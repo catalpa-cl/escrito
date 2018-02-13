@@ -1,0 +1,8 @@
+# question Id 	 assignment Id 	 score 	 student Id 	 learner answer 	 question 	 target answer
+1	1	5	29	kaghd hkhtkadhgkhkj	How many?	many
+1	1	2	31	eoaitn ioutvuoi vuiqeoruio	How many?	many
+1	1	3	12	uoiueqrk	How many?	many
+1	1	5	21	ncuoie uieoctu uiwzbhld ceqctc	How many?	many
+1	1	5	13	oirebgeqgh, erjeroi eqrh.	How many?	many
+10	2	5	11	wuoeruze zowuoirwuiotz irwziortbdac o45i hdrjgpnowr v4h45j.	How many?	few
+10	2	2.5	17	oieur iroet vntuewiu perv tpipiterit tpoc qepiv qeotuvioeutoiqeru.	How many?	few
