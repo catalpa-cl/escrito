@@ -90,7 +90,7 @@
 		</dependencies>
 	</dependencyManagement>
 	<modules>
-		<!--module>de.unidue.ltl.escrito.core</module-->
+		<module>de.unidue.ltl.escrito.core</module>
 		<!--module>de.unidue.ltl.escrito.data</module-->
 		<!--module>de.unidue.ltl.escrito.experiment.essay.baseline</module-->
 		<!--module>de.unidue.ltl.escrito.experiment.short.baseline</module-->

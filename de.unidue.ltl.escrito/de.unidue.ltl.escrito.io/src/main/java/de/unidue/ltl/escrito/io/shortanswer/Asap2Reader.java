@@ -26,6 +26,7 @@ import org.dkpro.tc.api.type.TextClassificationTarget;
 
 import de.tudarmstadt.ukp.dkpro.core.api.metadata.type.DocumentMetaData;
 import de.tudarmstadt.ukp.dkpro.core.api.resources.ResourceUtils;
+import de.unidue.ltl.escrito.core.types.LearnerAnswerWithReferenceAnswer;
 import de.unidue.ltl.escrito.io.util.Utils;
 
 public class Asap2Reader extends JCasCollectionReader_ImplBase {
@@ -176,6 +177,11 @@ public class Asap2Reader extends JCasCollectionReader_ImplBase {
 		catch (URISyntaxException e) {
 			throw new CollectionException(e);
 		}
+		
+		LearnerAnswerWithReferenceAnswer learnerAnswer = new LearnerAnswerWithReferenceAnswer(jcas, 0, jcas.getDocumentText().length());
+		learnerAnswer.setPromptId(String.valueOf(asap2Item.getPromptId()));
+		// TODO set TA ids
+		learnerAnswer.addToIndexes();
 
 		TextClassificationTarget unit = new TextClassificationTarget(jcas, 0, jcas.getDocumentText().length());
 		// will add the token content as a suffix to the ID of this unit 
