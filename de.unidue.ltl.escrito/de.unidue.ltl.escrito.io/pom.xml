@@ -36,11 +36,11 @@
 			<artifactId>dkpro-statistics-correlation</artifactId>
 			<version>2.1.0</version>
 		</dependency>
-		<dependency>
+		<!-->dependency>
 			<groupId>de.unidue.ltl.escrito</groupId>
 			<artifactId>de.unidue.ltl.escrito.core</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+		</dependency-->
 			<dependency>
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
 			<artifactId>de.tudarmstadt.ukp.dkpro.core.tokit-asl</artifactId>
