@@ -19,11 +19,9 @@ import org.dkpro.lab.storage.StorageService;
 import org.dkpro.lab.storage.impl.PropertiesAdapter;
 import org.dkpro.lab.task.TaskContextMetadata;
 import org.dkpro.tc.core.Constants;
+import org.dkpro.tc.core.task.TcTaskTypeUtil;
 import org.dkpro.tc.core.util.ReportUtils;
-import org.dkpro.tc.evaluation.Id2Outcome;
-import org.dkpro.tc.ml.report.TcTaskTypeUtil;
 import org.dkpro.tc.ml.weka.util.WekaUtils;
-import org.dkpro.tc.util.EvaluationReportUtil;
 
 import de.unidue.ltl.evaluation.ConfusionMatrix;
 import de.unidue.ltl.evaluation.EvaluationData;
@@ -68,7 +66,7 @@ implements Constants{
 			Properties props = new Properties();
 
 			File id2oFile = store.locateKey(subcontext.getId(),
-					 Constants.ID_HOMOGENIZED_OUTCOME_KEY);
+					 Constants.FILE_COMBINED_ID_OUTCOME_KEY);
 			// the serialized output seem to to be not working correctly.
 			//Constants.SERIALIZED_ID_OUTCOME_KEY);
 

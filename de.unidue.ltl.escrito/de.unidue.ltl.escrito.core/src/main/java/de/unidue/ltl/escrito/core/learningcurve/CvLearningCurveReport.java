@@ -11,7 +11,7 @@ import org.dkpro.lab.storage.StorageService;
 import org.dkpro.lab.storage.impl.PropertiesAdapter;
 import org.dkpro.lab.task.TaskContextMetadata;
 import org.dkpro.tc.core.Constants;
-import org.dkpro.tc.ml.report.TcTaskTypeUtil;
+import org.dkpro.tc.core.task.TcTaskTypeUtil;
 
 
 

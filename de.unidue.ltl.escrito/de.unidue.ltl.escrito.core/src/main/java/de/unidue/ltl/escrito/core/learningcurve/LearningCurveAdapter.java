@@ -9,19 +9,20 @@ import org.dkpro.lab.task.impl.ExecutableTaskBase;
 import org.dkpro.lab.task.impl.FoldDimensionBundle;
 import org.dkpro.tc.core.io.DataWriter;
 import org.dkpro.tc.core.ml.ModelSerialization_ImplBase;
-import org.dkpro.tc.core.ml.TCMachineLearningAdapter;
+import org.dkpro.tc.core.ml.TcShallowLearningAdapter;
 import org.dkpro.tc.core.task.ModelSerializationTask;
-import org.dkpro.tc.fstore.simple.DenseFeatureStore;
 import org.dkpro.tc.ml.report.InnerBatchReport;
+import org.dkpro.tc.ml.weka.report.WekaBaselineMajorityClassIdReport;
+import org.dkpro.tc.ml.weka.report.WekaBaselineRandomIdReport;
 import org.dkpro.tc.ml.weka.report.WekaOutcomeIDReport;
-import org.dkpro.tc.ml.weka.task.serialization.LoadModelConnectorWeka;
-import org.dkpro.tc.ml.weka.task.serialization.WekaModelSerializationDescription;
+import org.dkpro.tc.ml.weka.task.serialization.WekaLoadModelConnector;
+import org.dkpro.tc.ml.weka.task.serialization.WekaSerliazeModelConnector;
 import org.dkpro.tc.ml.weka.writer.WekaDataWriter;
 
-public class LearningCurveAdapter implements TCMachineLearningAdapter
+public class LearningCurveAdapter implements TcShallowLearningAdapter
 {
 
-	public static TCMachineLearningAdapter getInstance() {
+	public static TcShallowLearningAdapter getInstance() {
 		return new LearningCurveAdapter();
 	}
 	
@@ -35,10 +36,10 @@ public class LearningCurveAdapter implements TCMachineLearningAdapter
 		return DummyOutcomeIDReport.class;
 	}
 
-	@Override
-	public Class<? extends ReportBase> getBatchTrainTestReportClass() {
-		return CvLearningCurveReport.class;
-	}
+//	@Override
+//	public Class<? extends ReportBase> getBatchTrainTestReportClass() {
+//		return CvLearningCurveReport.class;
+//	}
 
 	@SuppressWarnings("unchecked")
     @Override
@@ -47,17 +48,17 @@ public class LearningCurveAdapter implements TCMachineLearningAdapter
 		return  new FoldDimensionBundle<String>("files", Dimension.create("", files), folds);
 	}
 
-	@Override
-	public String getFrameworkFilename(AdapterNameEntries name) {
-
-        switch (name) {
-            case featureVectorsFile:  return "training-data.arff.gz";
-            case predictionsFile      :  return "predictions.arff";
-            case featureSelectionFile :  return "attributeEvaluationResults.txt";
-        }
-        
-        return null;
-	}
+//	@Override
+//	public String getFrameworkFilename(AdapterNameEntries name) {
+//
+//        switch (name) {
+//            case featureVectorsFile:  return "training-data.arff.gz";
+//            case predictionsFile      :  return "predictions.arff";
+//            case featureSelectionFile :  return "attributeEvaluationResults.txt";
+//        }
+//        
+//        return null;
+//	}
 	
 	@Override
 	public Class<? extends DataWriter> getDataWriterClass() {
@@ -66,18 +67,33 @@ public class LearningCurveAdapter implements TCMachineLearningAdapter
 	
 	@Override
 	public Class<? extends ModelSerialization_ImplBase> getLoadModelConnectorClass() {
-		return LoadModelConnectorWeka.class;
+		return WekaLoadModelConnector.class;
 	}
 
 	@Override
 	public Class<? extends ModelSerializationTask> getSaveModelTask() {
-		return WekaModelSerializationDescription.class;
+		return WekaSerliazeModelConnector.class;
 	}
 	
+//	@Override
+//    public String getFeatureStore()
+//    {
+//        return DenseFeatureStore.class.getName();
+//    }
+
 	@Override
-    public String getFeatureStore()
-    {
-        return DenseFeatureStore.class.getName();
-    }
+	public Class<? extends ReportBase> getMajorityClassBaselineIdReportClass() {
+		return WekaBaselineMajorityClassIdReport.class;
+	}
+
+	@Override
+	public Class<? extends ReportBase> getRandomBaselineIdReportClass() {
+		return WekaBaselineRandomIdReport.class;
+	}
+
+	@Override
+	public boolean useSparseFeatures() {
+		return false;
+	}
 }
 

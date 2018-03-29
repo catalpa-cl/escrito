@@ -20,7 +20,6 @@ import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSink;
 import weka.filters.unsupervised.attribute.Remove;
 import org.dkpro.tc.core.Constants;
-import org.dkpro.tc.core.ml.TCMachineLearningAdapter.AdapterNameEntries;
 import org.dkpro.tc.ml.weka.util.MultilabelResult;
 import org.dkpro.tc.ml.weka.util.WekaUtils;
 
@@ -33,7 +32,7 @@ implements Constants
 {
 
 	@Discriminator(name=DIM_CLASSIFICATION_ARGS)
-	protected List<String> classificationArguments;
+	protected List<Object> classificationArguments;
 	@Discriminator(name=DIM_FEATURE_SEARCHER_ARGS)
 	protected List<String> featureSearcher;
 	@Discriminator(name=DIM_ATTRIBUTE_EVALUATOR_ARGS)
@@ -67,9 +66,9 @@ implements Constants
 		for (int numberOfClusters : NUMBER_OF_TRAINING_INSTANCES ){
 
 			File arffFileTrain = WekaUtils.getFile(aContext, TEST_TASK_INPUT_KEY_TRAINING_DATA,
-					AdapterNameEntries.featureVectorsFile, AccessMode.READONLY);
+					FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
 			File arffFileTest = WekaUtils.getFile(aContext, TEST_TASK_INPUT_KEY_TEST_DATA,
-					AdapterNameEntries.featureVectorsFile, AccessMode.READONLY);
+					FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
 
 			String train = arffFileTrain.getAbsolutePath();
 			System.out.println(train);
@@ -122,7 +121,7 @@ implements Constants
 				
 			// TODO anpassen	
 			// Write out the predictions
-			File predictionFile = WekaUtils.getFile(aContext,"", AdapterNameEntries.predictionsFile, AccessMode.READWRITE);
+			File predictionFile = WekaUtils.getFile(aContext,"", FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READWRITE);
 
 			String predictions = predictionFile.getAbsolutePath();
 			System.out.println(predictions);
