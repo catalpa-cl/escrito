@@ -36,7 +36,6 @@ import org.dkpro.lab.storage.StorageService.AccessMode;
 import org.dkpro.lab.task.Discriminator;
 import org.dkpro.lab.task.impl.ExecutableTaskBase;
 import org.dkpro.tc.core.Constants;
-import org.dkpro.tc.core.ml.TCMachineLearningAdapter.AdapterNameEntries;
 import org.dkpro.tc.core.util.TaskUtils;
 import org.dkpro.tc.ml.weka.util.WekaUtils;
 
@@ -82,7 +81,7 @@ public class ClusterLabelPropagationTask
         boolean multiLabel = false;
 
         File arffFileTrain = WekaUtils.getFile(aContext, TEST_TASK_INPUT_KEY_TRAINING_DATA,
-                AdapterNameEntries.featureVectorsFile, AccessMode.READONLY);
+        		FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
 
         Instances trainData = WekaUtils.getInstances(arffFileTrain, multiLabel);
         

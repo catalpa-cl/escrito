@@ -23,22 +23,22 @@ import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
 import org.dkpro.lab.task.impl.DefaultBatchTask;
 import org.dkpro.lab.task.impl.FoldDimensionBundle;
 import org.dkpro.tc.api.exception.TextClassificationException;
-import org.dkpro.tc.core.ml.TCMachineLearningAdapter;
+import org.dkpro.tc.core.Constants;
+import org.dkpro.tc.core.ml.TcShallowLearningAdapter;
 import org.dkpro.tc.core.task.ExtractFeaturesTask;
 import org.dkpro.tc.core.task.InitTask;
 import org.dkpro.tc.core.task.MetaInfoTask;
+import org.dkpro.tc.core.task.TcTaskType;
 import org.dkpro.tc.ml.ExperimentCrossValidation;
 import org.dkpro.tc.ml.FoldUtil;
-import org.dkpro.tc.ml.report.BatchBasicResultReport;
-import org.dkpro.tc.ml.report.TcTaskType;
 
-public class BatchTaskCrossValidationLearningCurve extends ExperimentCrossValidation{
+public class BatchTaskCrossValidationLearningCurve extends ExperimentCrossValidation  implements Constants{
 
 	
-	  public BatchTaskCrossValidationLearningCurve(String aExperimentName, Class<? extends TCMachineLearningAdapter> mlAdapter, int numFolds)
+	  public BatchTaskCrossValidationLearningCurve(String aExperimentName, Class<? extends TcShallowLearningAdapter> mlAdapter, int numFolds)
 	            throws TextClassificationException
 	    {
-		  super(aExperimentName, mlAdapter, numFolds);
+		  super(aExperimentName, numFolds);
 	    }
 	
 
@@ -57,7 +57,7 @@ public class BatchTaskCrossValidationLearningCurve extends ExperimentCrossValida
 
         // initialize the setup
         initTask = new InitTask();
-        initTask.setMlAdapter(mlAdapter);
+    //    initTask.setMlAdapter(mlAdapter);
         initTask.setPreprocessing(getPreprocessing());
         initTask.setOperativeViews(operativeViews);
         initTask.setType(initTask.getType() + "-" + experimentName);
@@ -159,7 +159,7 @@ public class BatchTaskCrossValidationLearningCurve extends ExperimentCrossValida
         extractFeaturesTrainTask.setTesting(false);
         extractFeaturesTrainTask.setType(extractFeaturesTrainTask.getType() + "-Train-"
                 + experimentName);
-        extractFeaturesTrainTask.setMlAdapter(mlAdapter);
+   //     extractFeaturesTrainTask.setMlAdapter(mlAdapter);
         extractFeaturesTrainTask.addImport(metaTask, MetaInfoTask.META_KEY);
         extractFeaturesTrainTask.setAttribute(TC_TASK_TYPE, TcTaskType.FEATURE_EXTRACTION_TRAIN.toString());
 
@@ -168,13 +168,14 @@ public class BatchTaskCrossValidationLearningCurve extends ExperimentCrossValida
         extractFeaturesTestTask.setTesting(true);
         extractFeaturesTestTask.setType(extractFeaturesTestTask.getType() + "-Test-"
                 + experimentName);
-        extractFeaturesTestTask.setMlAdapter(mlAdapter);
+   //     extractFeaturesTestTask.setMlAdapter(mlAdapter);
         extractFeaturesTestTask.addImport(metaTask, MetaInfoTask.META_KEY);
         extractFeaturesTestTask.addImport(extractFeaturesTrainTask, ExtractFeaturesTask.OUTPUT_KEY);
         extractFeaturesTestTask.setAttribute(TC_TASK_TYPE, TcTaskType.FEATURE_EXTRACTION_TEST.toString());
 
         // classification (numFolds times)
-        testTask = mlAdapter.getTestTask();
+     // TODO kann das wirklich weg?
+    //    testTask = mlAdapter.getTestTask();
         testTask.setType(testTask.getType() + "-" + experimentName);
         testTask.setAttribute(TC_TASK_TYPE, TcTaskType.MACHINE_LEARNING_ADAPTER.toString());
 
@@ -185,8 +186,9 @@ public class BatchTaskCrossValidationLearningCurve extends ExperimentCrossValida
         }
 
         // always add OutcomeIdReport
-        testTask.addReport(mlAdapter.getOutcomeIdReportClass());
-        testTask.addReport(BatchBasicResultReport.class);
+        // TODO kann das wirklich weg?
+     //   testTask.addReport(mlAdapter.getOutcomeIdReportClass());
+     //   testTask.addReport(BatchBasicResultReport.class);
 
         testTask.addImport(extractFeaturesTrainTask, ExtractFeaturesTask.OUTPUT_KEY,
                 TEST_TASK_INPUT_KEY_TRAINING_DATA);
@@ -208,7 +210,9 @@ public class BatchTaskCrossValidationLearningCurve extends ExperimentCrossValida
         // report of the inner batch task (sums up results for the folds)
         // we want to re-use the old CV report, we need to collect the evaluation.bin files from
         // the test task here (with another report)
-        crossValidationTask.addReport(mlAdapter.getBatchTrainTestReportClass());
+        // TODO kann das wirklich weg?
+        //   testTask.addReport(mlAdapter.getOutcomeIdReportClass());
+        //crossValidationTask.addReport(mlAdapter.getBatchTrainTestReportClass());
         crossValidationTask.setAttribute(TC_TASK_TYPE, TcTaskType.CROSS_VALIDATION.toString());
 
         // DKPro Lab issue 38: must be added as *first* task

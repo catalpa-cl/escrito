@@ -45,19 +45,18 @@ import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
 import org.dkpro.lab.task.impl.DefaultBatchTask;
 import org.dkpro.lab.task.impl.FoldDimensionBundle;
 import org.dkpro.lab.task.impl.TaskBase;
-import org.dkpro.tc.core.ml.TCMachineLearningAdapter;
+import org.dkpro.tc.core.ml.TcShallowLearningAdapter;
 import org.dkpro.tc.core.task.ExtractFeaturesTask;
 import org.dkpro.tc.core.task.InitTask;
 import org.dkpro.tc.core.task.MetaInfoTask;
+import org.dkpro.tc.core.task.TcTaskType;
 import org.dkpro.tc.ml.ExperimentCrossValidation;
 import org.dkpro.tc.ml.ExperimentTrainTest;
-import org.dkpro.tc.ml.Experiment_ImplBase;
 import org.dkpro.tc.ml.FoldUtil;
-import org.dkpro.tc.ml.report.BatchBasicResultReport;
-import org.dkpro.tc.ml.report.TcTaskType;
-import org.dkpro.tc.ml.weka.WekaClassificationAdapter;
+import org.dkpro.tc.ml.base.Experiment_ImplBase;
 import org.dkpro.tc.ml.weka.report.WekaOutcomeIDReport;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
+import org.dkpro.tc.core.Constants;
 
 import de.unidue.ltl.escrito.core.learningcurve.TrainingDataSelectionTestTask;
 import de.unidue.ltl.escrito.core.report.GradingEvaluationReport;
@@ -67,7 +66,7 @@ import de.unidue.ltl.escrito.core.report.GradingEvaluationReport;
  * 
  */
 public class BatchTaskClusterClassificationExemplarCV
-extends Experiment_ImplBase
+extends Experiment_ImplBase implements Constants
 {
 	protected Comparator<String> comparator;
 	protected int numFolds = 10;
@@ -99,13 +98,14 @@ extends Experiment_ImplBase
 	 *            preprocessing analysis engine aggregate
 	 */
 	public BatchTaskClusterClassificationExemplarCV(String aExperimentName,
-			Class<? extends TCMachineLearningAdapter> mlAdapter, AnalysisEngineDescription preprocessingPipeline)
+		//	Class<? extends TcShallowLearningAdapter> mlAdapter, 
+			AnalysisEngineDescription preprocessingPipeline)
 	{
 		setExperimentName(aExperimentName);
 		setPreprocessingPipeline(preprocessingPipeline);
 		// set name of overall batch task
 		setType("Evaluation-" + experimentName);
-		setMachineLearningAdapter(mlAdapter);
+	//	setMachineLearningAdapter(mlAdapter);
 	}
 
 	/*
@@ -135,13 +135,13 @@ extends Experiment_ImplBase
 
 		// initialize the setup
 		initTask = new InitTask();
-		initTask.setMlAdapter(mlAdapter);
+	//	initTask.setMlAdapter(mlAdapter);
 		initTask.setPreprocessing(getPreprocessing());
 		initTask.setOperativeViews(operativeViews);
 		initTask.setType(initTask.getType() + "-" + experimentName);
 		initTask.setAttribute(TC_TASK_TYPE, TcTaskType.INIT_TRAIN.toString());
 
-
+		
 
 		// inner batch task (carried out numFolds times)
 		DefaultBatchTask crossValidationTask = new DefaultBatchTask()
@@ -239,7 +239,7 @@ extends Experiment_ImplBase
 		extractFeaturesTrainTask.setTesting(false);
 		extractFeaturesTrainTask.setType(extractFeaturesTrainTask.getType() + "-Train-"
 				+ experimentName);
-		extractFeaturesTrainTask.setMlAdapter(mlAdapter);
+	//	extractFeaturesTrainTask.setMlAdapter(mlAdapter);
 		extractFeaturesTrainTask.addImport(metaTask, MetaInfoTask.META_KEY);
 		extractFeaturesTrainTask.setAttribute(TC_TASK_TYPE, TcTaskType.FEATURE_EXTRACTION_TRAIN.toString());
 
@@ -248,7 +248,7 @@ extends Experiment_ImplBase
 		extractFeaturesTestTask.setTesting(true);
 		extractFeaturesTestTask.setType(extractFeaturesTestTask.getType() + "-Test-"
 				+ experimentName);
-		extractFeaturesTestTask.setMlAdapter(mlAdapter);
+	//	extractFeaturesTestTask.setMlAdapter(mlAdapter);
 		extractFeaturesTestTask.addImport(metaTask, MetaInfoTask.META_KEY);
 		extractFeaturesTestTask.addImport(extractFeaturesTrainTask, ExtractFeaturesTask.OUTPUT_KEY);
 		extractFeaturesTestTask.setAttribute(TC_TASK_TYPE, TcTaskType.FEATURE_EXTRACTION_TEST.toString());

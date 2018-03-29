@@ -25,17 +25,14 @@ import org.apache.uima.analysis_engine.AnalysisEngineDescription;
 import org.dkpro.lab.engine.TaskContext;
 import org.dkpro.lab.reporting.Report;
 import org.dkpro.lab.task.impl.TaskBase;
-import org.dkpro.tc.core.ml.TCMachineLearningAdapter;
+import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.task.ExtractFeaturesTask;
 import org.dkpro.tc.core.task.InitTask;
 import org.dkpro.tc.core.task.MetaInfoTask;
+import org.dkpro.tc.core.task.TcTaskType;
 import org.dkpro.tc.ml.ExperimentTrainTest;
-import org.dkpro.tc.ml.Experiment_ImplBase;
-import org.dkpro.tc.ml.report.TcTaskType;
-import org.dkpro.tc.ml.weka.WekaClassificationAdapter;
 import org.dkpro.tc.ml.weka.report.WekaOutcomeIDReport;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
-import org.springframework.core.Constants;
 
 import de.unidue.ltl.escrito.core.report.GradingEvaluationReport;
 
@@ -44,7 +41,7 @@ import de.unidue.ltl.escrito.core.report.GradingEvaluationReport;
  * 
  */
 public class BatchTaskClusterClassification
-extends ExperimentTrainTest
+extends ExperimentTrainTest implements Constants
 {
 
     private String experimentName;
@@ -68,13 +65,14 @@ extends ExperimentTrainTest
      *            preprocessing analysis engine aggregate
      */
     public BatchTaskClusterClassification(String aExperimentName,
-            Class<? extends TCMachineLearningAdapter> mlAdapter, AnalysisEngineDescription preprocessingPipeline)
+          //  Class<? extends TCMachineLearningAdapter> mlAdapter, 
+    		AnalysisEngineDescription preprocessingPipeline)
     {
         setExperimentName(aExperimentName);
         setPreprocessingPipeline(preprocessingPipeline);
         // set name of overall batch task
         setType("Evaluation-" + experimentName);
-        setMachineLearningAdapter(mlAdapter);
+     //   setMachineLearningAdapter(mlAdapter);
     }
 
 
@@ -101,7 +99,7 @@ extends ExperimentTrainTest
 
         // init the train part of the experiment
         initTaskTrain = new InitTask();
-        initTaskTrain.setMlAdapter(mlAdapter);
+    //    initTaskTrain.setMlAdapter(mlAdapter);
         initTaskTrain.setPreprocessing(getPreprocessing());
         initTaskTrain.setOperativeViews(operativeViews);
         initTaskTrain.setTesting(false);
@@ -111,7 +109,7 @@ extends ExperimentTrainTest
         // init the test part of the experiment
         initTaskTest = new InitTask();
         initTaskTest.setTesting(true);
-        initTaskTest.setMlAdapter(mlAdapter);
+   //     initTaskTest.setMlAdapter(mlAdapter);
         initTaskTest.setPreprocessing(getPreprocessing());
         initTaskTest.setOperativeViews(operativeViews);
         initTaskTest.setType(initTaskTest.getType() + "-Test-" + experimentName);
@@ -129,7 +127,7 @@ extends ExperimentTrainTest
         // feature extraction on training data
         featuresTrainTask = new ExtractFeaturesTask();
         featuresTrainTask.setType(featuresTrainTask.getType() + "-Train-" + experimentName);
-        featuresTrainTask.setMlAdapter(mlAdapter);
+      //  featuresTrainTask.setMlAdapter(mlAdapter);
         featuresTrainTask.addImport(metaTask, MetaInfoTask.META_KEY);
         featuresTrainTask.addImport(initTaskTrain, InitTask.OUTPUT_KEY_TRAIN,
                 ExtractFeaturesTask.INPUT_KEY);
@@ -138,7 +136,7 @@ extends ExperimentTrainTest
         // feature extraction on test data
         featuresTestTask = new ExtractFeaturesTask();
         featuresTestTask.setType(featuresTestTask.getType() + "-Test-" + experimentName);
-        featuresTestTask.setMlAdapter(mlAdapter);
+    //    featuresTestTask.setMlAdapter(mlAdapter);
         featuresTestTask.addImport(metaTask, MetaInfoTask.META_KEY);
         featuresTestTask.addImport(initTaskTest, InitTask.OUTPUT_KEY_TEST,
                 ExtractFeaturesTask.INPUT_KEY);
