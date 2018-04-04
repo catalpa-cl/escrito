@@ -1,29 +1,35 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>de.unidue.ltl.escrito</groupId>
-    <artifactId>de.unidue.ltl.escrito</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>de.unidue.ltl.escrito.core</artifactId>
-  <dependencies>
-  	<dependency>
-  		<groupId>org.dkpro.statistics</groupId>
-  		<artifactId>dkpro-statistics-agreement</artifactId>
-  		<version>2.1.0</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.dkpro.lab</groupId>
-  		<artifactId>dkpro-lab-core</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.dkpro.tc</groupId>
-  		<artifactId>dkpro-tc-ml-weka</artifactId>
-  	</dependency>
-  	<dependency>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>de.unidue.ltl.escrito</groupId>
+		<artifactId>de.unidue.ltl.escrito</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>de.unidue.ltl.escrito.core</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>org.dkpro.statistics</groupId>
+			<artifactId>dkpro-statistics-agreement</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.dkpro.lab</groupId>
+			<artifactId>dkpro-lab-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.dkpro.tc</groupId>
+			<artifactId>dkpro-tc-ml-weka</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>de.unidue.ltl</groupId>
 			<artifactId>de.unidue.ltl.evaluation</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-  </dependencies>
+		<dependency>
+			<groupId>nz.ac.waikato.cms.weka</groupId>
+			<artifactId>weka-dev</artifactId>
+			<version>3.9.1</version>
+		</dependency>
+	</dependencies>
 </project>
