@@ -8,220 +8,111 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.dkpro.lab.reporting.ReportBase;
 import org.dkpro.lab.storage.StorageService;
-import org.dkpro.lab.storage.StorageService.AccessMode;
 import org.dkpro.lab.storage.impl.PropertiesAdapter;
-import org.dkpro.statistics.agreement.coding.BennettSAgreement;
-import org.dkpro.statistics.agreement.coding.CodingAnnotationStudy;
-import org.dkpro.statistics.agreement.coding.CohenKappaAgreement;
-import org.dkpro.statistics.agreement.coding.FleissKappaAgreement;
-import org.dkpro.statistics.agreement.coding.KrippendorffAlphaAgreement;
-import org.dkpro.statistics.agreement.coding.PercentageAgreement;
-import org.dkpro.statistics.agreement.coding.RandolphKappaAgreement;
-import org.dkpro.statistics.agreement.coding.ScottPiAgreement;
-import org.dkpro.statistics.agreement.distance.OrdinalDistanceFunction;
 import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.task.TcTaskTypeUtil;
 import org.dkpro.tc.ml.report.TcBatchReportBase;
-//import de.tudarmstadt.ukp.dkpro.tc.ml.TCMachineLearningAdapter.AdapterNameEntries;
-import org.dkpro.tc.ml.weka.task.WekaTestTask;
-import org.dkpro.tc.ml.weka.util.WekaUtils;
 
-import de.unidue.ltl.evaluation.ConfusionMatrix;
-import de.unidue.ltl.evaluation.EvaluationData;
-import de.unidue.ltl.evaluation.measure.agreement.CohenKappa;
-import de.unidue.ltl.evaluation.measure.agreement.LinearlyWeightedKappa;
-import de.unidue.ltl.evaluation.measure.agreement.QuadraticallyWeightedKappa;
-import de.unidue.ltl.evaluation.measure.categorial.Accuracy;
-import weka.classifiers.Evaluation;
-import weka.core.SerializationHelper;
+import de.unidue.ltl.evaluation.core.EvaluationData;
+import de.unidue.ltl.evaluation.measures.agreement.CohenKappa;
+import de.unidue.ltl.evaluation.measures.agreement.LinearlyWeightedKappa;
+import de.unidue.ltl.evaluation.measures.agreement.QuadraticallyWeightedKappa;
+import de.unidue.ltl.evaluation.measures.categorial.Fscore;
+import de.unidue.ltl.evaluation.measures.categorial.Precision;
+import de.unidue.ltl.evaluation.measures.categorial.Recall;
+import de.unidue.ltl.evaluation.measures.correlation.PearsonCorrelation;
+import de.unidue.ltl.evaluation.measures.correlation.SpearmanCorrelation;
+import de.unidue.ltl.evaluation.measures.Accuracy;
 
 public class GradingEvaluationReport extends TcBatchReportBase {
 
 	public static final String RESULTS_FILENAME = "classification_results.txt";
 
-	public static final String PERCENTAGEAGREEMENT = "percentageAgreement";
 	public static final String STATISTICS_FILE_NAME = "statistics.txt";
-	private static final String WEIGHTEDFMESSURE = "weightedFmessure";
-	private static final String WEIGHTEDPRECISION = "weightedPrecision";
-	private static final String WEIGHTEDRECALL = "weightedRecall";
-	private static final String FLEISSKAPPA = "fleissKappa";
-	private static final String RANDOLPHSKAPPA = "randolphsKappa";
+	private static final String WEIGHTEDFMEASURE = "weightedFmeasure";
+	private static final String MICROFMEASURE = "microAveragedFmessure";
+	private static final String MICROPRECISION = "microAveragedPrecision";
+	private static final String MICRORECALL = "macroAveragedRecall";
+	private static final String MACROFMEASURE = "macroAveragedFmessure";
+	private static final String MACROPRECISION = "macroAveragedPrecision";
+	private static final String MACRORECALL = "microAveragedRecall";
 	private static final String COHENSKAPPA = "cohensKappa";
-	private static final String KRIPPENDORFSALPHA = "krippendorfsAlpha";
-	private static final String SCOTTSPI = "scottsPi";
-	private static final String BENNETS = "bennetsS";
 	private static final String ACCURACYOFMAJORCLASS = "accuracyOfMajorClass";
 	private static final String MAJORCLASS = "majorClass";
-	public static final String QUADRATIC_WEIGHTED_KAPPA = "quadraticWeightedKappa";
+	private static final String ACCURACY = "accuracy";
+	private static final String LINEAR_KAPPA = "linearly weighted kappa";
+	private static final String QUADRATIC_WEIGHTED_KAPPA = "quadratically weighted kappa";
+	private static final String PEARSON = "pearson correlation";
+	private static final String SPEARMAN = "spearman correlation";
 
 	Map<String, Double> results = new HashMap<String, Double>();
 
 	@Override
 	public void execute() throws Exception {
 		File evaluationFile = null;
+		File evaluationFileMajority = null;
 		StorageService storageService = getContext().getStorageService();
 		Set<String> taskIds = getTaskIdsFromMetaData(getSubtasks());
 		List<String> allIds = new ArrayList<String>();
 		allIds.addAll(collectTasks(taskIds));
 		for (String id : taskIds) {
-			 if (!TcTaskTypeUtil.isMachineLearningAdapterTask(storageService, id)) {
-		           continue;
-		        }
-			evaluationFile = storageService.locateKey(id, "evaluation.bin");
+			if (!TcTaskTypeUtil.isMachineLearningAdapterTask(storageService, id)) {
+				continue;
+			}
+			evaluationFile = storageService.locateKey(id, Constants.ID_OUTCOME_KEY);
+			evaluationFileMajority = storageService.locateKey(id, Constants.BASELINE_MAJORITIY_ID_OUTCOME_KEY);
 		}
-
 
 		Properties props = new Properties();
 
-		weka.classifiers.Evaluation eval = (weka.classifiers.Evaluation) SerializationHelper
-				.read(evaluationFile.getAbsolutePath());
+		EvaluationData<Double> evaluationDouble = ReportUtils.readId2OutcomeAsDouble(evaluationFile);
+		EvaluationData<String> evaluationString = ReportUtils.readId2OutcomeAsString(evaluationFile);
+		EvaluationData<String> evaluationStringMajority = ReportUtils.readId2OutcomeAsString(evaluationFileMajority);
 
-		CodingAnnotationStudy study = getStudy(eval);
-		PercentageAgreement pa = new PercentageAgreement(study);
-		FleissKappaAgreement fleissKappa = new FleissKappaAgreement(study);
-		RandolphKappaAgreement randolphKappa = new RandolphKappaAgreement(study);
-		CohenKappaAgreement cohenKappa = new CohenKappaAgreement(study);
-		KrippendorffAlphaAgreement krippendorfAlpha = new KrippendorffAlphaAgreement(
-				study, new OrdinalDistanceFunction());
-		ScottPiAgreement scottPi = new ScottPiAgreement(study);
-		BennettSAgreement bennetS = new BennettSAgreement(study);
+		Accuracy<String> acc = new Accuracy<String>(evaluationString);
+		results.put(ACCURACY, acc.getResult());
 
-		int majorClass = getMajorClass(eval);
-		// TP+TN / TP+TN+FP+FN
-		double accuracyOfMajorClass = (eval.numTruePositives(majorClass) + eval
-				.numTrueNegatives(majorClass))
-				/ (eval.numTruePositives(majorClass)
-						+ eval.numTrueNegatives(majorClass)
-						+ eval.numFalsePositives(majorClass) + eval
-						.numFalseNegatives(majorClass));
+		Accuracy<String> accMaj = new Accuracy<String>(evaluationStringMajority);
+		results.put(ACCURACYOFMAJORCLASS, accMaj.getResult());
 
-		results.put(QUADRATIC_WEIGHTED_KAPPA,getQuadraticWeightedKappa(eval));
-		results.put(MAJORCLASS, (double) majorClass);
-		results.put(ACCURACYOFMAJORCLASS, accuracyOfMajorClass);
-		results.put(WEIGHTEDFMESSURE, eval.weightedFMeasure());
-		results.put(WEIGHTEDPRECISION, eval.weightedPrecision());
-		results.put(WEIGHTEDRECALL, eval.weightedRecall());
-		results.put(PERCENTAGEAGREEMENT, pa.calculateAgreement());
-		results.put(FLEISSKAPPA, fleissKappa.calculateAgreement());
-		results.put(RANDOLPHSKAPPA, randolphKappa.calculateAgreement());
-		results.put(COHENSKAPPA, cohenKappa.calculateAgreement());
-		results.put(KRIPPENDORFSALPHA, krippendorfAlpha
-				.calculateAgreement());
-		results.put(SCOTTSPI, scottPi.calculateAgreement());
-		results.put(BENNETS, bennetS.calculateAgreement());
+		CohenKappa<String> kappa = new CohenKappa<String>(evaluationString);
+		results.put(COHENSKAPPA, kappa.getResult());
 
-		System.out.println(eval.toMatrixString());
+		LinearlyWeightedKappa<Double> lwKappa = new LinearlyWeightedKappa<Double>(evaluationDouble);
+		results.put(LINEAR_KAPPA, lwKappa.getResult());
 
+		QuadraticallyWeightedKappa<Double> qwKappa = new QuadraticallyWeightedKappa<Double>(evaluationDouble);
+		results.put(QUADRATIC_WEIGHTED_KAPPA, qwKappa.getResult());
+
+		Precision<String> prec = new Precision<String>(evaluationString);
+		results.put(MACROPRECISION, prec.getMacroPrecision());
+		results.put(MICROPRECISION, prec.getMicroPrecision());
+
+		Recall<String> rec = new Recall<String>(evaluationString);
+		results.put(MACRORECALL, rec.getMacroRecall());
+		results.put(MICRORECALL, rec.getMicroRecall());
+
+		Fscore<String> f = new Fscore<String>(evaluationString);
+		results.put(MACROFMEASURE, f.getMacroFscore());
+		results.put(MICROFMEASURE, f.getMicroFscore());
+		results.put(WEIGHTEDFMEASURE, f.getWeightedFscore());
+
+		PearsonCorrelation pearson = new PearsonCorrelation(evaluationDouble);
+		results.put(PEARSON, pearson.getResult());
+
+		SpearmanCorrelation spearman = new SpearmanCorrelation(evaluationDouble);
+		results.put(SPEARMAN, spearman.getResult());
+		
 		for (String s : results.keySet()) {
-			if (s.equals("majorClass")) {
-				// translate from index to classname
-				String className = WekaUtils.getClassLabels(eval.getHeader(),
-						false).get(results.get(s).intValue());
-				System.out.println(s + ": " + className);
-				props.setProperty(s, className);
-			} else {
-				System.out.printf(s+": %.2f"+System.getProperty("line.separator"), results.get(s));
-				//				System.out.println(s + ": " + results.get(s));
-				props.setProperty(s, results.get(s).toString());
-			}
+			System.out.printf(s+": %.2f"+System.getProperty("line.separator"), results.get(s));
+			//				System.out.println(s + ": " + results.get(s));
+			props.setProperty(s, results.get(s).toString());
 		}
 
 		// Write out properties
 		getContext().storeBinary(RESULTS_FILENAME,
 				new PropertiesAdapter(props));
-	}
-
-	private Double getQuadraticWeightedKappa(Evaluation eval) {
-		List<String> classLabels = WekaUtils.getClassLabels(eval.getHeader(), false);
-
-		List<Integer> classLabelsInteger = new ArrayList<Integer>();
-		for (String classLabel : classLabels) {
-			classLabelsInteger.add(Integer.parseInt(classLabel));
-		}
-
-		double[][] confusionMatrix = eval.confusionMatrix();
-
-		List<Integer> goldLabelsList = new ArrayList<Integer>();
-		List<Integer> predictedLabelsList = new ArrayList<Integer>();
-
-
-		//        EvaluationData<Double> evaluationDouble 
-		//		= new EvaluationData<Double>();
-		//		EvaluationData<String> evaluationString 
-		//		= new EvaluationData<String>();
-
-		// fill rating lists from weka confusion matrix
-		for (int c = 0; c < confusionMatrix.length; c++) {
-			for (int r = 0; r < confusionMatrix.length; r++) {
-				for (int i=0; i < (int) confusionMatrix[c][r]; i++) {
-					goldLabelsList.add(classLabelsInteger.get(c));
-					predictedLabelsList.add(classLabelsInteger.get(r));
-					//     System.out.println(1.0*classLabelsInteger.get(c)+" "+1.0*classLabelsInteger.get(r));
-					//                    evaluationDouble.register(1.0*classLabelsInteger.get(c), 1.0*classLabelsInteger.get(r));
-					//                    evaluationString.register(String.valueOf(classLabelsInteger.get(c)), String.valueOf(classLabelsInteger.get(r)));
-				}
-			}
-		}
-		//        Accuracy<String> acc = new Accuracy<String>(evaluationString);
-		//		results.put("Acc2", acc.getAccuracy());
-		//		CohenKappa<String> kappa = new CohenKappa<String>(evaluationString);
-		//		results.put("CohensKappa2", kappa.getAgreement());
-		//
-		//		LinearlyWeightedKappa<Double> lwKappa = new LinearlyWeightedKappa<Double>(evaluationDouble);
-		//		QuadraticallyWeightedKappa<Double> qwKappa = new QuadraticallyWeightedKappa<Double>(evaluationDouble);
-		//		results.put("LinearKappa2", lwKappa.getAgreement());
-		//		results.put("QuadraticKappa2", qwKappa.getAgreement());
-		//
-		//		ConfusionMatrix<String> matrix = new ConfusionMatrix<String>(evaluationString);
-		//		String confusionMatrix2 = matrix.toString();
-		//		System.out.println(confusionMatrix2);
-		return QuadraticWeightedKappa.getKappa(goldLabelsList, predictedLabelsList, classLabelsInteger.toArray(new Integer[0]));
-	}
-
-	// find the major class
-	private int getMajorClass(Evaluation eval) {
-		double[][] confusionMatrix = eval.confusionMatrix();
-		int tempResult = 0;
-		int tempSum = 0;
-		for (int i = 0; i < confusionMatrix[0].length; i++) {
-			int sum = getSum(confusionMatrix[i]);
-			if (sum > tempSum) {
-				tempResult = i;
-				tempSum = sum;
-			}
-		}
-		return tempResult;
-	}
-
-	private int getSum(double[] ds) {
-		int result = 0;
-		for (double d : ds) {
-			result += (int) d;
-		}
-		return result;
-	}
-
-	/**
-	 * get a CodingAnnotationStudy from the weka evaluation
-	 * 
-	 * @param eval
-	 * @return study
-	 */
-	private CodingAnnotationStudy getStudy(Evaluation eval) {
-		List<String> classLabels = WekaUtils.getClassLabels(eval.getHeader(),
-				false);
-		CodingAnnotationStudy study = new CodingAnnotationStudy(2);
-		double[][] confusionMatrix = eval.confusionMatrix();
-
-		for (int i = 0; i < confusionMatrix[0].length; i++) {
-			for (int j = 0; j < confusionMatrix[0].length; j++) {
-				study.addMultipleItems((int) confusionMatrix[i][j],
-						classLabels.get(i), classLabels.get(j));
-			}
-		}
-		return study;
 	}
 
 }

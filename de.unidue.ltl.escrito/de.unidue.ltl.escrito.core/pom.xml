@@ -7,6 +7,46 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>de.unidue.ltl.escrito.core</artifactId>
+	<repositories>
+		<repository>
+			<id>ukp-oss-model-releases</id>
+			<url>http://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-model-releases-local</url>
+		</repository>
+		<repository>
+			<id>ukp-oss-snapshots</id>
+			<url>http://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-snapshots/</url>
+		</repository>
+		<repository>
+			<id>ltl-snapshots</id>
+			<url>http://basa.ltl.uni-due.de:34001/artifactory/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>ltl-releases</id>
+			<url>http://basa.ltl.uni-due.de:34001/artifactory/releases</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>ltl-model</id>
+			<url>http://basa.ltl.uni-due.de:34001/artifactory/models</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>org.dkpro.statistics</groupId>
@@ -22,9 +62,10 @@
 			<artifactId>dkpro-tc-ml-weka</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>de.unidue.ltl</groupId>
-			<artifactId>de.unidue.ltl.evaluation</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>de.unidue.ltl.evaluation</groupId>
+			<artifactId>ltlab-evaluation</artifactId>
+			<version>0.1.1</version>
+			<type>pom</type>
 		</dependency>
 		<dependency>
 			<groupId>nz.ac.waikato.cms.weka</groupId>
