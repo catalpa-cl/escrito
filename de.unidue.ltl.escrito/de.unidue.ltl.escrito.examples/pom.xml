@@ -7,7 +7,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>de.unidue.ltl.escrito</groupId>
-	<artifactId>de.unidue.ltl.examples</artifactId>
+	<artifactId>de.unidue.ltl.escrito.examples</artifactId>
 
 
 	<repositories>
@@ -53,14 +53,14 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>de.unidue.ltl.escrito</groupId>
-			<artifactId>de.unidue.ltl.escrito.core</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+		<groupId>de.unidue.ltl.escrito</groupId>
+		<artifactId>de.unidue.ltl.escrito.core</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>de.unidue.ltl.escrito</groupId>
-			<artifactId>de.unidue.ltl.escrito.io</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+		<groupId>de.unidue.ltl.escrito</groupId>
+		<artifactId>de.unidue.ltl.escrito.io</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.dkpro.tc</groupId>
@@ -124,7 +124,8 @@
 			<artifactId>
     		de.tudarmstadt.ukp.dkpro.core.clearnlp-asl
     	</artifactId>
-		</dependency><dependency>
+		</dependency>
+		<dependency>
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
 			<artifactId>
     		de.tudarmstadt.ukp.dkpro.core.clearnlp-model-parser-en-ontonotes
@@ -148,6 +149,11 @@
 			<groupId>com.clearnlp</groupId>
 			<artifactId>clearnlp-dictionary</artifactId>
 			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>nz.ac.waikato.cms.weka</groupId>
+			<artifactId>weka-dev</artifactId>
+			<version>3.9.1</version>
 		</dependency>
 	</dependencies>
 
