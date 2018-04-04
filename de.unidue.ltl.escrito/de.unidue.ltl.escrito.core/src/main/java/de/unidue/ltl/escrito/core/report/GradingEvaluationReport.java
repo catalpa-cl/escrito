@@ -6,8 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.dkpro.lab.reporting.ReportBase;
+import org.dkpro.lab.storage.StorageService;
 import org.dkpro.lab.storage.StorageService.AccessMode;
 import org.dkpro.lab.storage.impl.PropertiesAdapter;
 import org.dkpro.statistics.agreement.coding.BennettSAgreement;
@@ -19,6 +21,9 @@ import org.dkpro.statistics.agreement.coding.PercentageAgreement;
 import org.dkpro.statistics.agreement.coding.RandolphKappaAgreement;
 import org.dkpro.statistics.agreement.coding.ScottPiAgreement;
 import org.dkpro.statistics.agreement.distance.OrdinalDistanceFunction;
+import org.dkpro.tc.core.Constants;
+import org.dkpro.tc.core.task.TcTaskTypeUtil;
+import org.dkpro.tc.ml.report.TcBatchReportBase;
 //import de.tudarmstadt.ukp.dkpro.tc.ml.TCMachineLearningAdapter.AdapterNameEntries;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
 import org.dkpro.tc.ml.weka.util.WekaUtils;
@@ -32,10 +37,10 @@ import de.unidue.ltl.evaluation.measure.categorial.Accuracy;
 import weka.classifiers.Evaluation;
 import weka.core.SerializationHelper;
 
-public class GradingEvaluationReport extends ReportBase {
+public class GradingEvaluationReport extends TcBatchReportBase {
 
 	public static final String RESULTS_FILENAME = "classification_results.txt";
-	
+
 	public static final String PERCENTAGEAGREEMENT = "percentageAgreement";
 	public static final String STATISTICS_FILE_NAME = "statistics.txt";
 	private static final String WEIGHTEDFMESSURE = "weightedFmessure";
@@ -55,7 +60,18 @@ public class GradingEvaluationReport extends ReportBase {
 
 	@Override
 	public void execute() throws Exception {
-		File evaluationFile = getContext().getFile("evaluation.bin", AccessMode.READONLY);
+		File evaluationFile = null;
+		StorageService storageService = getContext().getStorageService();
+		Set<String> taskIds = getTaskIdsFromMetaData(getSubtasks());
+		List<String> allIds = new ArrayList<String>();
+		allIds.addAll(collectTasks(taskIds));
+		for (String id : taskIds) {
+			 if (!TcTaskTypeUtil.isMachineLearningAdapterTask(storageService, id)) {
+		           continue;
+		        }
+			evaluationFile = storageService.locateKey(id, "evaluation.bin");
+		}
+
 
 		Properties props = new Properties();
 
@@ -79,7 +95,7 @@ public class GradingEvaluationReport extends ReportBase {
 				/ (eval.numTruePositives(majorClass)
 						+ eval.numTrueNegatives(majorClass)
 						+ eval.numFalsePositives(majorClass) + eval
-							.numFalseNegatives(majorClass));
+						.numFalseNegatives(majorClass));
 
 		results.put(QUADRATIC_WEIGHTED_KAPPA,getQuadraticWeightedKappa(eval));
 		results.put(MAJORCLASS, (double) majorClass);
@@ -107,7 +123,7 @@ public class GradingEvaluationReport extends ReportBase {
 				props.setProperty(s, className);
 			} else {
 				System.out.printf(s+": %.2f"+System.getProperty("line.separator"), results.get(s));
-//				System.out.println(s + ": " + results.get(s));
+				//				System.out.println(s + ": " + results.get(s));
 				props.setProperty(s, results.get(s).toString());
 			}
 		}
@@ -119,48 +135,48 @@ public class GradingEvaluationReport extends ReportBase {
 
 	private Double getQuadraticWeightedKappa(Evaluation eval) {
 		List<String> classLabels = WekaUtils.getClassLabels(eval.getHeader(), false);
-        
-        List<Integer> classLabelsInteger = new ArrayList<Integer>();
-        for (String classLabel : classLabels) {
-            classLabelsInteger.add(Integer.parseInt(classLabel));
-        }
-        
-        double[][] confusionMatrix = eval.confusionMatrix();
 
-        List<Integer> goldLabelsList = new ArrayList<Integer>();
-        List<Integer> predictedLabelsList = new ArrayList<Integer>();
-        
-        
-//        EvaluationData<Double> evaluationDouble 
-//		= new EvaluationData<Double>();
-//		EvaluationData<String> evaluationString 
-//		= new EvaluationData<String>();
-        
-        // fill rating lists from weka confusion matrix
-        for (int c = 0; c < confusionMatrix.length; c++) {
-            for (int r = 0; r < confusionMatrix.length; r++) {
-                for (int i=0; i < (int) confusionMatrix[c][r]; i++) {
-                    goldLabelsList.add(classLabelsInteger.get(c));
-                    predictedLabelsList.add(classLabelsInteger.get(r));
-               //     System.out.println(1.0*classLabelsInteger.get(c)+" "+1.0*classLabelsInteger.get(r));
-//                    evaluationDouble.register(1.0*classLabelsInteger.get(c), 1.0*classLabelsInteger.get(r));
-//                    evaluationString.register(String.valueOf(classLabelsInteger.get(c)), String.valueOf(classLabelsInteger.get(r)));
-                    }
-            }
-        }
-//        Accuracy<String> acc = new Accuracy<String>(evaluationString);
-//		results.put("Acc2", acc.getAccuracy());
-//		CohenKappa<String> kappa = new CohenKappa<String>(evaluationString);
-//		results.put("CohensKappa2", kappa.getAgreement());
-//
-//		LinearlyWeightedKappa<Double> lwKappa = new LinearlyWeightedKappa<Double>(evaluationDouble);
-//		QuadraticallyWeightedKappa<Double> qwKappa = new QuadraticallyWeightedKappa<Double>(evaluationDouble);
-//		results.put("LinearKappa2", lwKappa.getAgreement());
-//		results.put("QuadraticKappa2", qwKappa.getAgreement());
-//
-//		ConfusionMatrix<String> matrix = new ConfusionMatrix<String>(evaluationString);
-//		String confusionMatrix2 = matrix.toString();
-//		System.out.println(confusionMatrix2);
+		List<Integer> classLabelsInteger = new ArrayList<Integer>();
+		for (String classLabel : classLabels) {
+			classLabelsInteger.add(Integer.parseInt(classLabel));
+		}
+
+		double[][] confusionMatrix = eval.confusionMatrix();
+
+		List<Integer> goldLabelsList = new ArrayList<Integer>();
+		List<Integer> predictedLabelsList = new ArrayList<Integer>();
+
+
+		//        EvaluationData<Double> evaluationDouble 
+		//		= new EvaluationData<Double>();
+		//		EvaluationData<String> evaluationString 
+		//		= new EvaluationData<String>();
+
+		// fill rating lists from weka confusion matrix
+		for (int c = 0; c < confusionMatrix.length; c++) {
+			for (int r = 0; r < confusionMatrix.length; r++) {
+				for (int i=0; i < (int) confusionMatrix[c][r]; i++) {
+					goldLabelsList.add(classLabelsInteger.get(c));
+					predictedLabelsList.add(classLabelsInteger.get(r));
+					//     System.out.println(1.0*classLabelsInteger.get(c)+" "+1.0*classLabelsInteger.get(r));
+					//                    evaluationDouble.register(1.0*classLabelsInteger.get(c), 1.0*classLabelsInteger.get(r));
+					//                    evaluationString.register(String.valueOf(classLabelsInteger.get(c)), String.valueOf(classLabelsInteger.get(r)));
+				}
+			}
+		}
+		//        Accuracy<String> acc = new Accuracy<String>(evaluationString);
+		//		results.put("Acc2", acc.getAccuracy());
+		//		CohenKappa<String> kappa = new CohenKappa<String>(evaluationString);
+		//		results.put("CohensKappa2", kappa.getAgreement());
+		//
+		//		LinearlyWeightedKappa<Double> lwKappa = new LinearlyWeightedKappa<Double>(evaluationDouble);
+		//		QuadraticallyWeightedKappa<Double> qwKappa = new QuadraticallyWeightedKappa<Double>(evaluationDouble);
+		//		results.put("LinearKappa2", lwKappa.getAgreement());
+		//		results.put("QuadraticKappa2", qwKappa.getAgreement());
+		//
+		//		ConfusionMatrix<String> matrix = new ConfusionMatrix<String>(evaluationString);
+		//		String confusionMatrix2 = matrix.toString();
+		//		System.out.println(confusionMatrix2);
 		return QuadraticWeightedKappa.getKappa(goldLabelsList, predictedLabelsList, classLabelsInteger.toArray(new Integer[0]));
 	}
 
