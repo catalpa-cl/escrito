@@ -1,6 +1,7 @@
 package de.unidue.ltl.escrito.core.report;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.compress.utils.IOUtils;
 import org.dkpro.lab.storage.StorageService;
 import org.dkpro.lab.storage.impl.PropertiesAdapter;
 import org.dkpro.tc.core.Constants;
@@ -110,9 +112,17 @@ public class GradingEvaluationReport extends TcBatchReportBase {
 			props.setProperty(s, results.get(s).toString());
 		}
 
-		// Write out properties
-		getContext().storeBinary(RESULTS_FILENAME,
-				new PropertiesAdapter(props));
+		// Write results
+		File outfile = new File(evaluationFile.getParentFile(), RESULTS_FILENAME);
+		FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(outfile);
+            props.store(fos, "Results");
+        }
+        finally {
+            IOUtils.closeQuietly(fos);
+        }   
+		
 	}
 
 }
