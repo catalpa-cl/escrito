@@ -23,12 +23,11 @@ import org.dkpro.tc.core.task.TcTaskTypeUtil;
 import org.dkpro.tc.core.util.ReportUtils;
 import org.dkpro.tc.ml.weka.util.WekaUtils;
 
-import de.unidue.ltl.evaluation.ConfusionMatrix;
-import de.unidue.ltl.evaluation.EvaluationData;
-import de.unidue.ltl.evaluation.measure.agreement.CohenKappa;
-import de.unidue.ltl.evaluation.measure.agreement.LinearlyWeightedKappa;
-import de.unidue.ltl.evaluation.measure.agreement.QuadraticallyWeightedKappa;
-import de.unidue.ltl.evaluation.measure.categorial.Accuracy;
+import de.unidue.ltl.evaluation.core.EvaluationData;
+import de.unidue.ltl.evaluation.measures.Accuracy;
+import de.unidue.ltl.evaluation.measures.agreement.CohenKappa;
+import de.unidue.ltl.evaluation.measures.agreement.LinearlyWeightedKappa;
+import de.unidue.ltl.evaluation.measures.agreement.QuadraticallyWeightedKappa;
 import weka.core.Instance;
 
 public class CvEvaluationReport extends BatchReportBase
@@ -171,18 +170,18 @@ implements Constants{
 			//	evaluationString.register(String.valueOf(gold), String.valueOf(predicted));
 			}
 			Accuracy acc = new Accuracy(evaluationString);
-			results.put(ACCURACY, acc.getAccuracy());
+			results.put(ACCURACY, acc.getResult());
 			CohenKappa<String> kappa = new CohenKappa<String>(evaluationString);
-			results.put(COHENSKAPPA, kappa.getAgreement());
+			results.put(COHENSKAPPA, kappa.getResult());
 
 			LinearlyWeightedKappa lwKappa = new LinearlyWeightedKappa(evaluationDouble);
 			QuadraticallyWeightedKappa qwKappa = new QuadraticallyWeightedKappa(evaluationDouble);
-			results.put(LINEAR_KAPPA, lwKappa.getAgreement());
-			results.put(QUADRATIC_WEIGHTED_KAPPA, qwKappa.getAgreement());
+			results.put(LINEAR_KAPPA, lwKappa.getResult());
+			results.put(QUADRATIC_WEIGHTED_KAPPA, qwKappa.getResult());
 
-			ConfusionMatrix<String> matrix = new ConfusionMatrix<String>(evaluationString);
-			String confusionMatrix = matrix.toString();
-			System.out.println(matrix);
+//			ConfusionMatrix<String> matrix = new ConfusionMatrix(evaluationString);
+//			String confusionMatrix = matrix.toString();
+//			System.out.println(matrix);
 
 			for (String s : results.keySet()) {
 				if (s.equals("majorClass")) {
@@ -197,7 +196,7 @@ implements Constants{
 				}
 			}
 			// TODO: this needs to be printed in a different way
-			props.setProperty(CONFUSION_MATRIX, confusionMatrix);
+			//props.setProperty(CONFUSION_MATRIX, confusionMatrix);
 
 
 			// Write out properties

@@ -26,12 +26,6 @@ import org.dkpro.tc.ml.weka.task.WekaTestTask;
 import org.dkpro.tc.ml.weka.util.WekaUtils;
 
 import de.unidue.ltl.escrito.core.clustering.ClusterExemplarTask;
-import de.unidue.ltl.evaluation.ConfusionMatrix;
-import de.unidue.ltl.evaluation.EvaluationData;
-import de.unidue.ltl.evaluation.measure.agreement.CohenKappa;
-import de.unidue.ltl.evaluation.measure.agreement.LinearlyWeightedKappa;
-import de.unidue.ltl.evaluation.measure.agreement.QuadraticallyWeightedKappa;
-import de.unidue.ltl.evaluation.measure.categorial.Accuracy;
 import weka.classifiers.Evaluation;
 import weka.core.SerializationHelper;
 
