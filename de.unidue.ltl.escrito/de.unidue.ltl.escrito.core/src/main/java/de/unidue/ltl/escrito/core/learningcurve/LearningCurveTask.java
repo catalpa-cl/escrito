@@ -44,42 +44,67 @@ import de.unidue.ltl.escrito.core.Utils;
  */
 public class LearningCurveTask
 extends ExecutableTaskBase
-//  extends WekaTestTask
 implements Constants
 {
-	@Discriminator
-	private List<String> classificationArguments;   
-	@Discriminator
-	private String featureMode;
-	@Discriminator
-	private String learningMode;
-	
+	//	@Discriminator
+	//	private List<String> classificationArguments;   
+	//	@Discriminator
+	//	private String featureMode;
+	//	@Discriminator
+	//	private String learningMode;
+
+	@Discriminator(name = DIM_CLASSIFICATION_ARGS)
+	protected List<Object> classificationArguments;
+
+	@Discriminator(name = DIM_FEATURE_SEARCHER_ARGS)
+	protected List<String> featureSearcher;
+
+	@Discriminator(name = DIM_ATTRIBUTE_EVALUATOR_ARGS)
+	protected List<String> attributeEvaluator;
+
+	@Discriminator(name = DIM_LABEL_TRANSFORMATION_METHOD)
+	protected String labelTransformationMethod;
+
+	@Discriminator(name = DIM_NUM_LABELS_TO_KEEP)
+	protected int numLabelsToKeep;
+
+	@Discriminator(name = DIM_APPLY_FEATURE_SELECTION)
+	protected boolean applySelection;
+
+	@Discriminator(name = DIM_FEATURE_MODE)
+	protected String featureMode;
+
+	@Discriminator(name = DIM_LEARNING_MODE)
+	protected String learningMode;
+
+	@Discriminator(name = DIM_BIPARTITION_THRESHOLD)
+	protected String threshold;
+
 	// Should this be static? If not, how can I caccess it in the report?
 	@Discriminator(name = "dimension_iterations")
 	public static Integer ITERATIONS = 100;
-	
+
 	@Discriminator(name = "dimension_number_of_training_instances")
 	public static int[] NUMBER_OF_TRAINING_INSTANCES = {4,8,16,32,64,128,256};
-	
-	
+
+
 	@Override
 	public void execute(TaskContext aContext)
 			throws Exception
 	{
 		boolean multiLabel = false;
-		// TODO comment in again
-	//	Map<String, String> instanceId2TextMap = Utils.getInstanceId2TextMap(aContext);
+		Map<String, String> instanceId2TextMap = Utils.getInstanceId2TextMap(aContext);
 
 
 		System.out.println("Execute LearningCurveTask");
 		for (Integer numberInstances : NUMBER_OF_TRAINING_INSTANCES) {
 			for (int iteration=0; iteration<ITERATIONS; iteration++) {
-			//	System.out.println(numberInstances+"\t"+iteration);
+				//System.out.println(numberInstances+"\t"+iteration);
 				File arffFileTrain = WekaUtils.getFile(aContext, TEST_TASK_INPUT_KEY_TRAINING_DATA,
 						FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
-					File arffFileTest = WekaUtils.getFile(aContext, TEST_TASK_INPUT_KEY_TEST_DATA,
-							FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
-			
+				File arffFileTest = WekaUtils.getFile(aContext, TEST_TASK_INPUT_KEY_TEST_DATA,
+						FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
+
 				Instances trainData = WekaUtils.getInstances(arffFileTrain, multiLabel);
 				Instances testData = WekaUtils.getInstances(arffFileTest, multiLabel);
 
@@ -89,13 +114,14 @@ implements Constants
 					continue;
 				}
 
-				Classifier cl = AbstractClassifier.forName(classificationArguments.get(0), classificationArguments
-						.subList(1, classificationArguments.size()).toArray(new String[0]));
+				Classifier cl = WekaUtils.getClassifier(learningMode, classificationArguments);
+				//				Classifier cl = AbstractClassifier.forName(classificationArguments.get(0), classificationArguments
+				//						.subList(1, classificationArguments.size()).toArray(new String[0]));
 
 				Instances copyTestData = new Instances(testData);
 				testData = WekaUtils.removeInstanceId(testData, multiLabel);
 
-				
+
 				Random generator = new Random();
 				generator.setSeed(System.nanoTime());
 				trainData.randomize(generator);
@@ -106,7 +132,7 @@ implements Constants
 				}
 				Instances copyTrainData = new Instances(trainData);
 				trainData = WekaUtils.removeInstanceId(trainData, multiLabel);
-				
+
 
 				// file to hold prediction results
 				File evalOutput = new File(aContext.getStorageLocation(TEST_TASK_OUTPUT_KEY,
@@ -118,8 +144,8 @@ implements Constants
 						AccessMode.READWRITE)
 						.getPath()
 						+ "/" + Constants.EVAL_FILE_NAME + "_" + numberInstances + "_" + iteration + "_itemIds.txt");
-				
-					// train the classifier on the train set split - not necessary in multilabel setup, but
+
+				// train the classifier on the train set split - not necessary in multilabel setup, but
 				// in single label setup
 				cl.buildClassifier(trainData);
 
@@ -127,14 +153,14 @@ implements Constants
 						WekaUtils.getEvaluationSinglelabel(cl, trainData, testData));
 				testData = WekaUtils.getPredictionInstancesSingleLabel(testData, cl);
 				testData = WekaUtils.addInstanceId(testData, copyTestData, multiLabel);
-				
+
 				BufferedWriter bw = new BufferedWriter(new FileWriter(trainItemIds));
 				for (Instance inst : copyTrainData){
-//					bw.write(inst.stringValue(0)+"\n");
+					//				bw.write(inst.stringValue(0)+"\n");
 					String instanceId = inst.stringValue(copyTrainData.attribute(Constants.ID_FEATURE_NAME).index());
 					instanceId = instanceId.substring(instanceId.indexOf("_0_")+3);
 					// TODO comment in again
-				//	bw.write(instanceId+"\t"+instanceId2TextMap.get(instanceId)+"\n");
+					bw.write(instanceId+"\t"+instanceId2TextMap.get(instanceId)+"\n");
 				}
 				bw.close();
 				//                // Write out the predictions
@@ -156,5 +182,5 @@ implements Constants
 		bw.close();
 	}
 
-	
+
 }
