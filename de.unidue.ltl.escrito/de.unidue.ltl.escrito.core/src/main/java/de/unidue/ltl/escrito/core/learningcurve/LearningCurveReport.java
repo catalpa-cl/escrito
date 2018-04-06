@@ -40,7 +40,9 @@ import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
 import org.dkpro.tc.ml.weka.util.WekaUtils;
 
-import de.unidue.ltl.escrito.core.report.QuadraticWeightedKappa;
+import de.unidue.ltl.escrito.core.report.ReportUtils;
+import de.unidue.ltl.evaluation.core.EvaluationData;
+import de.unidue.ltl.evaluation.measures.agreement.QuadraticallyWeightedKappa;
 import weka.core.Instance;
 import weka.core.SerializationHelper;
 
@@ -128,8 +130,14 @@ implements Constants
 						}
 					}
 				}
-
-				double kappa = QuadraticWeightedKappa.getKappa(goldLabelsList, predictedLabelsList, classLabelsInteger.toArray(new Integer[0]));
+				
+				EvaluationData<Integer> evalData = new EvaluationData<Integer>();
+				for (int i = 0; i<goldLabelsList.size(); i++){
+					evalData.register(goldLabelsList.get(i), predictedLabelsList.get(i));
+				}
+				QuadraticallyWeightedKappa<Integer> qwk = new QuadraticallyWeightedKappa<Integer>(evalData);
+				double kappa = qwk.getResult();
+				
 				kappas.add(kappa);
 				selectedItemsOverall.add(new Configuration(kappa, selectedItems));
 			}
@@ -140,7 +148,7 @@ implements Constants
 				min = Collections.min(kappas);
 				max = Collections.max(kappas);
 			}
-			double meanKappa = QuadraticWeightedKappa.getMeanKappa(kappas);
+			double meanKappa = ReportUtils.getMeanKappa(kappas);
 			results.put(QUADRATIC_WEIGHTED_KAPPA_MEAN, meanKappa);
 			results.put(QUADRATIC_WEIGHTED_KAPPA_MIN, min);
 			results.put(QUADRATIC_WEIGHTED_KAPPA_MAX, max);
