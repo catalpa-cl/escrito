@@ -86,6 +86,7 @@ implements Constants
 			List<Configuration> selectedItemsOverall = new ArrayList<Configuration>();
 			Properties props = new Properties();
 			List<Double> kappas = new ArrayList<Double>();
+			String LearningCurveTaskId = null;
 			for (int iteration=0; iteration<LearningCurveTask.ITERATIONS; iteration++) {
 			//	System.out.println("Iteration: "+iteration);
 				File evaluationFile = null;
@@ -98,6 +99,7 @@ implements Constants
 					if (!TcTaskTypeUtil.isMachineLearningAdapterTask(storageService, id)) {
 						continue;
 					}
+					LearningCurveTaskId = id;
 					evaluationFile = storageService.locateKey(id, Constants.TEST_TASK_OUTPUT_KEY+"/"+Constants.EVAL_FILE_NAME+"_" + numberOfInstances + "_" + iteration);
 					selectedItemFile = storageService.locateKey(id, Constants.TEST_TASK_OUTPUT_KEY+"/"+Constants.EVAL_FILE_NAME+"_" + numberOfInstances + "_" + iteration+"_itemIds.txt");
 				}
@@ -173,7 +175,8 @@ implements Constants
 			}
 
 			// Write out properties
-			getContext().storeBinary(RESULTS_FILENAME + "_" + numberOfInstances+".txt", new PropertiesAdapter(props));
+			getContext().getStorageService().storeBinary(LearningCurveTaskId, RESULTS_FILENAME + "_" + numberOfInstances+".txt", new PropertiesAdapter(props));
+		//	getContext().storeBinary(RESULTS_FILENAME + "_" + numberOfInstances+".txt", new PropertiesAdapter(props));
 			
 			
 			selectedItemsOverall.sort(null);
