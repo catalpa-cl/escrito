@@ -92,10 +92,9 @@
 	<modules>
 		<module>de.unidue.ltl.escrito.core</module>
 		<!--module>de.unidue.ltl.escrito.data</module-->
-		<!--module>de.unidue.ltl.escrito.experiment.essay.baseline</module-->
-		<!--module>de.unidue.ltl.escrito.experiment.short.baseline</module-->
+		<module>de.unidue.ltl.escrito.examples</module>
 		<module>de.unidue.ltl.escrito.io</module>
-		<!--module>de.unidue.ltl.escrito.features</module-->
+		<module>de.unidue.ltl.escrito.features</module>
 		<!--module>de.unidue.ltl.escrito.integration.jack</module-->
 	</modules>
 	<build>

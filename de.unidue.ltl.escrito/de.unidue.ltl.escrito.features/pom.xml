@@ -1,0 +1,194 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>de.unidue.ltl.escrito</groupId>
+		<artifactId>de.unidue.ltl.escrito</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>de.unidue.ltl.escrito.features</artifactId>
+	<name>de.unidue.ltl.escrito.features</name>
+	<dependencies>
+		<!-- dkpro core dependencies -->
+			<dependency>
+			<groupId>de.unidue.ltl.escrito</groupId>
+			<artifactId>de.unidue.ltl.escrito.core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.matetools-gpl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.tokit-asl</artifactId>
+			</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.ngrams-asl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.stopwordremover-asl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.opennlp-asl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.stanfordnlp-gpl</artifactId>
+		</dependency>
+		<!--dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>
+                de.tudarmstadt.ukp.dkpro.core.languagetool-asl
+            </artifactId>
+		</dependency-->
+		<!-- dkpro core io dependencies -->
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>
+                de.tudarmstadt.ukp.dkpro.core.io.tei-asl
+            </artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.io.tiger-asl</artifactId>
+		</dependency>
+		<!-- dkpro core api dependencies -->
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.api.metadata-asl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.api.frequency-asl</artifactId>
+		</dependency>
+		<!-- dkpro core models -->
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.opennlp-model-tagger-de-maxent</artifactId>
+			<version>20120616.1</version>
+		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.stanfordnlp-model-parser-de-pcfg</artifactId>
+			<version>20140104.1</version>
+		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.decompounding-asl</artifactId>
+		</dependency>
+		<!-- dkpro tc dependencies -->
+		<dependency>
+			<groupId>org.dkpro.tc</groupId>
+			<artifactId>dkpro-tc-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.dkpro.tc</groupId>
+			<artifactId>dkpro-tc-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.dkpro.tc</groupId>
+			<artifactId>dkpro-tc-ml</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.dkpro.tc</groupId>
+			<artifactId>dkpro-tc-features</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.dkpro.tc</groupId>
+			<artifactId>dkpro-tc-features-ngram</artifactId>
+		</dependency>
+		<!--dependency> 
+		<groupId>org.dkpro.tc</groupId> <artifactId>dkpro-tc-features-readability</artifactId> 
+			</dependency-->
+		<dependency>
+			<groupId>org.dkpro.tc</groupId>
+			<artifactId>dkpro-tc-api-features</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.dkpro.tc</groupId>
+			<artifactId>dkpro-tc-ml-weka</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.dkpro.tc</groupId>
+			<artifactId>dkpro-tc-testing</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- dkpro similarity dependencies -->
+		<dependency>
+			<groupId>org.dkpro.similarity</groupId>
+			<artifactId>dkpro-similarity-algorithms-api-asl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.dkpro.similarity</groupId>
+			<artifactId>dkpro-similarity-algorithms-lexical-asl</artifactId>
+		</dependency>
+
+		<!-- dkpro statistics dependencies -->
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.statistics</groupId>
+			<artifactId>dkpro-statistics-agreement</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+
+		<!-- apache dependencies -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.7</version>
+		</dependency>
+
+		<!-- google dependencies -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.jweb1t</groupId>
+			<artifactId>com.googlecode.jweb1t</artifactId>
+		</dependency>
+
+		<!-- other dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>jaxen</groupId>
+			<artifactId>jaxen</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.clearnlp</groupId>
+			<artifactId>clearnlp-dictionary</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jazzy</groupId>
+			<artifactId>jazzy-core</artifactId>
+			<version>0.5.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>4.4.0</version>
+		</dependency>
+	</dependencies>
+</project>
