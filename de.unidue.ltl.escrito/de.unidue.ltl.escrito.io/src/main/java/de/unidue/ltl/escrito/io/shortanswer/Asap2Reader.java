@@ -169,7 +169,7 @@ public class Asap2Reader extends JCasCollectionReader_ImplBase {
 
 			DocumentMetaData dmd = DocumentMetaData.create(jcas);
 			dmd.setDocumentId(itemId); // + "-" + asap2Item.getEssaySetId());
-			dmd.setDocumentTitle(itemId);
+			dmd.setDocumentTitle(asap2Item.getText());
 			dmd.setDocumentUri(inputFileURL.toURI().toString());
 			dmd.setCollectionId(itemId);
 

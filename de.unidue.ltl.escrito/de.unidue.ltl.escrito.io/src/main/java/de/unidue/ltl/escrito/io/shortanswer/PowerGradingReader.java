@@ -41,11 +41,11 @@ extends JCasCollectionReader_ImplBase
 
 	public static final String PARAM_ENCODING = "Encoding";
 	@ConfigurationParameter(name = PARAM_ENCODING, mandatory = false, defaultValue = "UTF-8")
-	private String encoding;
+	protected String encoding;
 
 	public static final String PARAM_SEPARATOR = "Separator";
 	@ConfigurationParameter(name = PARAM_SEPARATOR, mandatory = false, defaultValue = "\t")
-	private String separator;
+	protected String separator;
 
 	public static final String PARAM_PROMPT_IDS = "PromptId";
 	@ConfigurationParameter(name = PARAM_PROMPT_IDS, mandatory = false, defaultValue = "-1")
@@ -161,7 +161,7 @@ extends JCasCollectionReader_ImplBase
 
 			DocumentMetaData dmd = DocumentMetaData.create(jcas);
 			dmd.setDocumentId(itemId); 
-			dmd.setDocumentTitle(itemId);
+			dmd.setDocumentTitle(item.getText());
 			dmd.setDocumentUri(inputFileURL.toURI().toString());
 			dmd.setCollectionId(itemId);
 

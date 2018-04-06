@@ -140,7 +140,7 @@ public class GenericDatasetReader  extends JCasCollectionReader_ImplBase{
 			jcas.setDocumentText(item.getText());        	        	
 			DocumentMetaData dmd = DocumentMetaData.create(jcas);
 			dmd.setDocumentId(itemId); 
-			dmd.setDocumentTitle(itemId);
+			dmd.setDocumentTitle(item.getText());
 			dmd.setDocumentUri(inputFileURL.toURI().toString());
 			dmd.setCollectionId(itemId);
 
