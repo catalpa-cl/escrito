@@ -15,7 +15,9 @@ import org.dkpro.lab.task.Dimension;
 import org.dkpro.lab.task.ParameterSpace;
 import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
 import org.dkpro.tc.core.Constants;
+import org.dkpro.tc.ml.ExperimentCrossValidation;
 import org.dkpro.tc.ml.ExperimentTrainTest;
+import org.dkpro.tc.ml.report.BatchCrossValidationReport;
 import org.dkpro.tc.ml.report.BatchRuntimeReport;
 import org.dkpro.tc.ml.report.BatchTrainTestReport;
 import org.dkpro.tc.ml.weka.WekaAdapter;
@@ -27,6 +29,7 @@ import de.tudarmstadt.ukp.dkpro.core.matetools.MateLemmatizer;
 import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpPosTagger;
 import de.unidue.ltl.escrito.core.learningcurve.LearningCurveAdapter;
 import de.unidue.ltl.escrito.core.learningcurve.LearningCurveReport;
+import de.unidue.ltl.escrito.core.report.CvEvaluationReport;
 import de.unidue.ltl.escrito.core.report.GradingEvaluationReport;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.functions.SMO;
@@ -110,6 +113,24 @@ public class Experiments_ImplBase implements Constants {
 		// Run
 		Lab.getInstance().run(batch);
 	}
+	
+	// ##### CV #####
+			protected static void runCrossValidation(ParameterSpace pSpace, String name, AnalysisEngineDescription aed, int numFolds)
+					throws Exception
+			{
+				ExperimentCrossValidation batch = new ExperimentCrossValidation(name + "-CV", numFolds);
+				batch.setPreprocessing(aed);
+				batch.addInnerReport(GradingEvaluationReport.class);
+				batch.setParameterSpace(pSpace);
+				batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
+				batch.addReport(BatchCrossValidationReport.class);
+				batch.addReport(CvEvaluationReport.class);
+
+				// Run
+				Lab.getInstance().run(batch);
+			}
+			
+			
 
 	// ##### LEARNING-CURVE #####
 	public static void runLearningCurve(ParameterSpace pSpace, String name, String languageCode)

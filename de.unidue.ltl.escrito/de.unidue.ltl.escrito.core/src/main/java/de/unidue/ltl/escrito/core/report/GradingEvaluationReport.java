@@ -31,7 +31,6 @@ public class GradingEvaluationReport extends TcBatchReportBase {
 
 	public static final String RESULTS_FILENAME = "classification_results.txt";
 
-	public static final String STATISTICS_FILE_NAME = "statistics.txt";
 	private static final String WEIGHTEDFMEASURE = "weightedFmeasure";
 	private static final String MICROFMEASURE = "microAveragedFmessure";
 	private static final String MICROPRECISION = "microAveragedPrecision";
