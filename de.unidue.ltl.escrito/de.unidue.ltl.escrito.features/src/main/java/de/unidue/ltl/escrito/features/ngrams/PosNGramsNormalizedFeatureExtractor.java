@@ -8,22 +8,23 @@ import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.dkpro.tc.api.exception.TextClassificationException;
 import org.dkpro.tc.api.features.Feature;
+import org.dkpro.tc.api.features.FeatureType;
 import org.dkpro.tc.api.type.TextClassificationTarget;
-import org.dkpro.tc.features.ngram.LucenePOSNGram;
-import org.dkpro.tc.features.ngram.util.NGramUtils;
+import org.dkpro.tc.features.ngram.PosNGram;
+import org.dkpro.tc.features.ngram.meta.PosNGramMC;
 
 
 import de.tudarmstadt.ukp.dkpro.core.api.frequency.util.FrequencyDistribution;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 
-public class PosNGramsNormalizedFeatureExtractor extends LucenePOSNGram {
+public class PosNGramsNormalizedFeatureExtractor extends PosNGram {
 
 	@Override
     public Set<Feature> extract(JCas jcas, TextClassificationTarget target)
         throws TextClassificationException
     { 
         Set<Feature> features = new HashSet<Feature>();
-        FrequencyDistribution<String> documentPOSNgrams = NGramUtils.getDocumentPosNgrams(jcas, target, ngramMinN,
+        FrequencyDistribution<String> documentPOSNgrams = PosNGramMC.getDocumentPosNgrams(jcas, target, ngramMinN,
                 ngramMaxN, useCanonicalTags);
 
         for (String topNgram : topKSet.getKeys()) {
@@ -32,10 +33,10 @@ public class PosNGramsNormalizedFeatureExtractor extends LucenePOSNGram {
             	int n =  StringUtils.countMatches(topNgram, "_");;
             	int numberOfNgramsInEssay = JCasUtil.select(jcas, Token.class).size()-n;	
            // 	System.out.println("POS: \t"+topNgram+"\t"+numberOfOccurences+"\t"+numberOfNgramsInEssay+"\t"+1.0*numberOfOccurences/numberOfNgramsInEssay);
-                features.add(new Feature(getFeaturePrefix() + "_" + topNgram, 1.0*numberOfOccurences/numberOfNgramsInEssay));
+                features.add(new Feature(getFeaturePrefix() + "_" + topNgram, 1.0*numberOfOccurences/numberOfNgramsInEssay, FeatureType.NUMERIC));
             }
             else {
-                features.add(new Feature(getFeaturePrefix() + "_" + topNgram, 0, true));
+                features.add(new Feature(getFeaturePrefix() + "_" + topNgram, 0, FeatureType.NUMERIC));
             }
         }
         return features;
