@@ -33,10 +33,13 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.dkpro.lab.reporting.ReportBase;
+import org.dkpro.lab.storage.StorageService;
 import org.dkpro.lab.storage.StorageService.AccessMode;
 import org.dkpro.lab.storage.impl.PropertiesAdapter;
 import org.dkpro.lab.task.Discriminator;
 import org.dkpro.tc.core.Constants;
+import org.dkpro.tc.core.task.TcTaskTypeUtil;
+import org.dkpro.tc.ml.report.TcBatchReportBase;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
 import org.dkpro.tc.ml.weka.util.WekaUtils;
 
@@ -51,7 +54,7 @@ import weka.core.SerializationHelper;
  * Collects results for each of the learning curve runs.
  */
 public class LearningCurveReport
-extends ReportBase
+extends TcBatchReportBase
 implements Constants
 {
 
@@ -84,9 +87,20 @@ implements Constants
 			Properties props = new Properties();
 			List<Double> kappas = new ArrayList<Double>();
 			for (int iteration=0; iteration<LearningCurveTask.ITERATIONS; iteration++) {
-				File evaluationFile = getContext().getFile(Constants.TEST_TASK_OUTPUT_KEY+"/"+Constants.EVAL_FILE_NAME+"_" + numberOfInstances + "_" + iteration, AccessMode.READONLY);
-				File selectedItemFile = getContext().getFile(Constants.TEST_TASK_OUTPUT_KEY+"/"+Constants.EVAL_FILE_NAME+"_" + numberOfInstances + "_" + iteration+"_itemIds.txt", AccessMode.READONLY);
-				
+			//	System.out.println("Iteration: "+iteration);
+				File evaluationFile = null;
+				File selectedItemFile = null;
+				StorageService storageService = getContext().getStorageService();
+				Set<String> taskIds = getTaskIdsFromMetaData(getSubtasks());
+				List<String> allIds = new ArrayList<String>();
+				allIds.addAll(collectTasks(taskIds));
+				for (String id : taskIds) {
+					if (!TcTaskTypeUtil.isMachineLearningAdapterTask(storageService, id)) {
+						continue;
+					}
+					evaluationFile = storageService.locateKey(id, Constants.TEST_TASK_OUTPUT_KEY+"/"+Constants.EVAL_FILE_NAME+"_" + numberOfInstances + "_" + iteration);
+					selectedItemFile = storageService.locateKey(id, Constants.TEST_TASK_OUTPUT_KEY+"/"+Constants.EVAL_FILE_NAME+"_" + numberOfInstances + "_" + iteration+"_itemIds.txt");
+				}
 				
 				// we need to check non-existing files as we might skip some training sizes
 				if (!evaluationFile.exists()) {
@@ -141,7 +155,7 @@ implements Constants
 				kappas.add(kappa);
 				selectedItemsOverall.add(new Configuration(kappa, selectedItems));
 			}
-
+		
 			double min = -1.0;
 			double max = -1.0;
 			if (kappas.size() > 0) {
