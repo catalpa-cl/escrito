@@ -25,24 +25,24 @@ import org.junit.Assert;
 public class AvgNrOfCharsPerTokenTest
 {
 	@Test
-    public void tokenLengthFeatureExtractorTest()
-        throws Exception
-    {
+	public void tokenLengthFeatureExtractorTest()
+			throws Exception
+	{
 		AnalysisEngineDescription description= createEngineDescription(createEngineDescription(BreakIteratorSegmenter.class), createEngineDescription(OpenNlpPosTagger.class));
-        AnalysisEngine engine=createEngine(description);
-        		
-        JCas jcas = engine.newJCas();
-        jcas.setDocumentLanguage("de");
-        jcas.setDocumentText("Sie ist gut.");
-        engine.process(jcas);
+		AnalysisEngine engine=createEngine(description);
 
-        AvgNrOfCharsPerToken extractor = new AvgNrOfCharsPerToken();
-        Set<Feature> features = extractor.extract(jcas, TextClassificationTarget.get(jcas));
+		JCas jcas = engine.newJCas();
+		jcas.setDocumentLanguage("de");
+		jcas.setDocumentText("Sie ist gut.");
+		engine.process(jcas);
 
-        Assert.assertEquals(2, features.size());
+		AvgNrOfCharsPerToken extractor = new AvgNrOfCharsPerToken();
+		Set<Feature> features = extractor.extract(jcas, TextClassificationTarget.get(jcas));
 
-        Iterator<Feature> iter = features.iterator();
-        assertFeature(AvgNrOfCharsPerToken.AVG_NR_OF_CHARS_PER_TOKEN, 3.0, iter.next());
-        assertFeature(AvgNrOfCharsPerToken.STANDARD_DEVIATION_OF_CHARS_PER_TOKEN, 0.0, iter.next());
-    }
+		Assert.assertEquals(2, features.size());
+
+		Iterator<Feature> iter = features.iterator();
+		assertFeature(AvgNrOfCharsPerToken.STANDARD_DEVIATION_OF_CHARS_PER_TOKEN, 0.0, iter.next());
+		assertFeature(AvgNrOfCharsPerToken.AVG_NR_OF_CHARS_PER_TOKEN, 3.0, iter.next());
+	}
 }
