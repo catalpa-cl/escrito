@@ -177,7 +177,9 @@ public class GradingEvaluationReportClusteringCurve extends ReportBase {
 		//		String confusionMatrix2 = matrix.toString();
 		//		System.out.println(confusionMatrix2);
 		// TODO: ist das das richtige Kappa?
-		return QuadraticWeightedKappa.getKappa(goldLabelsList, predictedLabelsList, classLabelsInteger.toArray(new Integer[0]));
+	//	return QuadraticWeightedKappa.getKappa(goldLabelsList, predictedLabelsList, classLabelsInteger.toArray(new Integer[0]));
+		// TODO replace
+		return 0.0;
 	}
 
 	// find the major class
