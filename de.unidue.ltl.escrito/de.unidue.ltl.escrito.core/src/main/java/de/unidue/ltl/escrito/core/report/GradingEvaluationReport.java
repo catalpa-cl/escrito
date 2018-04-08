@@ -1,9 +1,13 @@
 package de.unidue.ltl.escrito.core.report;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -16,7 +20,9 @@ import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.task.TcTaskTypeUtil;
 import org.dkpro.tc.ml.report.TcBatchReportBase;
 
+import de.unidue.ltl.escrito.core.Utils;
 import de.unidue.ltl.evaluation.core.EvaluationData;
+import de.unidue.ltl.evaluation.core.EvaluationEntry;
 import de.unidue.ltl.evaluation.measures.agreement.CohenKappa;
 import de.unidue.ltl.evaluation.measures.agreement.LinearlyWeightedKappa;
 import de.unidue.ltl.evaluation.measures.agreement.QuadraticallyWeightedKappa;
@@ -30,6 +36,7 @@ import de.unidue.ltl.evaluation.measures.Accuracy;
 public class GradingEvaluationReport extends TcBatchReportBase {
 
 	public static final String RESULTS_FILENAME = "classification_results.txt";
+	public static final String LABELED_ITEMS_FILENAME = "labeledItems.txt";
 
 	private static final String WEIGHTEDFMEASURE = "weightedFmeasure";
 	private static final String MICROFMEASURE = "microAveragedFmessure";
@@ -71,6 +78,10 @@ public class GradingEvaluationReport extends TcBatchReportBase {
 		EvaluationData<String> evaluationString = ReportUtils.readId2OutcomeAsString(evaluationFile);
 		EvaluationData<String> evaluationStringMajority = ReportUtils.readId2OutcomeAsString(evaluationFileMajority);
 
+		Map<String, String> instanceId2TextMap = Utils.getInstanceId2TextMap(this.getContext());
+		//System.out.println("Read map with "+instanceId2TextMap.size()+" entries");
+		
+		
 		Accuracy<String> acc = new Accuracy<String>(evaluationString);
 		results.put(ACCURACY, acc.getResult());
 
@@ -111,6 +122,9 @@ public class GradingEvaluationReport extends TcBatchReportBase {
 			props.setProperty(s, results.get(s).toString());
 		}
 
+		File itemsFile = new File(evaluationFile.getParentFile(), LABELED_ITEMS_FILENAME);
+		ReportUtils.writeLabeledOutput(instanceId2TextMap, evaluationString, itemsFile);
+		
 		// Write results
 		File outfile = new File(evaluationFile.getParentFile(), RESULTS_FILENAME);
 		FileOutputStream fos = null;
@@ -123,5 +137,6 @@ public class GradingEvaluationReport extends TcBatchReportBase {
         }   
 		
 	}
+
 
 }

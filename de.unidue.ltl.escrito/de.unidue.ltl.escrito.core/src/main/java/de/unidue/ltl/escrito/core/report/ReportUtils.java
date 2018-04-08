@@ -1,12 +1,15 @@
 package de.unidue.ltl.escrito.core.report;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +17,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.math3.stat.StatUtils;
 
 import de.unidue.ltl.evaluation.core.EvaluationData;
+import de.unidue.ltl.evaluation.core.EvaluationEntry;
 
 public class ReportUtils {
 
@@ -35,7 +39,7 @@ public class ReportUtils {
 					String everythingElse = line.split("=")[1];
 					String prediction = everythingElse.split(";")[0];
 					String gold = everythingElse.split(";")[1];
-					evaluationDouble.register(Double.parseDouble(labelMappings.get(String.valueOf(gold))), Double.parseDouble(labelMappings.get(String.valueOf(prediction))));
+					evaluationDouble.register(Double.parseDouble(labelMappings.get(String.valueOf(gold))), Double.parseDouble(labelMappings.get(String.valueOf(prediction))), id);
 		//			System.out.println(line+"\t"+prediction+"\t"+gold);
 				}
 			}
@@ -66,7 +70,7 @@ public class ReportUtils {
 					String everythingElse = line.split("=")[1];
 					String prediction = everythingElse.split(";")[0];
 					String gold = everythingElse.split(";")[1];
-					evaluationString.register(labelMappings.get(String.valueOf(gold)), labelMappings.get(String.valueOf(prediction)));
+					evaluationString.register(labelMappings.get(String.valueOf(gold)), labelMappings.get(String.valueOf(prediction)), id);
 		//			System.out.println(line+"\t"+prediction+"\t"+gold);
 				}
 			}
@@ -142,6 +146,23 @@ public class ReportUtils {
 	    }
 	    
 	
-	
+	    public static void writeLabeledOutput(Map<String, String> instanceId2TextMap, EvaluationData<String> evaluationString, File itemsFile) {
+			try {
+				BufferedWriter bw = new BufferedWriter(new FileWriter(itemsFile.getAbsolutePath()));
+				Iterator<EvaluationEntry<String>> iter = evaluationString.iterator();
+				while (iter.hasNext()){
+					EvaluationEntry<String> e = iter.next();
+					String id = e.getName();
+					id = id.substring(id.indexOf("_0_")+3);
+					bw.write(id+"\t"+instanceId2TextMap.get(id)
+					+"\t"+e.getGold()+"\t"+e.getPredicted()+"\n");
+				}
+				bw.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
 	
 }
