@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.dkpro.tc.ml.weka.util.WekaUtils;
+import org.dkpro.tc.ml.weka.core._eka;
 
 import weka.clusterers.Clusterer;
 import weka.core.Instance;
@@ -18,7 +18,7 @@ public class ClusterUtils {
 
 
 	public static Instances removeInstanceIdAndClassLabel(Instances trainData, boolean multiLabel) throws Exception {
-		trainData = WekaUtils.removeInstanceId(trainData, multiLabel);
+		trainData = _eka.removeInstanceId(trainData, multiLabel);
 
 		// generate data for clusterer (w/o class)
 		Remove filter = new Remove();

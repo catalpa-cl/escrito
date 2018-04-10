@@ -23,7 +23,6 @@ import org.dkpro.statistics.agreement.distance.OrdinalDistanceFunction;
 import org.dkpro.tc.core.Constants;
 //import de.tudarmstadt.ukp.dkpro.tc.ml.TCMachineLearningAdapter.AdapterNameEntries;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
-import org.dkpro.tc.ml.weka.util.WekaUtils;
 
 import de.unidue.ltl.escrito.core.clustering.ClusterExemplarTask;
 import weka.classifiers.Evaluation;

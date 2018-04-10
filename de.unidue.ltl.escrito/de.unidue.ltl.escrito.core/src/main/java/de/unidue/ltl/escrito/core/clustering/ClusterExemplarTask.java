@@ -12,8 +12,9 @@ import org.dkpro.lab.storage.StorageService.AccessMode;
 import org.dkpro.lab.task.Discriminator;
 import org.dkpro.lab.task.impl.ExecutableTaskBase;
 import org.dkpro.tc.core.Constants;
-import org.dkpro.tc.ml.weka.util.WekaUtils;
+import org.dkpro.tc.ml.weka.core._eka;
 
+import de.unidue.ltl.escrito.core.Utils;
 import weka.clusterers.AbstractClusterer;
 import weka.clusterers.Clusterer;
 import weka.clusterers.SimpleKMeans;
@@ -64,10 +65,10 @@ implements Constants
 
 		for (int numberOfClusters : NUMBER_OF_TRAINING_INSTANCES ){
 
-			File arffFileTrain = WekaUtils.getFile(aContext, TEST_TASK_INPUT_KEY_TRAINING_DATA,
+			File arffFileTrain = Utils.getFile(aContext, TEST_TASK_INPUT_KEY_TRAINING_DATA,
 					FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
 
-			Instances trainData = WekaUtils.getInstances(arffFileTrain, multiLabel);
+			Instances trainData = _eka.getInstances(arffFileTrain, multiLabel);
 
 			Clusterer abstractClusterer = AbstractClusterer.forName(clusteringArguments.get(0), clusteringArguments
 					.subList(1, clusteringArguments.size()).toArray(new String[0]));
@@ -80,7 +81,7 @@ implements Constants
 			Instances selectedTrainDataWithId = new Instances(trainData);
 			selectedTrainDataWithId.clear();
 			
-			trainData = WekaUtils.removeInstanceId(trainData, multiLabel);
+			trainData = _eka.removeInstanceId(trainData, multiLabel);
 			Instances copyTrainData = new Instances(trainData);
 
 			// generate data for clusterer (w/o class)
@@ -128,7 +129,7 @@ implements Constants
 
 
 			// write the new training data (that will be used by the test task instead of the original one)    
-			File predictionFile = WekaUtils.getFile(aContext,"", ADAPTED_TRAINING_DATA, AccessMode.READWRITE);
+			File predictionFile = Utils.getFile(aContext,"", ADAPTED_TRAINING_DATA, AccessMode.READWRITE);
 			DataSink.write(predictionFile.getPath() + "/training-data_"+numberOfClusters+".arff.gz", trainData);
 
 			File trainItemIds = new File(aContext.getStorageLocation(TEST_TASK_OUTPUT_KEY,

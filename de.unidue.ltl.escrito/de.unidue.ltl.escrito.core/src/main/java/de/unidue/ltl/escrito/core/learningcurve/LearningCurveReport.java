@@ -40,8 +40,8 @@ import org.dkpro.lab.task.Discriminator;
 import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.task.TcTaskTypeUtil;
 import org.dkpro.tc.ml.report.TcBatchReportBase;
+import org.dkpro.tc.ml.weka.core._eka;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
-import org.dkpro.tc.ml.weka.util.WekaUtils;
 
 import de.unidue.ltl.escrito.core.report.ReportUtils;
 import de.unidue.ltl.evaluation.core.EvaluationData;
@@ -124,7 +124,7 @@ implements Constants
 						.read(evaluationFile.getAbsolutePath());
 
 				//System.out.println(eval.getHeader());
-				List<String> classLabels = WekaUtils.getClassLabels(eval.getHeader(), false);
+				List<String> classLabels = _eka.getClassLabels(eval.getHeader(), false);
 				//System.out.println("Classlabels: "+classLabels);
 				List<Integer> classLabelsInteger = new ArrayList<Integer>();
 				for (String classLabel : classLabels) {

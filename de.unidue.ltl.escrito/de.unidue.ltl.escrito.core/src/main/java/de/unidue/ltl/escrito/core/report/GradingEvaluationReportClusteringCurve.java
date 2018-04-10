@@ -21,9 +21,9 @@ import org.dkpro.statistics.agreement.coding.RandolphKappaAgreement;
 import org.dkpro.statistics.agreement.coding.ScottPiAgreement;
 import org.dkpro.statistics.agreement.distance.OrdinalDistanceFunction;
 import org.dkpro.tc.core.Constants;
+import org.dkpro.tc.ml.weka.core._eka;
 //import de.tudarmstadt.ukp.dkpro.tc.ml.TCMachineLearningAdapter.AdapterNameEntries;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
-import org.dkpro.tc.ml.weka.util.WekaUtils;
 
 import de.unidue.ltl.escrito.core.clustering.ClusterExemplarTask;
 import weka.classifiers.Evaluation;
@@ -113,7 +113,7 @@ public class GradingEvaluationReportClusteringCurve extends ReportBase {
 			for (String s : results.keySet()) {
 				if (s.equals("majorClass")) {
 					// translate from index to classname
-					String className = WekaUtils.getClassLabels(eval.getHeader(),
+					String className = _eka.getClassLabels(eval.getHeader(),
 							false).get(results.get(s).intValue());
 					System.out.println(s + ": " + className);
 					props.setProperty(s, className);
@@ -133,7 +133,7 @@ public class GradingEvaluationReportClusteringCurve extends ReportBase {
 	}
 
 	private Double getQuadraticWeightedKappa(Evaluation eval) {
-		List<String> classLabels = WekaUtils.getClassLabels(eval.getHeader(), false);
+		List<String> classLabels = _eka.getClassLabels(eval.getHeader(), false);
 
 		List<Integer> classLabelsInteger = new ArrayList<Integer>();
 		for (String classLabel : classLabels) {
@@ -212,7 +212,7 @@ public class GradingEvaluationReportClusteringCurve extends ReportBase {
 	 * @return study
 	 */
 	private CodingAnnotationStudy getStudy(Evaluation eval) {
-		List<String> classLabels = WekaUtils.getClassLabels(eval.getHeader(),
+		List<String> classLabels = _eka.getClassLabels(eval.getHeader(),
 				false);
 		CodingAnnotationStudy study = new CodingAnnotationStudy(2);
 		double[][] confusionMatrix = eval.confusionMatrix();

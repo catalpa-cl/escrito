@@ -16,6 +16,7 @@ import org.dkpro.lab.task.TaskContextMetadata;
 import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.task.TcTaskTypeUtil;
 
+import de.unidue.ltl.escrito.core.Utils;
 import de.unidue.ltl.evaluation.core.EvaluationData;
 import de.unidue.ltl.evaluation.measures.Accuracy;
 import de.unidue.ltl.evaluation.measures.agreement.CohenKappa;
@@ -31,6 +32,8 @@ public class CvEvaluationReport extends BatchReportBase
 implements Constants{
 
 	public static final String RESULTS_FILENAME = "combined_classification_results.txt";
+	public static final String LABELED_ITEMS_FILENAME = "labeledItems.txt";
+	
 
 	private static final String WEIGHTEDFMEASURE = "weightedFmeasure";
 	private static final String MICROFMEASURE = "microAveragedFmessure";
@@ -69,8 +72,11 @@ implements Constants{
 			EvaluationData<Double> evaluationDouble = ReportUtils.readId2OutcomeAsDouble(id2oFile);
 			EvaluationData<String> evaluationString = ReportUtils.readId2OutcomeAsString(id2oFile);
 			EvaluationData<String> evaluationStringMajority = ReportUtils.readId2OutcomeAsString(id2oFileMaj);
-
-
+			
+			Map<String, String> instanceId2TextMap = Utils.getInstanceId2TextMapCV(this.getContext());
+			//System.out.println("Read map with "+instanceId2TextMap.size()+" entries");
+			
+			
 			Map<String, Double> results = new HashMap<String, Double>();
 
 			Accuracy<String> acc = new Accuracy<String>(evaluationString);
@@ -111,6 +117,10 @@ implements Constants{
 				System.out.printf(s+": %.2f"+System.getProperty("line.separator"), results.get(s));
 				props.setProperty(s, results.get(s).toString());
 			}
+			
+			File itemsFile = new File(id2oFile.getParentFile(), LABELED_ITEMS_FILENAME);
+			ReportUtils.writeLabeledOutput(instanceId2TextMap, evaluationString, itemsFile);
+			
 
 			// Write out properties
 			//getContext().storeBinary(RESULTS_FILENAME, new PropertiesAdapter(props));

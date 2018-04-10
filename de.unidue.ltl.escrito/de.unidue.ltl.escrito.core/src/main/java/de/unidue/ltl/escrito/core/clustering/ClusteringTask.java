@@ -47,7 +47,7 @@ import org.dkpro.lab.task.Discriminator;
 import org.dkpro.lab.task.impl.ExecutableTaskBase;
 import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.task.InitTask;
-import org.dkpro.tc.ml.weka.util.WekaUtils;
+import org.dkpro.tc.ml.weka.core._eka;
 
 import weka.clusterers.AbstractClusterer;
 import weka.clusterers.Clusterer;
@@ -97,12 +97,12 @@ implements Constants
 			}
 			boolean multiLabel = false;
 
-			File arffFileTrain = WekaUtils.getFile(aContext, TEST_TASK_INPUT_KEY_TRAINING_DATA,
+			File arffFileTrain = Utils.getFile(aContext, TEST_TASK_INPUT_KEY_TRAINING_DATA,
 					FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
-			Instances trainData = WekaUtils.getInstances(arffFileTrain, multiLabel);
+			Instances trainData = _eka.getInstances(arffFileTrain, multiLabel);
 
 			// get number of outcomes
-			List<String> trainOutcomeValues = WekaUtils.getClassLabels(trainData, multiLabel);
+			List<String> trainOutcomeValues = _eka.getClassLabels(trainData, multiLabel);
 
 			// TODO: complain if it is not KMeans
 

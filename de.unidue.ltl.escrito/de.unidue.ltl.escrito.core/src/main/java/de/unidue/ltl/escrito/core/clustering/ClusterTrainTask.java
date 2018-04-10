@@ -35,7 +35,7 @@ import org.dkpro.lab.task.Discriminator;
 import org.dkpro.lab.task.impl.ExecutableTaskBase;
 import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.util.TaskUtils;
-import org.dkpro.tc.ml.weka.util.WekaUtils;
+import org.dkpro.tc.ml.weka.core._eka;
 
 import weka.clusterers.AbstractClusterer;
 import weka.clusterers.Clusterer;
@@ -46,6 +46,7 @@ import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Remove;
 import de.tudarmstadt.ukp.dkpro.core.api.frequency.util.ConditionalFrequencyDistribution;
 import de.tudarmstadt.ukp.dkpro.core.api.frequency.util.FrequencyDistribution;
+import de.unidue.ltl.escrito.core.Utils;
 
 /**
  * Clusters the training data, the performs label propagation 
@@ -80,19 +81,19 @@ public class ClusterTrainTask
         }
         boolean multiLabel = false;
 
-        File arffFileTrain = WekaUtils.getFile(aContext, TEST_TASK_INPUT_KEY_TRAINING_DATA,
+        File arffFileTrain = Utils.getFile(aContext, TEST_TASK_INPUT_KEY_TRAINING_DATA,
         		FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
 
-        Instances trainData = WekaUtils.getInstances(arffFileTrain, multiLabel);
+        Instances trainData = _eka.getInstances(arffFileTrain, multiLabel);
         
         // get number of outcomes
-		List<String> trainOutcomeValues = WekaUtils.getClassLabels(trainData, multiLabel);
+		List<String> trainOutcomeValues = _eka.getClassLabels(trainData, multiLabel);
 		
         Clusterer clusterer = AbstractClusterer.forName(clusteringArguments.get(0), clusteringArguments
                 .subList(1, clusteringArguments.size()).toArray(new String[0]));
 
         Instances copyTrainData = new Instances(trainData);
-        trainData = WekaUtils.removeInstanceId(trainData, multiLabel);
+        trainData = _eka.removeInstanceId(trainData, multiLabel);
         
 	    // generate data for clusterer (w/o class)
 	    Remove filter = new Remove();

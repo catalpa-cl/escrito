@@ -1,6 +1,7 @@
 package de.unidue.ltl.escrito.core.learningcurve;
 
 import org.dkpro.lab.task.impl.TaskBase;
+import org.dkpro.tc.ml.weka.core._eka;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
 import java.io.File;
 import java.util.List;
@@ -21,7 +22,8 @@ import weka.core.converters.ConverterUtils.DataSink;
 import weka.filters.unsupervised.attribute.Remove;
 import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.ml.weka.util.MultilabelResult;
-import org.dkpro.tc.ml.weka.util.WekaUtils;
+
+import de.unidue.ltl.escrito.core.Utils;
 
 /**
  * Base class for test task and save model tasks
@@ -65,9 +67,9 @@ implements Constants
 
 		for (int numberOfClusters : NUMBER_OF_TRAINING_INSTANCES ){
 
-			File arffFileTrain = WekaUtils.getFile(aContext, TEST_TASK_INPUT_KEY_TRAINING_DATA,
+			File arffFileTrain = Utils.getFile(aContext, TEST_TASK_INPUT_KEY_TRAINING_DATA,
 					FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
-			File arffFileTest = WekaUtils.getFile(aContext, TEST_TASK_INPUT_KEY_TEST_DATA,
+			File arffFileTest = Utils.getFile(aContext, TEST_TASK_INPUT_KEY_TEST_DATA,
 					FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
 
 			String train = arffFileTrain.getAbsolutePath();
@@ -76,33 +78,34 @@ implements Constants
 			System.out.println(train);
 			arffFileTrain = new File(train);
 
-			Instances trainData = WekaUtils.getInstances(arffFileTrain, multiLabel);
-			Instances testData = WekaUtils.getInstances(arffFileTest, multiLabel);
+			Instances trainData = _eka.getInstances(arffFileTrain, multiLabel);
+			Instances testData = _eka.getInstances(arffFileTest, multiLabel);
 
 			// do not balance in regression experiments
 			if (!learningMode.equals(Constants.LM_REGRESSION)) {
-				testData = WekaUtils.makeOutcomeClassesCompatible(trainData, testData, multiLabel);
+				testData = Utils.makeOutcomeClassesCompatible(trainData, testData, multiLabel);
 			}
 
 			Instances copyTestData = new Instances(testData);
-			trainData = WekaUtils.removeInstanceId(trainData, multiLabel);
-			testData = WekaUtils.removeInstanceId(testData, multiLabel);
+			trainData = _eka.removeInstanceId(trainData, multiLabel);
+			testData = _eka.removeInstanceId(testData, multiLabel);
 
 
 			// FEATURE SELECTION
-			if (attributeEvaluator != null && labelTransformationMethod != null
-					&& numLabelsToKeep > 0) {
-				Remove attSel = WekaUtils.featureSelectionMultilabel(aContext, trainData,
-						attributeEvaluator, labelTransformationMethod, numLabelsToKeep);
-				if (applySelection) {
-					Logger.getLogger(getClass()).info("APPLYING FEATURE SELECTION");
-					trainData = WekaUtils.applyAttributeSelectionFilter(trainData, attSel);
-					testData = WekaUtils.applyAttributeSelectionFilter(testData, attSel);
-				}
-			}
+			// TODO: DO we ever use this?
+//			if (attributeEvaluator != null && labelTransformationMethod != null
+//					&& numLabelsToKeep > 0) {
+//				Remove attSel = Utils.featureSelectionMultilabel(aContext, trainData,
+//						attributeEvaluator, labelTransformationMethod, numLabelsToKeep);
+//				if (applySelection) {
+//					Logger.getLogger(getClass()).info("APPLYING FEATURE SELECTION");
+//					trainData = Utils.applyAttributeSelectionFilter(trainData, attSel);
+//					testData = Utils.applyAttributeSelectionFilter(testData, attSel);
+//				}
+//			}
 
 			// build classifier
-			Classifier cl = WekaUtils.getClassifier(learningMode, classificationArguments);
+			Classifier cl = Utils.getClassifier(learningMode, classificationArguments);
 
 			// evaluation & prediction generation
 
@@ -115,13 +118,13 @@ implements Constants
 				// in single label setup
 				cl.buildClassifier(trainData);
 				weka.core.SerializationHelper.write(evalOutput.getAbsolutePath(),
-						WekaUtils.getEvaluationSinglelabel(cl, trainData, testData));
-				testData = WekaUtils.getPredictionInstancesSingleLabel(testData, cl);
-				testData = WekaUtils.addInstanceId(testData, copyTestData, false);
+						Utils.getEvaluationSinglelabel(cl, trainData, testData));
+				testData = Utils.getPredictionInstancesSingleLabel(testData, cl);
+				testData = _eka.addInstanceId(testData, copyTestData, false);
 				
 			// TODO anpassen	
 			// Write out the predictions
-			File predictionFile = WekaUtils.getFile(aContext,"", FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READWRITE);
+			File predictionFile = Utils.getFile(aContext,"", FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READWRITE);
 
 			String predictions = predictionFile.getAbsolutePath();
 			System.out.println(predictions);

@@ -28,7 +28,7 @@ import org.dkpro.lab.task.Discriminator;
 import org.dkpro.lab.task.impl.ExecutableTaskBase;
 import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.task.InitTask;
-import org.dkpro.tc.ml.weka.util.WekaUtils;
+import org.dkpro.tc.ml.weka.core._eka;
 
 import de.tudarmstadt.ukp.dkpro.core.api.metadata.type.DocumentMetaData;
 import de.tudarmstadt.ukp.dkpro.core.io.bincas.BinaryCasReader;
@@ -100,13 +100,13 @@ implements Constants
 		for (Integer numberInstances : NUMBER_OF_TRAINING_INSTANCES) {
 			for (int iteration=0; iteration<ITERATIONS; iteration++) {
 				//System.out.println(numberInstances+"\t"+iteration);
-				File arffFileTrain = WekaUtils.getFile(aContext, TEST_TASK_INPUT_KEY_TRAINING_DATA,
+				File arffFileTrain = Utils.getFile(aContext, TEST_TASK_INPUT_KEY_TRAINING_DATA,
 						FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
-				File arffFileTest = WekaUtils.getFile(aContext, TEST_TASK_INPUT_KEY_TEST_DATA,
+				File arffFileTest = Utils.getFile(aContext, TEST_TASK_INPUT_KEY_TEST_DATA,
 						FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
 
-				Instances trainData = WekaUtils.getInstances(arffFileTrain, multiLabel);
-				Instances testData = WekaUtils.getInstances(arffFileTest, multiLabel);
+				Instances trainData = _eka.getInstances(arffFileTrain, multiLabel);
+				Instances testData = _eka.getInstances(arffFileTest, multiLabel);
 
 
 				if (numberInstances > trainData.size()) {
@@ -114,12 +114,12 @@ implements Constants
 					continue;
 				}
 
-				Classifier cl = WekaUtils.getClassifier(learningMode, classificationArguments);
+				Classifier cl = Utils.getClassifier(learningMode, classificationArguments);
 				//				Classifier cl = AbstractClassifier.forName(classificationArguments.get(0), classificationArguments
 				//						.subList(1, classificationArguments.size()).toArray(new String[0]));
 
 				Instances copyTestData = new Instances(testData);
-				testData = WekaUtils.removeInstanceId(testData, multiLabel);
+				testData = _eka.removeInstanceId(testData, multiLabel);
 
 
 				Random generator = new Random();
@@ -131,7 +131,7 @@ implements Constants
 					trainData.delete(i);
 				}
 				Instances copyTrainData = new Instances(trainData);
-				trainData = WekaUtils.removeInstanceId(trainData, multiLabel);
+				trainData = _eka.removeInstanceId(trainData, multiLabel);
 
 
 				// file to hold prediction results
@@ -150,9 +150,9 @@ implements Constants
 				cl.buildClassifier(trainData);
 
 				weka.core.SerializationHelper.write(evalOutput.getAbsolutePath(),
-						WekaUtils.getEvaluationSinglelabel(cl, trainData, testData));
-				testData = WekaUtils.getPredictionInstancesSingleLabel(testData, cl);
-				testData = WekaUtils.addInstanceId(testData, copyTestData, multiLabel);
+						Utils.getEvaluationSinglelabel(cl, trainData, testData));
+				testData = Utils.getPredictionInstancesSingleLabel(testData, cl);
+				testData = _eka.addInstanceId(testData, copyTestData, multiLabel);
 
 				BufferedWriter bw = new BufferedWriter(new FileWriter(trainItemIds));
 				for (Instance inst : copyTrainData){
@@ -168,9 +168,9 @@ implements Constants
 				//                        .getAbsolutePath() + "/" + PREDICTIONS_FILENAME + "_" + trainPercent, testData); 
 			} 	
 		}
-		File arffFileTest = WekaUtils.getFile(aContext, TEST_TASK_INPUT_KEY_TEST_DATA,
+		File arffFileTest = Utils.getFile(aContext, TEST_TASK_INPUT_KEY_TEST_DATA,
 				FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
-		Instances testData = WekaUtils.getInstances(arffFileTest, multiLabel);
+		Instances testData = _eka.getInstances(arffFileTest, multiLabel);
 		File testItemIds = new File(aContext.getStorageLocation("",
 				AccessMode.READWRITE)
 				.getPath()
