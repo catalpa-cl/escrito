@@ -11,7 +11,6 @@ import org.dkpro.tc.core.io.DataWriter;
 import org.dkpro.tc.core.ml.ModelSerialization_ImplBase;
 import org.dkpro.tc.core.ml.TcShallowLearningAdapter;
 import org.dkpro.tc.core.task.ModelSerializationTask;
-import org.dkpro.tc.ml.report.InnerBatchReport;
 import org.dkpro.tc.ml.weka.WekaAdapter;
 import org.dkpro.tc.ml.weka.report.WekaBaselineMajorityClassIdReport;
 import org.dkpro.tc.ml.weka.report.WekaBaselineRandomIdReport;
