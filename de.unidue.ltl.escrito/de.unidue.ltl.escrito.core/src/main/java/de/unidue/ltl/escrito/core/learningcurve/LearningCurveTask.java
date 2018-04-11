@@ -6,6 +6,7 @@ import static org.apache.uima.fit.factory.CollectionReaderFactory.createReaderDe
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +29,10 @@ import org.dkpro.lab.task.Discriminator;
 import org.dkpro.lab.task.impl.ExecutableTaskBase;
 import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.task.InitTask;
+import org.dkpro.tc.ml.weka.core.MekaTrainer;
+import org.dkpro.tc.ml.weka.core.WekaTrainer;
 import org.dkpro.tc.ml.weka.core._eka;
+import org.dkpro.tc.ml.weka.task.WekaTestTask;
 
 import de.tudarmstadt.ukp.dkpro.core.api.metadata.type.DocumentMetaData;
 import de.tudarmstadt.ukp.dkpro.core.io.bincas.BinaryCasReader;
@@ -43,6 +47,7 @@ import de.unidue.ltl.escrito.core.Utils;
  * 
  */
 public class LearningCurveTask
+//extends WekaTestTask
 extends ExecutableTaskBase
 implements Constants
 {
@@ -114,7 +119,11 @@ implements Constants
 					continue;
 				}
 
-				Classifier cl = Utils.getClassifier(learningMode, classificationArguments);
+				File model = aContext.getFile(MODEL_CLASSIFIER, AccessMode.READWRITE);				
+				WekaTrainer trainer = new WekaTrainer();
+				//Classifier cl = trainer.train(trainData, model, getParameters(classificationArguments));
+
+				//Classifier cl = Utils.getClassifier(learningMode, classificationArguments);
 				//				Classifier cl = AbstractClassifier.forName(classificationArguments.get(0), classificationArguments
 				//						.subList(1, classificationArguments.size()).toArray(new String[0]));
 
@@ -147,7 +156,10 @@ implements Constants
 
 				// train the classifier on the train set split - not necessary in multilabel setup, but
 				// in single label setup
-				cl.buildClassifier(trainData);
+				
+				Classifier cl = trainer.train(trainData, model, getParameters(classificationArguments));
+
+				//cl.buildClassifier(trainData);
 
 				weka.core.SerializationHelper.write(evalOutput.getAbsolutePath(),
 						Utils.getEvaluationSinglelabel(cl, trainData, testData));
@@ -182,5 +194,17 @@ implements Constants
 		bw.close();
 	}
 
+	
+	   private List<String> getParameters(List<Object> classificationArguments)
+	    {
+	        List<String> o = new ArrayList<>();
+
+	        for (int i = 1; i < classificationArguments.size(); i++) {
+	            o.add((String) classificationArguments.get(i));
+	        }
+
+	        return o;
+	    }
+	
 
 }
