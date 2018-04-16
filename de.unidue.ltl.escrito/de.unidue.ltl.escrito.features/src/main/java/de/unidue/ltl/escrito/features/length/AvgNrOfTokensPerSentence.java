@@ -1,5 +1,6 @@
 package de.unidue.ltl.escrito.features.length;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,19 +31,29 @@ implements FeatureExtractor
 	 * Public name of the feature "number of tokens per sentence" in this classification unit
 	 */
 	public static final String FN_TOKENS_PER_SENTENCE = "NrofTokensPerSentence";
+	public static final String STANDARD_DEVIATION_OF_TOKENS_PER_SENTENCE = "standardDevTokensPerSentence";
 
 	@Override
 	public Set<Feature> extract(JCas jcas, TextClassificationTarget classificationUnit)
 			throws TextClassificationException
 	{
 		Set<Feature> featSet = new HashSet<Feature>();
+		Collection<Sentence> sentences = JCasUtil.selectCovered(jcas, Sentence.class, classificationUnit);
+		double numSentences = sentences.size();
+		double numTokens = JCasUtil.selectCovered(jcas, Token.class, classificationUnit).size();
+		double avgSize = numTokens/numSentences;
+		
+		double varianceSum = 0;
+		for(Sentence s : sentences){
+			double nrOfTokens = JCasUtil.selectCovered(jcas, Token.class, s).size();
+			double deviation = nrOfTokens-avgSize;
+			varianceSum +=Math.pow(deviation,2);
+		}
+		double stndDeviation = Math.sqrt(varianceSum/numSentences);
 
-		int numSentences = JCasUtil.selectCovered(jcas, Sentence.class, classificationUnit).size();
-
-		int numTokens = JCasUtil.selectCovered(jcas, Token.class, classificationUnit).size();
-		double ratio = numTokens / (double) numSentences;
-
-		featSet.add(new Feature(FN_TOKENS_PER_SENTENCE, ratio, FeatureType.NUMERIC));
+		featSet.add(new Feature(FN_TOKENS_PER_SENTENCE, avgSize, FeatureType.NUMERIC));
+		//System.out.println(avgSize);
+		featSet.add(new Feature(STANDARD_DEVIATION_OF_TOKENS_PER_SENTENCE, stndDeviation,FeatureType.NUMERIC));
 		return featSet;
 	}
 }

@@ -1,5 +1,7 @@
 package de.unidue.ltl.escrito.features.length;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.uima.fit.descriptor.TypeCapability;
@@ -26,14 +28,33 @@ public class AvgNrOfCharsPerSentence
      * Public name of the feature "number of characters"
      */
     public static final String AVG_NR_OF_CHARS_SENTENCE = "avgNumCharsSent";
+    public static final String STANDARD_DEVIATION_OF_CHARS_PER_SENTENCE = "standardDevCharsPerSentence";
 
     @Override
     public Set<Feature> extract(JCas jcas, TextClassificationTarget target)
-        throws TextClassificationException
-    {
-        double nrOfSentences = JCasUtil.selectCovered(jcas, Sentence.class, target).size();
-        double nrOfChars = target.getEnd() - target.getBegin();
+        throws TextClassificationException{
+    	Set<Feature> featureList = new HashSet<Feature>();
+    	Collection<Sentence> sentences = JCasUtil.selectCovered(jcas, Sentence.class,target);
+        double nrOfSentences = sentences.size();
+        double sumOfChars = 0;
+        for(Sentence s:sentences){
+        	double sentenceLength = s.getEnd()-s.getBegin();
+        	sumOfChars+=sentenceLength;
+        }
+        double avgSize = sumOfChars / nrOfSentences;
         
-        return new Feature(AVG_NR_OF_CHARS_SENTENCE, nrOfChars / nrOfSentences, FeatureType.NUMERIC).asSet();
+        double varianceSum = 0;
+        for(Sentence s:sentences){
+        	double sentenceLength = s.getEnd()-s.getBegin();
+        	double deviation = sentenceLength-avgSize;
+        	varianceSum+=Math.pow(deviation,2);
+        }
+        double stndDeviation = Math.sqrt(varianceSum/nrOfSentences);
+        
+        
+        featureList.add(new Feature(AVG_NR_OF_CHARS_SENTENCE, avgSize, FeatureType.NUMERIC));
+        featureList.add(new Feature(STANDARD_DEVIATION_OF_CHARS_PER_SENTENCE,stndDeviation,FeatureType.NUMERIC));
+        
+        return featureList;
     }
 }

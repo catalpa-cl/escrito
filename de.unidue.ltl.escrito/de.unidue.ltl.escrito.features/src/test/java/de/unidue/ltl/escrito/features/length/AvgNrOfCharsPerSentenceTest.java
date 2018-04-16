@@ -32,8 +32,9 @@ public class AvgNrOfCharsPerSentenceTest
         AvgNrOfCharsPerSentence extractor = new AvgNrOfCharsPerSentence();
         List<Feature> features = new ArrayList<>(extractor.extract(jcas, TextClassificationTarget.get(jcas)));
 
-        Assert.assertEquals(1, features.size());
+        Assert.assertEquals(2, features.size());
 
-        assertEquals(new Double(15.5), features.get(0).getValue());
+        assertEquals(new Double(15.0), features.get(0).getValue());
+        assertEquals(new Double(0.0), features.get(1).getValue());
     }
 }
