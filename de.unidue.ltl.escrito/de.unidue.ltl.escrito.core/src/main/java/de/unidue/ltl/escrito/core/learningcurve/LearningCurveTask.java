@@ -172,7 +172,8 @@ implements Constants
 					String instanceId = inst.stringValue(copyTrainData.attribute(Constants.ID_FEATURE_NAME).index());
 					instanceId = instanceId.substring(instanceId.indexOf("_0_")+3);
 					// TODO comment in again
-					bw.write(instanceId+"\t"+instanceId2TextMap.get(instanceId)+"\n");
+					bw.write(instanceId+"\t"+instanceId2TextMap.get(instanceId)
+					+"\t"+inst.classValue()+"\n");
 				//	System.out.println(instanceId+"\t"+instanceId2TextMap.get(instanceId));
 				}
 				bw.close();
