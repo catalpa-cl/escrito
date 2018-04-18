@@ -28,6 +28,7 @@ import org.dkpro.lab.task.impl.TaskBase;
 import org.dkpro.tc.core.task.ExtractFeaturesTask;
 import org.dkpro.tc.core.task.InitTask;
 import org.dkpro.tc.core.task.MetaInfoTask;
+import org.dkpro.tc.core.task.OutcomeCollectionTask;
 import org.dkpro.tc.core.task.TcTaskType;
 import org.dkpro.tc.ml.ExperimentTrainTest;
 import org.dkpro.tc.ml.weka.report.WekaOutcomeIDReport;
@@ -64,16 +65,12 @@ extends ExperimentTrainTest implements Constants
      * @param preprocessingPipeline
      *            preprocessing analysis engine aggregate
      */
-    public BatchTaskClusterLabelPropagation(String aExperimentName,
-            //Class<? extends TCMachineLearningAdapter> mlAdapter, 
-    		AnalysisEngineDescription preprocessingPipeline)
+    public BatchTaskClusterLabelPropagation(String aExperimentName)
     {
         setExperimentName(aExperimentName);
-        setPreprocessingPipeline(preprocessingPipeline);
         // set name of overall batch task
         setType("Evaluation-" + experimentName);
-     //   setMachineLearningAdapter(mlAdapter);
-    }
+     }
 
 
 
@@ -90,12 +87,9 @@ extends ExperimentTrainTest implements Constants
      */
     protected void init()
     {
-        if (experimentName == null || preprocessingPipeline == null)
-
-        {
-            throw new IllegalStateException(
-                    "You must set Experiment Name, DataWriter and Aggregate.");
-        }
+    	 if (experimentName == null) {
+             throw new IllegalStateException("You must set an experiment name");
+         }
 
         // init the train part of the experiment
         initTaskTrain = new InitTask();
@@ -115,6 +109,12 @@ extends ExperimentTrainTest implements Constants
         initTaskTest.setType(initTaskTest.getType() + "-Test-" + experimentName);
         initTaskTest.setAttribute(TC_TASK_TYPE, TcTaskType.INIT_TEST.toString());
        
+        collectionTask = new OutcomeCollectionTask();
+        collectionTask.setType(collectionTask.getType() + "-" + experimentName);
+        collectionTask.setAttribute(TC_TASK_TYPE, TcTaskType.COLLECTION.toString());
+        collectionTask.addImport(initTaskTrain, InitTask.OUTPUT_KEY_TRAIN);
+        collectionTask.addImport(initTaskTest, InitTask.OUTPUT_KEY_TEST);
+        
         // get some meta data depending on the whole document collection that we need for training
         metaTask = new MetaInfoTask();
         metaTask.setOperativeViews(operativeViews);
@@ -124,23 +124,28 @@ extends ExperimentTrainTest implements Constants
                 MetaInfoTask.INPUT_KEY);
         metaTask.setAttribute(TC_TASK_TYPE, TcTaskType.META.toString());
 
-        // feature extraction on training data
+     // feature extraction on training data
         featuresTrainTask = new ExtractFeaturesTask();
         featuresTrainTask.setType(featuresTrainTask.getType() + "-Train-" + experimentName);
-   //     featuresTrainTask.setMlAdapter(mlAdapter);
+        featuresTrainTask.setTesting(false);
         featuresTrainTask.addImport(metaTask, MetaInfoTask.META_KEY);
         featuresTrainTask.addImport(initTaskTrain, InitTask.OUTPUT_KEY_TRAIN,
                 ExtractFeaturesTask.INPUT_KEY);
-        featuresTrainTask.setAttribute(TC_TASK_TYPE, TcTaskType.FEATURE_EXTRACTION_TRAIN.toString());
+        featuresTrainTask.addImport(collectionTask, OutcomeCollectionTask.OUTPUT_KEY,
+                ExtractFeaturesTask.COLLECTION_INPUT_KEY);
+        featuresTrainTask.setAttribute(TC_TASK_TYPE,
+                TcTaskType.FEATURE_EXTRACTION_TRAIN.toString());
 
         // feature extraction on test data
         featuresTestTask = new ExtractFeaturesTask();
         featuresTestTask.setType(featuresTestTask.getType() + "-Test-" + experimentName);
-   //     featuresTestTask.setMlAdapter(mlAdapter);
+        featuresTestTask.setTesting(true);
         featuresTestTask.addImport(metaTask, MetaInfoTask.META_KEY);
         featuresTestTask.addImport(initTaskTest, InitTask.OUTPUT_KEY_TEST,
                 ExtractFeaturesTask.INPUT_KEY);
         featuresTestTask.addImport(featuresTrainTask, ExtractFeaturesTask.OUTPUT_KEY);
+        featuresTestTask.addImport(collectionTask, OutcomeCollectionTask.OUTPUT_KEY,
+                ExtractFeaturesTask.COLLECTION_INPUT_KEY);
         featuresTestTask.setAttribute(TC_TASK_TYPE, TcTaskType.FEATURE_EXTRACTION_TEST.toString());
 
         // test task operating on the models of the feature extraction train and test tasks
@@ -152,7 +157,8 @@ extends ExperimentTrainTest implements Constants
         
         addTask(initTaskTrain);
         addTask(initTaskTest);
-        addTask(metaTask);
+        addTask(collectionTask);
+         addTask(metaTask);
         addTask(featuresTrainTask);
         addTask(featuresTestTask);
         addTask(clusteringTask);
