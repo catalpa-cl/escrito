@@ -33,7 +33,7 @@ public class LearningCurveAdapter implements TcShallowLearningAdapter
 	@Override
 	public ExecutableTaskBase getTestTask()
 	{
-	return new LearningCurveTask();
+		return new LearningCurveTask();
 	}
 
 	@Override
@@ -62,9 +62,9 @@ public class LearningCurveAdapter implements TcShallowLearningAdapter
 	}
 
 	@Override
-	public Class<? extends DataWriter> getDataWriterClass()
+	public String getDataWriterClass()
 	{
-		return WekaDataWriter.class;
+		return WekaDataWriter.class.getName();
 	}
 
 	@Override
@@ -74,9 +74,9 @@ public class LearningCurveAdapter implements TcShallowLearningAdapter
 	}
 
 	@Override
-	public Class<? extends ModelSerializationTask> getSaveModelTask()
+	public ModelSerializationTask getSaveModelTask()
 	{
-		return WekaSerliazeModelConnector.class;
+		return new WekaSerliazeModelConnector();
 	}
 
 	@Override
