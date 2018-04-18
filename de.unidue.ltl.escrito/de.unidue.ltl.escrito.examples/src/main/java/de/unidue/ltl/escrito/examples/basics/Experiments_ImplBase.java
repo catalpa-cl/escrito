@@ -42,7 +42,7 @@ public class Experiments_ImplBase implements Constants {
 	{	
 		Map<String, Object> config = new HashMap<>();
 		config.put(DIM_CLASSIFICATION_ARGS, new Object[] { new WekaAdapter(), SMO.class.getName()});
-		config.put(DIM_DATA_WRITER, new WekaAdapter().getDataWriterClass().getName());
+		config.put(DIM_DATA_WRITER, new WekaAdapter().getDataWriterClass());
 		config.put(DIM_FEATURE_USE_SPARSE, new WekaAdapter().useSparseFeatures());
 		Dimension<Map<String, Object>> mlas = Dimension.createBundle("config", config);					
 		return mlas;
@@ -54,7 +54,7 @@ public class Experiments_ImplBase implements Constants {
 	{	
 		Map<String, Object> config = new HashMap<>();
 		config.put(DIM_CLASSIFICATION_ARGS, new Object[] { new LearningCurveAdapter(), SMO.class.getName()});
-		config.put(DIM_DATA_WRITER, new LearningCurveAdapter().getDataWriterClass().getName());
+		config.put(DIM_DATA_WRITER, new LearningCurveAdapter().getDataWriterClass());
 		config.put(DIM_FEATURE_USE_SPARSE, new LearningCurveAdapter().useSparseFeatures());
 		Dimension<Map<String, Object>> mlas = Dimension.createBundle("config", config);					
 		return mlas;
