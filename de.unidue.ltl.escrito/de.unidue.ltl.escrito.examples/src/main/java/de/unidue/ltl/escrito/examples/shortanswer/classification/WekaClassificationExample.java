@@ -29,7 +29,7 @@ public class WekaClassificationExample extends Experiments_ImplBase implements C
 					System.getenv("DKPRO_HOME")+"/datasets/powergrading//train_70.txt", 
 					System.getenv("DKPRO_HOME")+"/datasets/powergrading//test_30.txt", 
 					"en", 
-					1);
+					2);
 	}
 
 
