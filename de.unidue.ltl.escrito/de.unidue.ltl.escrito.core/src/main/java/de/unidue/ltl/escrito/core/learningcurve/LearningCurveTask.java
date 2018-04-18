@@ -98,7 +98,7 @@ implements Constants
 			throws Exception
 	{
 		boolean multiLabel = false;
-		Map<String, String> instanceId2TextMap = Utils.getInstanceId2TextMap(aContext);
+		Map<String, String> instanceId2TextMap = Utils.getInstanceId2TextMapTrain(aContext);
 
 
 		System.out.println("Execute LearningCurveTask");
@@ -173,6 +173,7 @@ implements Constants
 					instanceId = instanceId.substring(instanceId.indexOf("_0_")+3);
 					// TODO comment in again
 					bw.write(instanceId+"\t"+instanceId2TextMap.get(instanceId)+"\n");
+				//	System.out.println(instanceId+"\t"+instanceId2TextMap.get(instanceId));
 				}
 				bw.close();
 				//                // Write out the predictions

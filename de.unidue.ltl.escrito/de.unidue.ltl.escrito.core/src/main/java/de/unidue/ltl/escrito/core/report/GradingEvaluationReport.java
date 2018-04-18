@@ -78,7 +78,7 @@ public class GradingEvaluationReport extends TcBatchReportBase {
 		EvaluationData<String> evaluationString = ReportUtils.readId2OutcomeAsString(evaluationFile);
 		EvaluationData<String> evaluationStringMajority = ReportUtils.readId2OutcomeAsString(evaluationFileMajority);
 
-		Map<String, String> instanceId2TextMap = Utils.getInstanceId2TextMap(this.getContext());
+		Map<String, String> instanceId2TextMap = Utils.getInstanceId2TextMapTest(this.getContext());
 		//System.out.println("Read map with "+instanceId2TextMap.size()+" entries");
 		
 		

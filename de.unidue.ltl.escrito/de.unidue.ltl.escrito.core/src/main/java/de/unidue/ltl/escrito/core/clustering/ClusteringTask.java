@@ -119,7 +119,7 @@ implements Constants
 			// get a mapping from clusterIDs to instance offsets in the ARFF
 			Map<Integer, Set<Integer>> clusterMap = ClusterUtils.getClusterMap(clusterTrainData, clusterer);
 
-			Map<String, String> instanceId2TextMap = Utils.getInstanceId2TextMap(aContext);
+			Map<String, String> instanceId2TextMap = Utils.getInstanceId2TextMapTrain(aContext);
 
 			// build a table for the cluster assignments
 			FlexTable<String> table = FlexTable.forClass(String.class);

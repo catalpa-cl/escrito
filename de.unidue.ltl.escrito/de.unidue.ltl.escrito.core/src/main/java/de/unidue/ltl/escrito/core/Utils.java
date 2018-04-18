@@ -35,11 +35,22 @@ import weka.filters.unsupervised.attribute.Remove;
 
 public class Utils {
 
-	public static Map<String, String> getInstanceId2TextMap(TaskContext aContext)
+	public static Map<String, String> getInstanceId2TextMapTrain(TaskContext aContext)
+			throws ResourceInitializationException{
+		return getInstanceId2TextMap(Constants.TEST_TASK_INPUT_KEY_TRAINING_DATA, aContext);
+	}
+	
+	public static Map<String, String> getInstanceId2TextMapTest(TaskContext aContext)
+			throws ResourceInitializationException{
+		return getInstanceId2TextMap(Constants.TEST_TASK_INPUT_KEY_TEST_DATA, aContext);
+	}
+	
+	
+	public static Map<String, String> getInstanceId2TextMap(String inputKey, TaskContext aContext)
 			throws ResourceInitializationException
 	{	
 		Map<String, String> instanceId2TextMap = new HashMap<String,String>();
-		String path = aContext.getFolder(Constants.TEST_TASK_INPUT_KEY_TEST_DATA, AccessMode.READONLY).getPath()
+		String path = aContext.getFolder(inputKey, AccessMode.READONLY).getPath()
 				+"/documentMetaData.txt";
 		//	System.out.println(path);
 		BufferedReader br;
@@ -52,6 +63,7 @@ public class Utils {
 				} else {
 					String[] parts = line.split("\t");
 					instanceId2TextMap.put(parts[0], parts[1]);
+			//		System.out.println(parts[0]+"\t"+parts[1]);
 				}
 				line = br.readLine();
 			}
