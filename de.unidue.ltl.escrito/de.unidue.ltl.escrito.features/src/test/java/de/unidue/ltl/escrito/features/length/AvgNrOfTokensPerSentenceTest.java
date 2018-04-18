@@ -22,7 +22,7 @@ import de.unidue.ltl.escrito.features.core.EssayGradingTestBase;
 
 import org.junit.Assert;
 
-public class NrOfTokensPerSentenceTest extends EssayGradingTestBase
+public class AvgNrOfTokensPerSentenceTest extends EssayGradingTestBase
 {
     @Test
     public void nrOfTokensPerSentenceFeatureExtractorTest()

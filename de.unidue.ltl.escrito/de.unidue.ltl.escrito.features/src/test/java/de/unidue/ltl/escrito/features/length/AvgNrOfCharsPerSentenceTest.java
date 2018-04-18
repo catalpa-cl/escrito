@@ -18,7 +18,7 @@ import org.junit.Assert;
 public class AvgNrOfCharsPerSentenceTest
 {
     @Test
-    public void nrOfCharsFeatureExtractorTest()
+    public void AvgNrOfCharsFeatureExtractorTest()
         throws Exception
     {
         AnalysisEngine engine = createEngine(BreakIteratorSegmenter.class);
