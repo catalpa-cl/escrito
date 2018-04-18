@@ -181,7 +181,9 @@ implements Constants
 			
 			selectedItemsOverall.sort(null);
 			
-			BufferedWriter bw = new BufferedWriter(new FileWriter(getContext().getFile("selectedItemIds_"+numberOfInstances+".txt", AccessMode.READWRITE)));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(getContext().getStorageService().locateKey(LearningCurveTaskId, "selectedItemIds_"+numberOfInstances+".txt")));
+		//	BufferedWriter bw = new BufferedWriter(new FileWriter(getContext().getFile("selectedItemIds_"+numberOfInstances+".txt", AccessMode.READWRITE)));
+			
 			for (Configuration c : selectedItemsOverall){
 				bw.write(c.toString()+"\n");
 			}
