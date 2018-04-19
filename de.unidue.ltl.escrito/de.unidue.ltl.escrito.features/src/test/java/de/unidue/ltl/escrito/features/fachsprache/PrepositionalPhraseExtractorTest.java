@@ -1,4 +1,4 @@
-package de.unidue.ltl.escrito.feature.fachsprache;
+package de.unidue.ltl.escrito.features.fachsprache;
 
 import java.util.Set;
 import org.apache.uima.analysis_engine.AnalysisEngine;
@@ -14,7 +14,7 @@ import de.unidue.ltl.escrito.features.fachsprache.PrepositionalPhraseExtractor;
 public class PrepositionalPhraseExtractorTest extends EssayGradingTestBase {
 	@Test
 	public void PrepositionalPhraseInEssayTest() throws Exception {
-		AnalysisEngine engine = getPreprocessingEngine();
+		AnalysisEngine engine = getPreprocessingEngine("de");
 
 		JCas jcas = engine.newJCas();
 		jcas.setDocumentLanguage("de");

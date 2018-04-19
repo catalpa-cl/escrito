@@ -1,4 +1,4 @@
-package de.unidue.ltl.escrito.feature.fachsprache;
+package de.unidue.ltl.escrito.features.fachsprache;
 
 import static org.dkpro.tc.testing.FeatureTestUtil.assertFeatures;
 
@@ -20,7 +20,7 @@ public class PassiveSentenceExtractorTest extends EssayGradingTestBase {
 	
 	@Test
 	public void PassiveFeatureExtractorTest() throws Exception {
-		AnalysisEngine engine = getPreprocessingEngine();
+		AnalysisEngine engine = getPreprocessingEngine("de");
 
 		JCas jcas = engine.newJCas();
 		jcas.setDocumentLanguage("de");
@@ -54,7 +54,7 @@ public class PassiveSentenceExtractorTest extends EssayGradingTestBase {
 	
 	@Test
 	public void PassiveFeatureInEssayTest() throws Exception {
-		AnalysisEngine engine = getPreprocessingEngine();
+		AnalysisEngine engine = getPreprocessingEngine("de");
 
 		JCas jcas = engine.newJCas();
 		jcas.setDocumentLanguage("de");

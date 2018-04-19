@@ -1,4 +1,4 @@
-package de.unidue.ltl.escrito.feature.fachsprache;
+package de.unidue.ltl.escrito.features.fachsprache;
 
 import static org.dkpro.tc.testing.FeatureTestUtil.assertFeatures;
 import java.util.Set;
@@ -17,7 +17,7 @@ import de.unidue.ltl.escrito.features.fachsprache.SubstantivierungExtractor;
 public class SubstantivierungExtractorTest extends EssayGradingTestBase {
 	@Test
 	public void SubstantivierungFeatureExtractorTest() throws Exception {
-		AnalysisEngine engine = getPreprocessingEngine();
+		AnalysisEngine engine = getPreprocessingEngine("de");
 
 		JCas jcas = engine.newJCas();
 		jcas.setDocumentLanguage("de");
