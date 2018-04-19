@@ -69,7 +69,6 @@ public class ClusteringExample extends Experiments_ImplBase implements Constants
 	{     
 		Map<String, Object> dimReaders = new HashMap<String, Object>();
 		dimReaders.put(DIM_READER_TRAIN, readerTrain);
-		dimReaders.put(DIM_READER_TEST, readerTrain);
 		
 		Dimension<String> learningDims = Dimension.create(DIM_LEARNING_MODE, LM_SINGLE_LABEL);
 		Dimension<List<String>> dimClusteringArgs = Dimension.create("clusteringArguments",

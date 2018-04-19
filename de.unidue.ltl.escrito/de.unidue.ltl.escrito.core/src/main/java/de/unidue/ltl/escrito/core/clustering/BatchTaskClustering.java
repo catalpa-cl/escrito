@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
 import org.dkpro.lab.reporting.Report;
+import org.dkpro.lab.task.impl.TaskBase;
 import org.dkpro.tc.core.ml.TcShallowLearningAdapter;
 import org.dkpro.tc.core.task.ExtractFeaturesTask;
 import org.dkpro.tc.core.task.InitTask;
@@ -32,6 +33,7 @@ import org.dkpro.tc.core.task.MetaInfoTask;
 import org.dkpro.tc.core.task.OutcomeCollectionTask;
 import org.dkpro.tc.core.task.TcTaskType;
 import org.dkpro.tc.ml.ExperimentTrainTest;
+import org.dkpro.tc.ml.base.ShallowLearningExperiment_ImplBase;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
 import org.dkpro.tc.core.Constants;
 
@@ -41,8 +43,14 @@ import org.dkpro.tc.core.Constants;
  * 
  */
 public class BatchTaskClustering
-extends ExperimentTrainTest implements Constants
+extends ShallowLearningExperiment_ImplBase
 {
+
+	protected InitTask initTaskTrain;
+	protected OutcomeCollectionTask collectionTask;
+	protected MetaInfoTask metaTask;
+	protected ExtractFeaturesTask featuresTrainTask;
+	protected TaskBase testTask;
 
 	private String experimentName;
 	private AnalysisEngineDescription preprocessingPipeline;
@@ -87,8 +95,8 @@ extends ExperimentTrainTest implements Constants
 			throw new IllegalStateException("You must set an experiment name");
 		}
 
-		
-		
+
+
 		// init the train part of the experiment
 		initTaskTrain = new InitTask();
 		initTaskTrain.setPreprocessing(getPreprocessing());
@@ -97,19 +105,10 @@ extends ExperimentTrainTest implements Constants
 		initTaskTrain.setType(initTaskTrain.getType() + "-Train-" + experimentName);
 		initTaskTrain.setAttribute(TC_TASK_TYPE, TcTaskType.INIT_TRAIN.toString());
 
-		// init the test part of the experiment
-		initTaskTest = new InitTask();
-		initTaskTest.setTesting(true);
-		initTaskTest.setPreprocessing(getPreprocessing());
-		initTaskTest.setOperativeViews(operativeViews);
-		initTaskTest.setType(initTaskTest.getType() + "-Test-" + experimentName);
-		initTaskTest.setAttribute(TC_TASK_TYPE, TcTaskType.INIT_TEST.toString());
-
 		collectionTask = new OutcomeCollectionTask();
 		collectionTask.setType(collectionTask.getType() + "-" + experimentName);
 		collectionTask.setAttribute(TC_TASK_TYPE, TcTaskType.COLLECTION.toString());
 		collectionTask.addImport(initTaskTrain, InitTask.OUTPUT_KEY_TRAIN);
-		collectionTask.addImport(initTaskTest, InitTask.OUTPUT_KEY_TEST);
 
 		// get some meta data depending on the whole document collection that we need for training
 		metaTask = new MetaInfoTask();
@@ -132,18 +131,6 @@ extends ExperimentTrainTest implements Constants
 		featuresTrainTask.setAttribute(TC_TASK_TYPE,
 				TcTaskType.FEATURE_EXTRACTION_TRAIN.toString());
 
-		// feature extraction on test data
-		featuresTestTask = new ExtractFeaturesTask();
-		featuresTestTask.setType(featuresTestTask.getType() + "-Test-" + experimentName);
-		featuresTestTask.setTesting(true);
-		featuresTestTask.addImport(metaTask, MetaInfoTask.META_KEY);
-		featuresTestTask.addImport(initTaskTest, InitTask.OUTPUT_KEY_TEST,
-				ExtractFeaturesTask.INPUT_KEY);
-		featuresTestTask.addImport(featuresTrainTask, ExtractFeaturesTask.OUTPUT_KEY);
-		featuresTestTask.addImport(collectionTask, OutcomeCollectionTask.OUTPUT_KEY,
-				ExtractFeaturesTask.COLLECTION_INPUT_KEY);
-		featuresTestTask.setAttribute(TC_TASK_TYPE, TcTaskType.FEATURE_EXTRACTION_TEST.toString());
-
 		clusteringTask = new ClusteringTask();
 		clusteringTask.setType(clusteringTask.getType() + "-" + experimentName);
 		clusteringTask.addImport(initTaskTrain, InitTask.OUTPUT_KEY_TRAIN);
@@ -159,11 +146,9 @@ extends ExperimentTrainTest implements Constants
 
 		// DKPro Lab issue 38: must be added as *first* task
 		addTask(initTaskTrain);
-		addTask(initTaskTest);
 		addTask(collectionTask);
 		addTask(metaTask);
 		addTask(featuresTrainTask);
-		addTask(featuresTestTask);
 		addTask(clusteringTask);
 	}
 

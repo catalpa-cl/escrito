@@ -31,20 +31,28 @@ import org.dkpro.tc.core.task.MetaInfoTask;
 import org.dkpro.tc.core.task.OutcomeCollectionTask;
 import org.dkpro.tc.core.task.TcTaskType;
 import org.dkpro.tc.ml.ExperimentTrainTest;
+import org.dkpro.tc.ml.base.ShallowLearningExperiment_ImplBase;
 import org.dkpro.tc.ml.weka.report.WekaOutcomeIDReport;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
 import org.dkpro.tc.core.Constants;
 
 import de.unidue.ltl.escrito.core.report.GradingEvaluationReport;
+import static org.dkpro.tc.core.Constants.TC_TASK_TYPE;
 
 /**
  * Clustering setup
  * 
  */
 public class BatchTaskClusterLabelPropagation
-extends ExperimentTrainTest implements Constants
+extends ShallowLearningExperiment_ImplBase
 {
-
+	
+	protected InitTask initTaskTrain;
+	protected OutcomeCollectionTask collectionTask;
+	protected MetaInfoTask metaTask;
+	protected ExtractFeaturesTask featuresTrainTask;
+	protected TaskBase testTask;
+	
     private String experimentName;
     private AnalysisEngineDescription preprocessingPipeline;
     private List<String> operativeViews;
@@ -99,21 +107,11 @@ extends ExperimentTrainTest implements Constants
         initTaskTrain.setTesting(false);
         initTaskTrain.setType(initTaskTrain.getType() + "-Train-" + experimentName);
         initTaskTrain.setAttribute(TC_TASK_TYPE, TcTaskType.INIT_TRAIN.toString());
-
-        // init the test part of the experiment
-        initTaskTest = new InitTask();
-        initTaskTest.setTesting(true);
-     //   initTaskTest.setMlAdapter(mlAdapter);
-        initTaskTest.setPreprocessing(getPreprocessing());
-        initTaskTest.setOperativeViews(operativeViews);
-        initTaskTest.setType(initTaskTest.getType() + "-Test-" + experimentName);
-        initTaskTest.setAttribute(TC_TASK_TYPE, TcTaskType.INIT_TEST.toString());
        
         collectionTask = new OutcomeCollectionTask();
         collectionTask.setType(collectionTask.getType() + "-" + experimentName);
         collectionTask.setAttribute(TC_TASK_TYPE, TcTaskType.COLLECTION.toString());
         collectionTask.addImport(initTaskTrain, InitTask.OUTPUT_KEY_TRAIN);
-        collectionTask.addImport(initTaskTest, InitTask.OUTPUT_KEY_TEST);
         
         // get some meta data depending on the whole document collection that we need for training
         metaTask = new MetaInfoTask();
@@ -136,18 +134,6 @@ extends ExperimentTrainTest implements Constants
         featuresTrainTask.setAttribute(TC_TASK_TYPE,
                 TcTaskType.FEATURE_EXTRACTION_TRAIN.toString());
 
-        // feature extraction on test data
-        featuresTestTask = new ExtractFeaturesTask();
-        featuresTestTask.setType(featuresTestTask.getType() + "-Test-" + experimentName);
-        featuresTestTask.setTesting(true);
-        featuresTestTask.addImport(metaTask, MetaInfoTask.META_KEY);
-        featuresTestTask.addImport(initTaskTest, InitTask.OUTPUT_KEY_TEST,
-                ExtractFeaturesTask.INPUT_KEY);
-        featuresTestTask.addImport(featuresTrainTask, ExtractFeaturesTask.OUTPUT_KEY);
-        featuresTestTask.addImport(collectionTask, OutcomeCollectionTask.OUTPUT_KEY,
-                ExtractFeaturesTask.COLLECTION_INPUT_KEY);
-        featuresTestTask.setAttribute(TC_TASK_TYPE, TcTaskType.FEATURE_EXTRACTION_TEST.toString());
-
         // test task operating on the models of the feature extraction train and test tasks
         clusteringTask = new ClusterLabelPropagationTask();
         clusteringTask.setType(clusteringTask.getType() + "-" + experimentName);
@@ -156,11 +142,9 @@ extends ExperimentTrainTest implements Constants
         		WekaTestTask.TEST_TASK_INPUT_KEY_TRAINING_DATA);
         
         addTask(initTaskTrain);
-        addTask(initTaskTest);
         addTask(collectionTask);
          addTask(metaTask);
         addTask(featuresTrainTask);
-        addTask(featuresTestTask);
         addTask(clusteringTask);
     }
 
