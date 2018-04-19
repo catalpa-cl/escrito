@@ -16,24 +16,49 @@ import de.tudarmstadt.ukp.dkpro.core.tokit.BreakIteratorSegmenter;
 
 public class EssayGradingTestBase {
 
-	public AnalysisEngine getPreprocessingEngine()
+	public AnalysisEngine getPreprocessingEngine(String lang)
 			throws ResourceInitializationException
 	{
-		AnalysisEngineDescription description = createEngineDescription(
-				createEngineDescription(BreakIteratorSegmenter.class),
-				// TODO: reintegrate that
-			//	createEngineDescription(LanguageToolChecker.class,
-			//			LanguageToolChecker.PARAM_LANGUAGE, "en"),
-				createEngineDescription(OpenNlpPosTagger.class),
-	//			createEngineDescription(OpenNlpChunker.class),
-				createEngineDescription(MateLemmatizer.class),
-			createEngineDescription(
-					BerkeleyParser.class,
-					BerkeleyParser.PARAM_LANGUAGE,"de",
-					//BerkeleyParser.PARAM_LANGUAGE,"en",
-					BerkeleyParser.PARAM_WRITE_PENN_TREE,true
-					)
-			);
-		return createEngine(description);
+
+
+		if (lang.equals("de")){
+			AnalysisEngineDescription description = createEngineDescription(
+					createEngineDescription(BreakIteratorSegmenter.class),
+					// TODO: reintegrate that
+					//	createEngineDescription(LanguageToolChecker.class,
+					//			LanguageToolChecker.PARAM_LANGUAGE, lang),
+					createEngineDescription(OpenNlpPosTagger.class),
+					createEngineDescription(MateLemmatizer.class),
+					createEngineDescription(
+							BerkeleyParser.class,
+							BerkeleyParser.PARAM_LANGUAGE,"de",
+							//BerkeleyParser.PARAM_LANGUAGE,"en",
+							BerkeleyParser.PARAM_WRITE_PENN_TREE,true
+							)
+					);
+
+			return createEngine(description);
+		} else if (lang.equals("en")){
+			AnalysisEngineDescription description = createEngineDescription(
+					createEngineDescription(BreakIteratorSegmenter.class),
+					// TODO: reintegrate that
+					//	createEngineDescription(LanguageToolChecker.class,
+					//			LanguageToolChecker.PARAM_LANGUAGE, lang),
+					createEngineDescription(OpenNlpPosTagger.class),
+					createEngineDescription(OpenNlpChunker.class),
+					createEngineDescription(MateLemmatizer.class),
+					createEngineDescription(
+							BerkeleyParser.class,
+							BerkeleyParser.PARAM_LANGUAGE,"en",
+							BerkeleyParser.PARAM_WRITE_PENN_TREE,true
+							)
+					);
+
+			return createEngine(description);
+		} else {
+			return null;
+		}
+
 	}
+
 }
