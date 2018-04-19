@@ -26,7 +26,7 @@ public class PassiveSentenceExtractor  extends FeatureExtractorResource_ImplBase
 	public Set<Feature> extract(JCas view, TextClassificationTarget target) throws TextClassificationException {
 		Set<Feature> passiveFeatures = new HashSet<Feature>();
 		Collection<Sentence> sentences = JCasUtil.select(view, Sentence.class);
-		System.out.println("Sentence Sum: "+sentences.size());
+		//System.out.println("Sentence Sum: "+sentences.size());
 		//Counter of different type of passive sentences
 		int countTypicalPassive = 0;
 		int countPassiveWithImpersonalPronoun  = 0;
@@ -52,8 +52,8 @@ public class PassiveSentenceExtractor  extends FeatureExtractorResource_ImplBase
 				String text = t.getCoveredText().toLowerCase();
 				String posValue = t.getPos().getPosValue();
 				String lemmaValue = t.getLemma().getValue();
-				System.out.print(lemmaValue+" ");
-				System.out.print("["+posValue+"] ");
+				//System.out.print(lemmaValue+" ");
+				//System.out.print("["+posValue+"] ");
 							
 				if(text.equals("man")||text.equals("jemand")) //search "man/jemand"
 					impersonalPronoun = true;			
@@ -74,31 +74,31 @@ public class PassiveSentenceExtractor  extends FeatureExtractorResource_ImplBase
 				if(lemmaValue.equals("bekommen")||lemmaValue.equals("kriegen")) //search "bekommen/kriegen"
 					bekommen = true;
 			}
-			System.out.println();
-			System.out.println(s.getCoveredText());
+			//System.out.println();
+			//System.out.println(s.getCoveredText());
 			if((werden||sein)&&partizipII){
 				countTypicalPassive++; //typical passive form with "werden + Partizip Perfekt"
-				System.out.println("[typical passive]");
+				//System.out.println("[typical passive]");
 			}
 			if(lassen&&sich){
 				countPassiveWithSichLassen++; //passive form with "sich lassen"
-				System.out.println("[passive with sich lassen]");
+				//System.out.println("[passive with sich lassen]");
 			}
 			if(sein&&adjective){
 				countPassiveWithAdjective++; //passive form with adjective suffix "bar"
-				System.out.println("[passive with adjektive]");
+				//System.out.println("[passive with adjektive]");
 			}
 			if(sein&&zu){
 				countPassiveWithZu++; //passive form with "sein + zu + Infinitiv"
-				System.out.println("[passive with zu]");
+				//System.out.println("[passive with zu]");
 			}
 			if(bekommen){
 				countPassiveWithBekommen++; //passive form with "bekommen/kriegen"
-				System.out.println("[passive with bekommen]");
+				//System.out.println("[passive with bekommen]");
 			}
 			if(impersonalPronoun){
 				countPassiveWithImpersonalPronoun++; //passive form with "man/jemand"
-				System.out.println("[passive with Impersonal Pronoun]");
+				//System.out.println("[passive with Impersonal Pronoun]");
 			}
 		}
 		passiveFeatures.add(new Feature("FrequencyOfTypicalPassive", (double)countTypicalPassive/sentences.size(), FeatureType.NUMERIC));
