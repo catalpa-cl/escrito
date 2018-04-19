@@ -59,8 +59,9 @@ public class NrOfConnectivesTest
 
 		NrOfConnectives extractor = FeatureUtil.createResource(
 				NrOfConnectives.class,
-				NrOfConnectives.PARAM_CONNECTIVES_FILE_PATH, "src/main/resources/lists/en/connectives_en.txt"
-		);
+				NrOfConnectives.PARAM_CONNECTIVES_FILE_PATH, "src/main/resources/lists/en/connectives_en.txt",
+				NrOfConnectives.PARAM_UNIQUE_EXTRACTOR_NAME, "dummy"
+				);
         Set<Feature> features = extractor.extract(jcas, TextClassificationTarget.get(jcas));
 
 		Assert.assertEquals(1, features.size());
