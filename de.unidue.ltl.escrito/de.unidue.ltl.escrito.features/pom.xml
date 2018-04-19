@@ -12,7 +12,7 @@
 	<name>de.unidue.ltl.escrito.features</name>
 	<dependencies>
 		<!-- dkpro core dependencies -->
-			<dependency>
+		<dependency>
 			<groupId>de.unidue.ltl.escrito</groupId>
 			<artifactId>de.unidue.ltl.escrito.core</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
 			<artifactId>de.tudarmstadt.ukp.dkpro.core.tokit-asl</artifactId>
-			</dependency>
+		</dependency>
 		<dependency>
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
 			<artifactId>de.tudarmstadt.ukp.dkpro.core.ngrams-asl</artifactId>
@@ -109,6 +109,13 @@
 			<artifactId>dkpro-tc-testing</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.languagetool-asl</artifactId>
+			<version>1.8.0</version>
+		</dependency>
+
+
 
 		<!-- dkpro similarity dependencies -->
 		<dependency>
