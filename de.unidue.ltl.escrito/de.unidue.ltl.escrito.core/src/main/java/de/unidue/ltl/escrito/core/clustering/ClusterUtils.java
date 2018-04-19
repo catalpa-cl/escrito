@@ -3,11 +3,19 @@ package de.unidue.ltl.escrito.core.clustering;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
+import org.dkpro.lab.engine.TaskContext;
+import org.dkpro.lab.reporting.FlexTable;
+import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.ml.weka.core._eka;
 
+import de.tudarmstadt.ukp.dkpro.core.api.frequency.util.ConditionalFrequencyDistribution;
 import weka.clusterers.Clusterer;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -62,5 +70,99 @@ public class ClusterUtils {
 		}
 		return clusterMap;
 	}
+	
+	
+	
+	public static ConditionalFrequencyDistribution<Integer, String> writeClusterAssignments(TaskContext aContext,
+			int numClusters, 
+			List<String> trainOutcomeValues, 
+			Instances copyTrainData,
+			Map<Integer, Set<Integer>> clusterMap, 
+			Map<String, String> instanceId2TextMap) {
+		// build a table for the cluster assignments
+		FlexTable<String> table = FlexTable.forClass(String.class);
+		table.setSortRows(false);
+		int rowCounter = 0;
+		ConditionalFrequencyDistribution<Integer,String> clusterAssignments = new ConditionalFrequencyDistribution<Integer,String>();
+		String[] entries = {"Beginn der Korrektur:", "", "BITTE HIER ZEIT EINTRAGEN"};
+		addRow(table, rowCounter, entries);
+		rowCounter++;
+		addRow(table, rowCounter, "");
+		rowCounter++;
+		for (Integer clusterId : clusterMap.keySet()) {
+			System.out.println("CLUSTER: " + clusterId);
+			System.out.println(clusterMap.get(clusterId).size()+" entries");
+			addRow(table, rowCounter, "CLUSTER: " + clusterId);
+			rowCounter++;
+			// for sorting clusters alphabetically
+			Map<String, String> instanceIdToLabel = new HashMap<String, String>();
+			Map<String, String> instanceIdToSurfaceForm = new HashMap<String, String>();
+			for (Integer offset : clusterMap.get(clusterId)) {
+
+				// get instance ID from instance
+				Instance instance = copyTrainData.get(offset);
+
+				Double classOffset = new Double(instance.value(copyTrainData.classAttribute()));
+				String label = (String) trainOutcomeValues.get(classOffset.intValue());
+
+				clusterAssignments.addSample(clusterId, label, 1);
+
+				String instanceId = instance.stringValue(copyTrainData.attribute(Constants.ID_FEATURE_NAME).index());
+				instanceId = instanceId.substring(instanceId.indexOf("_0_")+3);
+				instanceIdToLabel.put(instanceId, label);
+				instanceIdToSurfaceForm.put(instanceId, instanceId2TextMap.get(instanceId));
+			}
+
+			// sort Map by Value
+			Map<String, String> sortedMap = 
+					instanceIdToSurfaceForm.entrySet().stream()
+					.sorted(Entry.comparingByValue())
+					.collect(Collectors.toMap(Entry::getKey, Entry::getValue,
+							(e1, e2) -> e1, LinkedHashMap::new));
+
+			String lastSurfaceForm = "";
+			for (String instanceId : sortedMap.keySet()){
+				String label = instanceIdToLabel.get(instanceId);
+				String surfaceForm = instanceId2TextMap.get(instanceId);
+				if (!surfaceForm.equals(lastSurfaceForm)){
+					System.out.println();
+					addRow(table, rowCounter, "");
+					rowCounter++;
+				}
+				System.out.println(instanceId + "\t" + label + "\t" + surfaceForm );
+				String[] entries3 = {instanceId, surfaceForm};
+				addRow(table, rowCounter, entries3);
+				rowCounter++;
+				lastSurfaceForm = surfaceForm;
+			}
+			System.out.println("\n");
+			addRow(table, rowCounter, "");
+			rowCounter++;
+			addRow(table, rowCounter, "");
+			rowCounter++;
+
+		}
+		String[] entries2 = {"Ende der Korrektur:", "", "BITTE HIER ZEIT EINTRAGEN"};
+		addRow(table, rowCounter, entries2);
+		rowCounter++;
+		aContext.storeBinary("cluster_assignments_"+numClusters + Constants.SUFFIX_EXCEL, table.getExcelWriter());
+		return clusterAssignments;
+	}
+
+
+	public static void addRow(FlexTable<String> table, int rowCounter, String ... entries) {
+		Map<String, String> cells = new HashMap<String, String>();
+		String[] columnIds = {"Id ", "Antwort", "Score"}; 
+		for (int i = 0; i<columnIds.length; i++){
+			if (i>=entries.length){
+				cells.put(columnIds[i], "");
+			} else {
+				cells.put(columnIds[i], entries[i]);
+			}
+		}
+		table.addRow(String.valueOf(rowCounter), cells);
+	}
+	
+	
 
 }

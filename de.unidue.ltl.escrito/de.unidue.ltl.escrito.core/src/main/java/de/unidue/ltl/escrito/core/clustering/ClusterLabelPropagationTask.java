@@ -146,6 +146,12 @@ public class ClusterLabelPropagationTask
         bw.write("Average cluster purity: " + avgPurity+"\n");
         bw.write("Average cluster accuracy: " + accuracy+"\n");
        bw.close();
+       
+       Map<String, String> instanceId2TextMap = Utils.getInstanceId2TextMapTrain(aContext);
+
+       ClusterUtils.writeClusterAssignments(aContext,
+    		   NUMBER_OF_CLUSTERS, trainOutcomeValues, copyTrainData, clusterMap, instanceId2TextMap);
+       
     }
     
     

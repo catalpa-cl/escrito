@@ -84,8 +84,6 @@ implements Constants
 	//  @Discriminator(name = "instance_id_to_text_map")
 	//	public static Map<String, String> INSTANCE_ID_TO_TEXT_MAP;
 
-	static int rowCounter;
-
 	@Override
 	public void execute(TaskContext aContext)
 			throws Exception
@@ -121,65 +119,8 @@ implements Constants
 
 			Map<String, String> instanceId2TextMap = Utils.getInstanceId2TextMapTrain(aContext);
 
-			// build a table for the cluster assignments
-			FlexTable<String> table = FlexTable.forClass(String.class);
-			table.setSortRows(false);
-			rowCounter = 0;
-			ConditionalFrequencyDistribution<Integer,String> clusterAssignments = new ConditionalFrequencyDistribution<Integer,String>();
-			String[] entries = {"Beginn der Korrektur:", "", "BITTE HIER ZEIT EINTRAGEN"};
-			addRow(table, entries);
-			addRow(table, "");
-			for (Integer clusterId : clusterMap.keySet()) {
-				System.out.println("CLUSTER: " + clusterId);
-				System.out.println(clusterMap.get(clusterId).size()+" entries");
-				addRow(table, "CLUSTER: " + clusterId);
-				// for sorting clusters alphabetically
-				Map<String, String> instanceIdToLabel = new HashMap<String, String>();
-				Map<String, String> instanceIdToSurfaceForm = new HashMap<String, String>();
-				for (Integer offset : clusterMap.get(clusterId)) {
-
-					// get instance ID from instance
-					Instance instance = copyTrainData.get(offset);
-
-					Double classOffset = new Double(instance.value(copyTrainData.classAttribute()));
-					String label = (String) trainOutcomeValues.get(classOffset.intValue());
-
-					clusterAssignments.addSample(clusterId, label, 1);
-
-					String instanceId = instance.stringValue(copyTrainData.attribute(Constants.ID_FEATURE_NAME).index());
-					instanceId = instanceId.substring(instanceId.indexOf("_0_")+3);
-					instanceIdToLabel.put(instanceId, label);
-					instanceIdToSurfaceForm.put(instanceId, instanceId2TextMap.get(instanceId));
-				}
-
-				// sort Map by Value
-				Map<String, String> sortedMap = 
-						instanceIdToSurfaceForm.entrySet().stream()
-						.sorted(Entry.comparingByValue())
-						.collect(Collectors.toMap(Entry::getKey, Entry::getValue,
-								(e1, e2) -> e1, LinkedHashMap::new));
-
-				String lastSurfaceForm = "";
-				for (String instanceId : sortedMap.keySet()){
-					String label = instanceIdToLabel.get(instanceId);
-					String surfaceForm = instanceId2TextMap.get(instanceId);
-					if (!surfaceForm.equals(lastSurfaceForm)){
-						System.out.println();
-						addRow(table, "");
-					}
-					System.out.println(instanceId + "\t" + label + "\t" + surfaceForm );
-					String[] entries3 = {instanceId, surfaceForm};
-					addRow(table, entries3);
-					lastSurfaceForm = surfaceForm;
-				}
-				System.out.println("\n");
-				addRow(table, "");
-				addRow(table, "");
-
-			}
-			String[] entries2 = {"Ende der Korrektur:", "", "BITTE HIER ZEIT EINTRAGEN"};
-			addRow(table, entries2);
-			aContext.storeBinary("cluster_assignments_"+numClusters + SUFFIX_EXCEL, table.getExcelWriter());
+			ConditionalFrequencyDistribution<Integer, String> clusterAssignments = ClusterUtils.writeClusterAssignments(aContext,
+					numClusters, trainOutcomeValues, copyTrainData, clusterMap, instanceId2TextMap);
 
 			System.out.println("ID\tSIZE\tPURITY\tRMSE");
 			for (Integer clusterId : clusterMap.keySet()) {
@@ -206,19 +147,7 @@ implements Constants
 	}
 
 
-	private void addRow(FlexTable<String> table, String ... entries) {
-		Map<String, String> cells = new HashMap<String, String>();
-		String[] columnIds = {"Id ", "Antwort", "Score"}; 
-		for (int i = 0; i<columnIds.length; i++){
-			if (i>=entries.length){
-				cells.put(columnIds[i], "");
-			} else {
-				cells.put(columnIds[i], entries[i]);
-			}
-		}
-		table.addRow(String.valueOf(rowCounter), cells);
-		rowCounter++;
-	}
+
 
 // as distance between clusters we use the distance between centroids
 	// as distance within cluster average distance to the centroid
