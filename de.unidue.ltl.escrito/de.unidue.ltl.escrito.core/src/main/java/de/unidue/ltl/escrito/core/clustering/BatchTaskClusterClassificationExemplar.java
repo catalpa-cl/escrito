@@ -67,7 +67,6 @@ extends ExperimentTrainTest implements Constants
 	public BatchTaskClusterClassificationExemplar(String aExperimentName)
 	{
 		setExperimentName(aExperimentName);
-		setPreprocessingPipeline(preprocessingPipeline);
 		// set name of overall batch task
 		setType("Evaluation-" + experimentName);
 	}
@@ -92,7 +91,6 @@ extends ExperimentTrainTest implements Constants
 
 		// init the train part of the experiment
 		initTaskTrain = new InitTask();
-		//	initTaskTrain.setMlAdapter(mlAdapter);
 		initTaskTrain.setPreprocessing(getPreprocessing());
 		initTaskTrain.setOperativeViews(operativeViews);
 		initTaskTrain.setTesting(false);
@@ -102,7 +100,6 @@ extends ExperimentTrainTest implements Constants
 		// init the test part of the experiment
 		initTaskTest = new InitTask();
 		initTaskTest.setTesting(true);
-		//	initTaskTest.setMlAdapter(mlAdapter);
 		initTaskTest.setPreprocessing(getPreprocessing());
 		initTaskTest.setOperativeViews(operativeViews);
 		initTaskTest.setType(initTaskTest.getType() + "-Test-" + experimentName);
@@ -122,15 +119,6 @@ extends ExperimentTrainTest implements Constants
 		metaTask.addImport(initTaskTrain, InitTask.OUTPUT_KEY_TRAIN,
 				MetaInfoTask.INPUT_KEY);
 		metaTask.setAttribute(TC_TASK_TYPE, TcTaskType.META.toString());
-
-		// feature extraction on training data
-		featuresTrainTask = new ExtractFeaturesTask();
-		featuresTrainTask.setType(featuresTrainTask.getType() + "-Train-" + experimentName);
-		//	featuresTrainTask.setMlAdapter(mlAdapter);
-		featuresTrainTask.addImport(metaTask, MetaInfoTask.META_KEY);
-		featuresTrainTask.addImport(initTaskTrain, InitTask.OUTPUT_KEY_TRAIN,
-				ExtractFeaturesTask.INPUT_KEY);
-		featuresTrainTask.setAttribute(TC_TASK_TYPE, TcTaskType.FEATURE_EXTRACTION_TRAIN.toString());
 
 		// feature extraction on training data
 		featuresTrainTask = new ExtractFeaturesTask();
@@ -156,6 +144,12 @@ extends ExperimentTrainTest implements Constants
 				ExtractFeaturesTask.COLLECTION_INPUT_KEY);
 		featuresTestTask.setAttribute(TC_TASK_TYPE, TcTaskType.FEATURE_EXTRACTION_TEST.toString());
 
+		clusteringTask = new ClusterExemplarTask();
+		clusteringTask.setType(clusteringTask.getType() + "-" + experimentName);
+		clusteringTask.addImport(initTaskTrain, InitTask.OUTPUT_KEY_TRAIN);
+
+		clusteringTask.addImport(featuresTrainTask, ExtractFeaturesTask.OUTPUT_KEY,
+				Constants.TEST_TASK_INPUT_KEY_TRAINING_DATA);
 
 		// test task operating on the models of the feature extraction train and test tasks
 		testTask = new TrainingDataSelectionTestTask();
@@ -173,16 +167,14 @@ extends ExperimentTrainTest implements Constants
 		}
 		// always add OutcomeIdReport
 		//	testTask.addReport(WekaOutcomeIDReport.class);
-
-		System.out.println(clusteringTask.toString());
-		System.out.println(ClusterTrainTask.ADAPTED_TRAINING_DATA);
-		System.out.println(WekaTestTask.TEST_TASK_INPUT_KEY_TRAINING_DATA);
 		
 		testTask.addImport(clusteringTask, 
 				ClusterTrainTask.ADAPTED_TRAINING_DATA,
 				WekaTestTask.TEST_TASK_INPUT_KEY_TRAINING_DATA);
 		testTask.addImport(featuresTestTask, ExtractFeaturesTask.OUTPUT_KEY,
 				WekaTestTask.TEST_TASK_INPUT_KEY_TEST_DATA);
+		testTask.addImport(featuresTrainTask, ExtractFeaturesTask.OUTPUT_KEY,
+				WekaTestTask.TEST_TASK_INPUT_KEY_TRAINING_DATA);
 
 
 		// DKPro Lab issue 38: must be added as *first* task

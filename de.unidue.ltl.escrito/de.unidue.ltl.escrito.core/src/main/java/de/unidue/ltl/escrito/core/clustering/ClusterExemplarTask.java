@@ -27,7 +27,8 @@ import weka.filters.unsupervised.attribute.Remove;
 
 /**
  * Clusters the training data, selects an exemplar/centroid,
- * uses thesee in the following test task as new training data.
+ * uses these in the following test task as new training data.
+ * For an informed version of a learning curve task.
  */
 public class ClusterExemplarTask
 extends ExecutableTaskBase
@@ -67,8 +68,8 @@ implements Constants
 
 			File arffFileTrain = Utils.getFile(aContext, TEST_TASK_INPUT_KEY_TRAINING_DATA,
 					FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
-
 			Instances trainData = _eka.getInstances(arffFileTrain, multiLabel);
+			
 
 			Clusterer abstractClusterer = AbstractClusterer.forName(clusteringArguments.get(0), clusteringArguments
 					.subList(1, clusteringArguments.size()).toArray(new String[0]));
@@ -138,10 +139,19 @@ implements Constants
 					+ "/" + Constants.EVAL_FILE_NAME + "_" + numberOfClusters + "_itemIds.txt");
 			BufferedWriter bw = new BufferedWriter(new FileWriter(trainItemIds));
 			for (Instance inst : selectedTrainDataWithId){
-				bw.write(inst.stringValue(0)+"\n");
+				bw.write(getId(inst));
 			}
 			bw.close();
 		}
+	}
+
+	private String getId(Instance inst) {
+		for (int i = 0; i<inst.numAttributes(); i++){
+			if (inst.attribute(i).name().equals("DKProTCInstanceID")){
+				return inst.stringValue(i);
+			}
+		}
+		return null;
 	}
 
 	private double distance(Instance i1, Instance i2) {
