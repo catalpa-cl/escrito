@@ -27,10 +27,14 @@ import de.tudarmstadt.ukp.dkpro.core.clearnlp.ClearNlpParser;
 import de.tudarmstadt.ukp.dkpro.core.clearnlp.ClearNlpSegmenter;
 import de.tudarmstadt.ukp.dkpro.core.matetools.MateLemmatizer;
 import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpPosTagger;
+import de.unidue.ltl.escrito.core.clustering.BatchTaskClusterClassificationExemplar;
+import de.unidue.ltl.escrito.core.clustering.BatchTaskClusterLabelPropagation;
+import de.unidue.ltl.escrito.core.clustering.BatchTaskClustering;
 import de.unidue.ltl.escrito.core.learningcurve.LearningCurveAdapter;
 import de.unidue.ltl.escrito.core.learningcurve.LearningCurveReport;
 import de.unidue.ltl.escrito.core.report.CvEvaluationReport;
 import de.unidue.ltl.escrito.core.report.GradingEvaluationReport;
+import de.unidue.ltl.escrito.core.report.GradingEvaluationReportClusteringCurve;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.functions.SMO;
 
@@ -148,6 +152,94 @@ public class Experiments_ImplBase implements Constants {
 		Lab.getInstance().run(batch);
 	}
 
+	 // ##### CLUSTERING #####
+    protected static void runClustering(ParameterSpace pSpace, String name, String languageCode)
+        throws Exception
+    {
+        BatchTaskClustering batch = new BatchTaskClustering(name + "-Clustering");   
+        batch.setPreprocessing(getPreprocessing(languageCode));
+     //   System.out.println(batch.getPreprocessing());
+		batch.setParameterSpace(pSpace);
+        batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
+        batch.addReport(BatchTrainTestReport.class);
+     //   batch.addReport(BatchOutcomeIDReport.class);
+        batch.addReport(BatchRuntimeReport.class);
+
+        // Run
+        Lab.getInstance().run(batch);
+    }
+
+    
+	 // ##### CLUSTERING WITH LABEL PROPAGATION #####
+    protected static void runClusteringLabelPropagation(ParameterSpace pSpace, String name, String languageCode)
+        throws Exception
+    {
+        BatchTaskClusterLabelPropagation batch = new BatchTaskClusterLabelPropagation(name + "-Clustering");    
+        batch.setPreprocessing(getPreprocessing(languageCode));
+         batch.setParameterSpace(pSpace);
+        batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
+        batch.addReport(BatchTrainTestReport.class);
+     //   batch.addReport(BatchOutcomeIDReport.class);
+        batch.addReport(BatchRuntimeReport.class);
+
+        // Run
+        Lab.getInstance().run(batch);
+    }
+//    
+//    // ##### CLUSTERING + CLASSIFICATION #####
+//    protected static void runClusterClassification(ParameterSpace pSpace, String name)
+//        throws Exception
+//    {
+//        BatchTaskClusterClassification batch = new BatchTaskClusterClassification(name + "-ClusterClassification", WekaClassificationAdapter.class,
+//                getPreprocessing());    
+//        batch.setParameterSpace(pSpace);
+//        batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
+//   //     batch.addInnerReport(KappaReport.class);
+//        batch.addReport(BatchTrainTestReport.class);
+//      //  batch.addReport(BatchOutcomeIDReport.class);
+//        batch.addReport(BatchRuntimeReport.class);
+//
+//        // Run
+//        Lab.getInstance().run(batch);
+//    }
+    
+    // ##### CLUSTERING + CLASSIFICATION WITH CENTROIDS #####
+    protected static void runClusterClassificationCentroids(ParameterSpace pSpace, String name, String languageCode)
+        throws Exception
+    {
+        BatchTaskClusterClassificationExemplar batch = new BatchTaskClusterClassificationExemplar(name + "-ClusterClassification");    
+        batch.setParameterSpace(pSpace);
+        batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
+        batch.addInnerReport(GradingEvaluationReportClusteringCurve.class);   
+     //   batch.addInnerReport(KappaReport.class);
+     //   batch.addReport(BatchTrainTestReport.class);
+    //    batch.addReport(BatchOutcomeIDReport.class);
+        batch.addReport(BatchRuntimeReport.class);
+
+        // Run
+        Lab.getInstance().run(batch);
+    }
+//
+//    
+//    
+//    protected static void runClusterClassificationCentroids_CV(ParameterSpace pSpace, String name)
+//            throws Exception
+//        {
+//            BatchTaskClusterClassificationExemplarCV batch = new BatchTaskClusterClassificationExemplarCV(name + "-ClusterClassification", WekaClassificationAdapter.class,
+//                    getPreprocessing());    
+//            batch.setParameterSpace(pSpace);
+//            batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
+//            batch.addInnerReport(GradingEvaluationReportClusteringCurve.class);   
+//            batch.addReport(BatchRuntimeReport.class);
+//            batch.addReport(GradingEvaluationReportClusteringCurveCV.class);
+//
+//            // Run
+//            Lab.getInstance().run(batch);
+//        }
+//    
+	
+	
+	
 
 
 }
