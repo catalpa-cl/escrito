@@ -34,14 +34,14 @@ public class GrammarMistakesTest {
 		jcas.setDocumentText("Ich wohnen in Haus. Viele Haus sind in der Stadt.");
 		engine.process(jcas);
 
-		GrammarMistakesDFE extractor = new GrammarMistakesDFE();
+		NumberOfGrammarMistakes extractor = new NumberOfGrammarMistakes();
 		Set<Feature> features = extractor.extract(jcas, TextClassificationTarget.get(jcas));
 
 		Assert.assertEquals(1, features.size());
 
 		Iterator<Feature> iter = features.iterator();
 		//3 GrammarMistakes
-		assertFeatures(GrammarMistakesDFE.FN_NR_OF_GRAMMAR_MISTAKES, 0.25, features, 0.001);
+		assertFeatures(NumberOfGrammarMistakes.FN_NR_OF_GRAMMAR_MISTAKES, 0.25, features, 0.001);
 	}
 
 	@Test
@@ -57,14 +57,14 @@ public class GrammarMistakesTest {
 		jcas.setDocumentText("I living in house. Many house are in street.");
 		engine.process(jcas);
 
-		GrammarMistakesDFE extractor = new GrammarMistakesDFE();
+		NumberOfGrammarMistakes extractor = new NumberOfGrammarMistakes();
 		Set<Feature> features = extractor.extract(jcas, TextClassificationTarget.get(jcas));
 
 		Assert.assertEquals(1, features.size());
 
 		Iterator<Feature> iter = features.iterator();
 		//3 GrammarMistakes
-		assertFeatures(GrammarMistakesDFE.FN_NR_OF_GRAMMAR_MISTAKES, 0.1818, features, 0.001);
+		assertFeatures(NumberOfGrammarMistakes.FN_NR_OF_GRAMMAR_MISTAKES, 0.1818, features, 0.001);
 	}
 
 }
