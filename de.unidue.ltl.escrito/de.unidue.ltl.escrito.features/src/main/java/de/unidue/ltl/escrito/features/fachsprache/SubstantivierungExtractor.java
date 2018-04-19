@@ -76,14 +76,14 @@ public class SubstantivierungExtractor extends FeatureExtractorResource_ImplBase
 				countNouns++;
 			}
 		}
-		System.out.println("Total Number of Nouns: "+countNouns);
+		//System.out.println("Total Number of Nouns: "+countNouns);
 		//frequency of nouns, which ends with suffixes
 		FrequencyDistribution<String> suffixFD = new FrequencyDistribution<String>();
 		for (String s : suffixes) {
 			//System.out.print("["+s+"] : ");
 			for (Token t : JCasUtil.select(view, Token.class)) {
 				if(t.getPos().getPosValue().startsWith("N")&&t.getLemma().getValue().endsWith(s)){
-					System.out.println(t.getCoveredText());
+					//System.out.println(t.getCoveredText());
 					suffixFD.inc(s);
 				}		
 			}

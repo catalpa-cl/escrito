@@ -180,5 +180,12 @@
 			<artifactId>lucene-core</artifactId>
 			<version>4.4.0</version>
 		</dependency>
+		<!-- Berkeley Parser -->
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>
+				de.tudarmstadt.ukp.dkpro.core.berkeleyparser-gpl
+			</artifactId>
+		</dependency>
 	</dependencies>
 </project>
