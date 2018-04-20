@@ -10,6 +10,15 @@
 	</parent>
 	<artifactId>de.unidue.ltl.escrito.features</artifactId>
 	<name>de.unidue.ltl.escrito.features</name>
+
+	<repositories>
+		<repository>
+			<id>data-local</id>
+			<name>data</name>
+			<url>file://${project.basedir}/lib</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<!-- dkpro core dependencies -->
 		<dependency>
@@ -198,5 +207,25 @@
 				de.tudarmstadt.ukp.dkpro.core.berkeleyparser-gpl
 			</artifactId>
 		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>de.tudarmstadt.ukp.dkpro.lexsemresource</groupId> -->
+		<!-- <artifactId>de.tudarmstadt.ukp.dkpro.lexsemresource-asl</artifactId> -->
+		<!-- <version>0.8.2-SNAPSHOT</version> -->
+		<!-- </dependency> -->
+		<dependency>
+			<groupId>edu.cmu.lti</groupId>
+			<artifactId>jawjaw</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/jawjaw-1.0.0.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>edu.cmu.lti</groupId>
+			<artifactId>ws4j</artifactId>
+			<version>1.0.1</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/ws4j-1.0.1.jar</systemPath>
+		</dependency>
+
 	</dependencies>
 </project>
