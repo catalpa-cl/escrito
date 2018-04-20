@@ -33,7 +33,7 @@ implements Constants{
 
 	public static final String RESULTS_FILENAME = "combined_classification_results.txt";
 	public static final String LABELED_ITEMS_FILENAME = "labeledItems.txt";
-	
+
 
 	private static final String WEIGHTEDFMEASURE = "weightedFmeasure";
 	private static final String MICROFMEASURE = "microAveragedFmessure";
@@ -57,9 +57,21 @@ implements Constants{
 
 		for (TaskContextMetadata subcontext : getSubtasks()) {
 			System.out.println(subcontext.toString());
+
+			Map<String, String> instanceId2TextMap = new HashMap<String, String>();
+
 			if (!TcTaskTypeUtil.isCrossValidationTask(store, subcontext.getId())) {
 				continue;
 			}
+			
+			if (TcTaskTypeUtil.isFeatureExtractionTestTask(store, subcontext.getId())){
+				// TODO: Das geht nicht, da komme ich nicht in den richtigen Task rein!
+				System.out.println("Found FETestTak");
+				Utils.extendInstanceId2TextMapCV(instanceId2TextMap, store, subcontext.getId());
+			}
+			
+			
+			
 			Properties props = new Properties();
 
 			File id2oFile = store.locateKey(subcontext.getId(),
@@ -72,11 +84,10 @@ implements Constants{
 			EvaluationData<Double> evaluationDouble = ReportUtils.readId2OutcomeAsDouble(id2oFile);
 			EvaluationData<String> evaluationString = ReportUtils.readId2OutcomeAsString(id2oFile);
 			EvaluationData<String> evaluationStringMajority = ReportUtils.readId2OutcomeAsString(id2oFileMaj);
-			
-			Map<String, String> instanceId2TextMap = Utils.getInstanceId2TextMapCV(this.getContext());
-			//System.out.println("Read map with "+instanceId2TextMap.size()+" entries");
-			
-			
+
+			System.out.println("Read map with "+instanceId2TextMap.size()+" entries");
+
+
 			Map<String, Double> results = new HashMap<String, Double>();
 
 			Accuracy<String> acc = new Accuracy<String>(evaluationString);
@@ -117,10 +128,10 @@ implements Constants{
 				System.out.printf(s+": %.2f"+System.getProperty("line.separator"), results.get(s));
 				props.setProperty(s, results.get(s).toString());
 			}
-			
+
 			File itemsFile = new File(id2oFile.getParentFile(), LABELED_ITEMS_FILENAME);
 			ReportUtils.writeLabeledOutput(instanceId2TextMap, evaluationString, itemsFile);
-			
+
 
 			// Write out properties
 			//getContext().storeBinary(RESULTS_FILENAME, new PropertiesAdapter(props));
