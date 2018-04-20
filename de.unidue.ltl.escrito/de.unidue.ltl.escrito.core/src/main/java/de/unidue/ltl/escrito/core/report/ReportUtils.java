@@ -150,6 +150,7 @@ public class ReportUtils {
 			try {
 				BufferedWriter bw = new BufferedWriter(new FileWriter(itemsFile.getAbsolutePath()));
 				Iterator<EvaluationEntry<String>> iter = evaluationString.iterator();
+				bw.write("#id itemText Gold Predicted");
 				while (iter.hasNext()){
 					EvaluationEntry<String> e = iter.next();
 					String id = e.getName();

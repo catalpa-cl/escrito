@@ -14,9 +14,11 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.dkpro.lab.engine.TaskContext;
+import org.dkpro.lab.storage.StorageService;
 import org.dkpro.lab.storage.StorageService.AccessMode;
 import org.dkpro.tc.api.exception.TextClassificationException;
 import org.dkpro.tc.core.Constants;
+import org.dkpro.tc.core.task.InitTask;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
 
 import meka.classifiers.multilabel.MultiLabelClassifier;
@@ -37,22 +39,18 @@ public class Utils {
 
 	public static Map<String, String> getInstanceId2TextMapTrain(TaskContext aContext)
 			throws ResourceInitializationException{
-		return getInstanceId2TextMap(Constants.TEST_TASK_INPUT_KEY_TRAINING_DATA, aContext);
+		String path = aContext.getFolder(Constants.TEST_TASK_INPUT_KEY_TEST_DATA, AccessMode.READONLY).getPath()
+				+"/documentMetaData.txt";
+		System.out.println(path);
+		return getInstanceId2TextMap(path);
 	}
+
 	
-	public static Map<String, String> getInstanceId2TextMapTest(TaskContext aContext)
-			throws ResourceInitializationException{
-		return getInstanceId2TextMap(Constants.TEST_TASK_INPUT_KEY_TEST_DATA, aContext);
-	}
-	
-	
-	public static Map<String, String> getInstanceId2TextMap(String inputKey, TaskContext aContext)
+	public static Map<String, String> getInstanceId2TextMap(String path)
 			throws ResourceInitializationException
 	{	
 		Map<String, String> instanceId2TextMap = new HashMap<String,String>();
-		String path = aContext.getFolder(inputKey, AccessMode.READONLY).getPath()
-				+"/documentMetaData.txt";
-		//	System.out.println(path);
+		
 		BufferedReader br;
 		try {
 			br = new BufferedReader(new FileReader(path));
@@ -75,13 +73,13 @@ public class Utils {
 		return instanceId2TextMap;
 	}
 
-	public static Map<String, String> getInstanceId2TextMapCV(TaskContext aContext)
-			throws ResourceInitializationException
+	public static void extendInstanceId2TextMapCV(Map<String, String> instanceId2TextMap, 
+			StorageService store, String subcontextId)
+					throws ResourceInitializationException
 	{	
-		Map<String, String> instanceId2TextMap = new HashMap<String,String>();
-		String path = aContext.getFolder(Constants.TEST_TASK_INPUT_KEY_TEST_DATA, AccessMode.READONLY).getPath()
-				+"/documentMetaData.txt";
-		//	System.out.println(path);
+		File path = store.locateKey(subcontextId,
+				Constants.TEST_TASK_INPUT_KEY_TEST_DATA+"/documentMetaData.txt");
+		System.out.println(path);
 		BufferedReader br;
 		try {
 			br = new BufferedReader(new FileReader(path));
@@ -100,7 +98,6 @@ public class Utils {
 			System.err.println(e.getMessage());
 			e.printStackTrace();
 		}
-		return instanceId2TextMap;
 	}
 
 	public static File getFile(TaskContext aContext, String key, String entry, AccessMode mode){
@@ -326,7 +323,16 @@ public class Utils {
         return list;
     }
     
-    
+    public static List<String> getParameters(List<Object> classificationArguments)
+    {
+        List<String> o = new ArrayList<>();
+
+        for (int i = 1; i < classificationArguments.size(); i++) {
+            o.add((String) classificationArguments.get(i));
+        }
+
+        return o;
+    }
     
 //    /**
 //     * Feature selection using Mulan.

@@ -1,13 +1,10 @@
 package de.unidue.ltl.escrito.core.report;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -15,14 +12,14 @@ import java.util.Set;
 
 import org.apache.commons.compress.utils.IOUtils;
 import org.dkpro.lab.storage.StorageService;
-import org.dkpro.lab.storage.impl.PropertiesAdapter;
+import org.dkpro.lab.storage.StorageService.AccessMode;
+import org.dkpro.lab.task.TaskContextMetadata;
 import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.task.TcTaskTypeUtil;
 import org.dkpro.tc.ml.report.TcBatchReportBase;
 
 import de.unidue.ltl.escrito.core.Utils;
 import de.unidue.ltl.evaluation.core.EvaluationData;
-import de.unidue.ltl.evaluation.core.EvaluationEntry;
 import de.unidue.ltl.evaluation.measures.agreement.CohenKappa;
 import de.unidue.ltl.evaluation.measures.agreement.LinearlyWeightedKappa;
 import de.unidue.ltl.evaluation.measures.agreement.QuadraticallyWeightedKappa;
@@ -58,18 +55,40 @@ public class GradingEvaluationReport extends TcBatchReportBase {
 
 	@Override
 	public void execute() throws Exception {
+		System.out.println("Grading Evaluation Report:");
 		File evaluationFile = null;
 		File evaluationFileMajority = null;
 		StorageService storageService = getContext().getStorageService();
+		Map<String, String> instanceId2TextMap = new HashMap<String, String>();
+
 		Set<String> taskIds = getTaskIdsFromMetaData(getSubtasks());
 		List<String> allIds = new ArrayList<String>();
 		allIds.addAll(collectTasks(taskIds));
+
 		for (String id : taskIds) {
-			if (!TcTaskTypeUtil.isMachineLearningAdapterTask(storageService, id)) {
+
+			if (TcTaskTypeUtil.isFeatureExtractionTestTask(storageService, id)) {
+				String path = storageService.locateKey(id, "output/documentMetaData.txt").getAbsolutePath();
+			//	System.out.println(path);
+				instanceId2TextMap = Utils.getInstanceId2TextMap(path);
+				System.out.println("Read map with "+instanceId2TextMap.size()+" entries");
+			}
+		//	System.out.println(id);
+			if (!TcTaskTypeUtil.isFacadeTask(storageService, id)) {
 				continue;
 			}
-			evaluationFile = storageService.locateKey(id, Constants.ID_OUTCOME_KEY);
-			evaluationFileMajority = storageService.locateKey(id, Constants.BASELINE_MAJORITIY_ID_OUTCOME_KEY);
+			Set<String> wrapped = new HashSet<>();
+			wrapped.add(id);
+			Set<String> subTaskId = collectTasks(wrapped);
+			for (String subId : subTaskId) {
+				if (!TcTaskTypeUtil.isMachineLearningAdapterTask(storageService, subId)) {
+					continue;
+				}
+				evaluationFile = storageService.locateKey(subId, Constants.ID_OUTCOME_KEY);
+				evaluationFileMajority = storageService.locateKey(subId, Constants.BASELINE_MAJORITIY_ID_OUTCOME_KEY);
+				System.out.println(evaluationFile);
+				System.out.println(evaluationFileMajority);
+			}
 		}
 
 		Properties props = new Properties();
@@ -78,10 +97,10 @@ public class GradingEvaluationReport extends TcBatchReportBase {
 		EvaluationData<String> evaluationString = ReportUtils.readId2OutcomeAsString(evaluationFile);
 		EvaluationData<String> evaluationStringMajority = ReportUtils.readId2OutcomeAsString(evaluationFileMajority);
 
-		Map<String, String> instanceId2TextMap = Utils.getInstanceId2TextMapTest(this.getContext());
-		//System.out.println("Read map with "+instanceId2TextMap.size()+" entries");
-		
-		
+
+
+
+
 		Accuracy<String> acc = new Accuracy<String>(evaluationString);
 		results.put(ACCURACY, acc.getResult());
 
@@ -115,7 +134,7 @@ public class GradingEvaluationReport extends TcBatchReportBase {
 
 		SpearmanCorrelation spearman = new SpearmanCorrelation(evaluationDouble);
 		results.put(SPEARMAN, spearman.getResult());
-		
+
 		for (String s : results.keySet()) {
 			System.out.printf(s+": %.2f"+System.getProperty("line.separator"), results.get(s));
 			//				System.out.println(s + ": " + results.get(s));
@@ -124,18 +143,18 @@ public class GradingEvaluationReport extends TcBatchReportBase {
 
 		File itemsFile = new File(evaluationFile.getParentFile(), LABELED_ITEMS_FILENAME);
 		ReportUtils.writeLabeledOutput(instanceId2TextMap, evaluationString, itemsFile);
-		
+
 		// Write results
 		File outfile = new File(evaluationFile.getParentFile(), RESULTS_FILENAME);
 		FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(outfile);
-            props.store(fos, "Results");
-        }
-        finally {
-            IOUtils.closeQuietly(fos);
-        }   
-		
+		try {
+			fos = new FileOutputStream(outfile);
+			props.store(fos, "Results");
+		}
+		finally {
+			IOUtils.closeQuietly(fos);
+		}   
+
 	}
 
 

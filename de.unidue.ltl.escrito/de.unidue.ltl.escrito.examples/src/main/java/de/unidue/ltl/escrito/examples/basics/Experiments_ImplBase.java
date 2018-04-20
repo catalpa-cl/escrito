@@ -110,9 +110,10 @@ public class Experiments_ImplBase implements Constants {
 		System.out.println("Running experiment "+name);
 		ExperimentTrainTest batch = new ExperimentTrainTest(name + "-TrainTest");
 		batch.setPreprocessing(aed);
-		batch.addInnerReport(GradingEvaluationReport.class);
+		//batch.addInnerReport(GradingEvaluationReport.class);
 		batch.setParameterSpace(pSpace);
 		batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
+		batch.addReport(GradingEvaluationReport.class);
 		batch.addReport(BatchTrainTestReport.class);
 		// Run
 		Lab.getInstance().run(batch);
@@ -124,7 +125,8 @@ public class Experiments_ImplBase implements Constants {
 			{
 				ExperimentCrossValidation batch = new ExperimentCrossValidation(name + "-CV", numFolds);
 				batch.setPreprocessing(aed);
-				batch.addInnerReport(GradingEvaluationReport.class);
+			// TODO: adapt o that it also works from this slightly different context
+				//	batch.addInnerReport(GradingEvaluationReport.class);
 				batch.setParameterSpace(pSpace);
 				batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
 				batch.addReport(BatchCrossValidationReport.class);
@@ -185,30 +187,15 @@ public class Experiments_ImplBase implements Constants {
         // Run
         Lab.getInstance().run(batch);
     }
-//    
-//    // ##### CLUSTERING + CLASSIFICATION #####
-//    protected static void runClusterClassification(ParameterSpace pSpace, String name)
-//        throws Exception
-//    {
-//        BatchTaskClusterClassification batch = new BatchTaskClusterClassification(name + "-ClusterClassification", WekaClassificationAdapter.class,
-//                getPreprocessing());    
-//        batch.setParameterSpace(pSpace);
-//        batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
-//   //     batch.addInnerReport(KappaReport.class);
-//        batch.addReport(BatchTrainTestReport.class);
-//      //  batch.addReport(BatchOutcomeIDReport.class);
-//        batch.addReport(BatchRuntimeReport.class);
-//
-//        // Run
-//        Lab.getInstance().run(batch);
-//    }
+
     
     // ##### CLUSTERING + CLASSIFICATION WITH CENTROIDS #####
     protected static void runClusterClassificationCentroids(ParameterSpace pSpace, String name, String languageCode)
         throws Exception
     {
         BatchTaskClusterClassificationExemplar batch = new BatchTaskClusterClassificationExemplar(name + "-ClusterClassification");    
-        batch.setParameterSpace(pSpace);
+        batch.setPreprocessing(getPreprocessing(languageCode));
+          batch.setParameterSpace(pSpace);
         batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
         batch.addInnerReport(GradingEvaluationReportClusteringCurve.class);   
      //   batch.addInnerReport(KappaReport.class);
@@ -219,25 +206,7 @@ public class Experiments_ImplBase implements Constants {
         // Run
         Lab.getInstance().run(batch);
     }
-//
-//    
-//    
-//    protected static void runClusterClassificationCentroids_CV(ParameterSpace pSpace, String name)
-//            throws Exception
-//        {
-//            BatchTaskClusterClassificationExemplarCV batch = new BatchTaskClusterClassificationExemplarCV(name + "-ClusterClassification", WekaClassificationAdapter.class,
-//                    getPreprocessing());    
-//            batch.setParameterSpace(pSpace);
-//            batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
-//            batch.addInnerReport(GradingEvaluationReportClusteringCurve.class);   
-//            batch.addReport(BatchRuntimeReport.class);
-//            batch.addReport(GradingEvaluationReportClusteringCurveCV.class);
-//
-//            // Run
-//            Lab.getInstance().run(batch);
-//        }
-//    
-	
+
 	
 	
 
