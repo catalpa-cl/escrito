@@ -52,14 +52,6 @@ extends JCasCollectionReader_ImplBase
 	@ConfigurationParameter(name = PARAM_PROMPT_IDS, mandatory = false, defaultValue = "-1")
 	protected Integer[] requestedPromptIds; 
 	
-	public static final String PARAM_QUESTION_PREFIX = "QuestionPrefix";
-	@ConfigurationParameter(name = PARAM_QUESTION_PREFIX, mandatory = true)
-	private String questionPrefix;
-
-	public static final String PARAM_TARGET_ANSWER_PREFIX = "TargetAnswerPrefix";
-	@ConfigurationParameter(name = PARAM_TARGET_ANSWER_PREFIX, mandatory = true)
-	private String targetAnswerPrefix;
-	
 	public static final String PARAM_CORPUSNAME = "corpusName";
 	@ConfigurationParameter(name = PARAM_CORPUSNAME, mandatory = true)
 	protected String corpusName;
@@ -150,8 +142,8 @@ extends JCasCollectionReader_ImplBase
 			throw new ResourceInitializationException(e);
 		}
 		currentIndex = 0;
-		Utils.preprocessConnectedTexts(targetAnswers, corpusName, targetAnswerPrefix, "en");
-		Utils.preprocessConnectedTexts(questions, corpusName, questionPrefix, "en");
+//		Utils.preprocessConnectedTexts(targetAnswers, corpusName, targetAnswerPrefix, "en");
+//		Utils.preprocessConnectedTexts(questions, corpusName, questionPrefix, "en");
 	}
 
 	@Override
