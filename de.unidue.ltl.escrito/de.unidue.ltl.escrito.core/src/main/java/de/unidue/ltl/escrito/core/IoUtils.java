@@ -1,4 +1,4 @@
-package de.unidue.ltl.escrito.features.similarity;
+package de.unidue.ltl.escrito.core;
 
 import java.io.IOException;
 
