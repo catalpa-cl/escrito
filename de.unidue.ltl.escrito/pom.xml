@@ -95,6 +95,7 @@
 		<module>de.unidue.ltl.escrito.examples</module>
 		<module>de.unidue.ltl.escrito.io</module>
 		<module>de.unidue.ltl.escrito.features</module>
+		<module>de.unidue.ltl.escrito.languagetool</module>
 		<!--module>de.unidue.ltl.escrito.integration.jack</module-->
 	</modules>
 	<build>

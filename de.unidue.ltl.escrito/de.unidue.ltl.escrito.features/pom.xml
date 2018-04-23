@@ -118,11 +118,7 @@
 			<artifactId>dkpro-tc-testing</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
-			<artifactId>de.tudarmstadt.ukp.dkpro.core.languagetool-asl</artifactId>
-			<version>1.8.0</version>
-		</dependency>
+
 		<dependency>
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
 			<artifactId>de.tudarmstadt.ukp.dkpro.core.readability-asl</artifactId>
@@ -226,6 +222,13 @@
 			<scope>system</scope>
 			<systemPath>${basedir}/lib/ws4j-1.0.1.jar</systemPath>
 		</dependency>
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId> -->
+<!-- 			<artifactId>de.tudarmstadt.ukp.dkpro.core.languagetool-asl</artifactId> -->
+<!-- 			<version>1.8.0</version> -->
+<!-- 		</dependency> -->
+
 
 	</dependencies>
 </project>
