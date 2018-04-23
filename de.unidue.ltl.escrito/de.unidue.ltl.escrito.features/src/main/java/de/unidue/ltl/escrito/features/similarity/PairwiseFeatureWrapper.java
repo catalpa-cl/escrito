@@ -25,6 +25,7 @@ import org.dkpro.tc.api.features.meta.MetaCollectorConfiguration;
 import org.dkpro.tc.api.features.meta.MetaDependent;
 import org.dkpro.tc.api.type.TextClassificationTarget;
 
+import de.unidue.ltl.escrito.core.IoUtils;
 import de.unidue.ltl.escrito.core.types.LearnerAnswerWithReferenceAnswer;
 
 
