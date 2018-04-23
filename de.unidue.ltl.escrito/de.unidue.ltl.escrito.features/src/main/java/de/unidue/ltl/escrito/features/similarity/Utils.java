@@ -14,42 +14,8 @@ import de.unidue.ltl.escrito.core.types.LearnerAnswerToken;
 public class Utils {
 
 
-	public static List<String> extractAllLemmasFromView(JCas view, 
-			boolean ignoreQuestionMaterial,
-			boolean ignoreStopwords,
-			boolean ignorePunctuation) {
-		if (JCasUtil.exists(view, LearnerAnswerToken.class)){
-			Collection<LearnerAnswerToken> tokens = JCasUtil.select(view, LearnerAnswerToken.class);
-			List<String> words = new ArrayList<String>();
-			Iterator<LearnerAnswerToken> iter = tokens.iterator();
-			while (iter.hasNext()){
-				LearnerAnswerToken t = iter.next();
-				if (ignoreToken(t, ignoreQuestionMaterial, ignoreStopwords, ignorePunctuation)){
-					System.out.println("Ignore token "+t.getCoveredText());
-				} else {
-					words.add(t.getToken().getLemma().getValue()); 
-				}
-			}
-			return words;
-		} else {
-			//if we do not have learner answer tokens annotated, take all tokens
-			Collection<Token> tokens = JCasUtil.select(view, Token.class);
-			List<String> words = new ArrayList<String>();
-			Iterator<Token> iter = tokens.iterator();
-			while (iter.hasNext()){
-				words.add(iter.next().getLemma().getValue()); 
-			}
-			return words;
-		}
-	}
 
 
-	private static boolean ignoreToken(LearnerAnswerToken t, boolean ignoreQuestionMaterial, boolean ignoreStopwords,
-			boolean ignorePunctuation) {
-		return ((t.getIsPunctuation() && ignorePunctuation)
-				|| (t.getIsQuestionMaterial() && ignoreQuestionMaterial)
-				|| (t.getIsStopWord() && ignoreStopwords));
-	}
 
 
 	public static List<String> extractAllContentWordLemmasFromView(JCas view) {

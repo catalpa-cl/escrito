@@ -32,6 +32,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.frequency.util.FrequencyDistribution;
 import de.tudarmstadt.ukp.dkpro.core.api.parameter.ComponentParameters;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.unidue.ltl.escrito.features.similarity.meta.WordIdfCollector;
+import de.unidue.ltl.escrito.core.Utils;
 
 
 public class WordOverlapFeatureExtractor 
