@@ -54,6 +54,10 @@
 			<version>2.1.0</version>
 		</dependency>
 		<dependency>
+			<groupId>org.dkpro.statistics</groupId>
+			<artifactId>dkpro-statistics-correlation</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.dkpro.lab</groupId>
 			<artifactId>dkpro-lab-core</artifactId>
 		</dependency>
@@ -75,6 +79,26 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-math3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.api.anomaly-asl</artifactId>
+			<version>1.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.universal-automata</groupId>
+			<artifactId>liblevenshtein</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.jazzy-asl</artifactId>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<version>1.9.0</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.gatech.gtri.string-metric</groupId>
+			<artifactId>string-metric</artifactId>
+			<version>1.0</version>
 		</dependency>
 	</dependencies>
 </project>
