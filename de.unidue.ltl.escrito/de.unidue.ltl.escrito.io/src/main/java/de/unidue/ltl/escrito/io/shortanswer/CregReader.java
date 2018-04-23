@@ -66,6 +66,18 @@ public class CregReader extends JCasCollectionReader_ImplBase {
 	@ConfigurationParameter(name = PARAM_SEPARATOR, mandatory = false, defaultValue = "\t")
 	private String separator;
 
+	public static final String PARAM_PROMPT_SET_ID = "PromptSetId";
+	@ConfigurationParameter(name = PARAM_PROMPT_SET_ID, mandatory = false)
+	protected String requestedPromptSetId; 
+
+	public static final String PARAM_QUESTION_PREFIX = "QuestionPrefix";
+	@ConfigurationParameter(name = PARAM_QUESTION_PREFIX, mandatory = true)
+	private String questionPrefix;
+
+	public static final String PARAM_TARGET_ANSWER_PREFIX = "TargetAnswerPrefix";
+	@ConfigurationParameter(name = PARAM_TARGET_ANSWER_PREFIX, mandatory = true)
+	private String targetAnswerPrefix;
+
 	protected int currentIndex;    
 
 	protected Queue<CregItem> items;
@@ -118,9 +130,8 @@ public class CregReader extends JCasCollectionReader_ImplBase {
 			throw new ResourceInitializationException(e);
 		}
 		currentIndex = 0;	
-	//	Utils.preprocessConnectedTexts(targetAnswers, corpusName, TARGET_ANSWER_PREFIX, "de");
-	//	Utils.preprocessConnectedTexts(questions, corpusName, QUESTION_PREFIX, "de");
-	//	System.exit(-1);
+		Utils.preprocessConnectedTexts(targetAnswers, corpusName, targetAnswerPrefix, "de");
+		Utils.preprocessConnectedTexts(questions, corpusName, questionPrefix, "de");
 	}
 
 	private void extractLearnerAnswersFromFile(URL fileURL) throws JDOMException, IOException {
@@ -137,7 +148,7 @@ public class CregReader extends JCasCollectionReader_ImplBase {
 			String qid = prefix+question.getAttributeValue("id");
 			String questionText = question.getChild("questionString").getText().trim();
 			questions.put(qid, Utils.cleanString(questionText));
-		//	System.out.println("Question "+qid+": "+questionText);
+			//	System.out.println("Question "+qid+": "+questionText);
 			Element taNode = question.getChild("TargetAnswers");
 			List<Element> targetAnswerNodes = taNode.getChildren("TargetAnswer");
 			String firstTargetAnswer = null;
@@ -149,7 +160,7 @@ public class CregReader extends JCasCollectionReader_ImplBase {
 				if (!(targetAnswer.getChildren().isEmpty())){
 					String taText = targetAnswer.getChild("answerText").getText().trim();
 					targetAnswers.put(taid, Utils.cleanString(taText));
-			//		System.out.println("TA "+taid+": "+taText);
+					//		System.out.println("TA "+taid+": "+taText);
 					if (!(foundFirst)){
 						firstTargetAnswer = Utils.cleanString(taText);
 						firstTargetAnswerId = taid;
@@ -178,7 +189,7 @@ public class CregReader extends JCasCollectionReader_ImplBase {
 				String diagnosisId2 = prefix+diagnoses.get(1).getAttributeValue("id");
 				String closestTaId1 = diagnoses.get(0).getAttributeValue("closestTA_id");
 				String closestTaId2 = diagnoses.get(1).getAttributeValue("closestTA_id");
-		//		System.out.println("StudentAnswer "+id+" "+studentId+" "+binary1+"/"+binary2+" "+detailed1+"/"+detailed2+" "+answertext1);
+				//		System.out.println("StudentAnswer "+id+" "+studentId+" "+binary1+"/"+binary2+" "+detailed1+"/"+detailed2+" "+answertext1);
 				int score = -1;
 				if (binary1.equals("false")){
 					score = 0;
@@ -198,7 +209,7 @@ public class CregReader extends JCasCollectionReader_ImplBase {
 				}
 				CregItem item = new CregItem(studentId, qid, answertext1, score, closestTa);
 				item.setTargetAnswerId(closestTaId);
-		//		System.out.println("TA id: "+closestTaId);
+				//		System.out.println("TA id: "+closestTaId);
 				item.setBinary1(binary1);
 				item.setBinary2(binary2);
 				item.setDetailed1(detailed1);
@@ -227,7 +238,6 @@ public class CregReader extends JCasCollectionReader_ImplBase {
 	{
 		CregItem item = items.poll();
 		getLogger().debug(item);
-	//	System.out.println(item.toString());
 		String itemId = item.getQuestionId()+"_"+item.getStudentId(); 
 
 		try
@@ -254,13 +264,13 @@ public class CregReader extends JCasCollectionReader_ImplBase {
 		}
 		LearnerAnswerWithReferenceAnswer learnerAnswer = new LearnerAnswerWithReferenceAnswer(jcas, 0, jcas.getDocumentText().length());
 		learnerAnswer.setPromptId(item.getQuestionId());
-		// TODO check
-	//	learnerAnswer.setReferenceAnswers(org.autograder.io.Utils.toStringArray(jcas,item.getTargetAnswer()));
-	//	learnerAnswer.setReferenceAnswerIds(org.autograder.io.Utils.toStringArray(jcas,item.getTargetAnswerId()));
+		StringArray ids = new StringArray(jcas, 1);
+		ids.set(0, item.getClosestTaId1());
+		learnerAnswer.setReferenceAnswerIds(ids);
 		learnerAnswer.addToIndexes();
 		TextClassificationTarget unit = new TextClassificationTarget(jcas, 0, jcas.getDocumentText().length());
 		// will add the token content as a suffix to the ID of this unit 
-	//	System.out.println("ItemId: "+itemId);
+		//	System.out.println("ItemId: "+itemId);
 		unit.setSuffix(itemId);
 		unit.addToIndexes();
 
@@ -395,7 +405,7 @@ class CregItem extends ItemWithTargetAnswer {
 	public void setTargetAnswerId(String targetAnswerId) {
 		this.targetAnswerId = targetAnswerId;
 	}
-	
+
 	String answerText1;
 	String answerText2;
 	String teacherId1;

@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 
 import org.apache.uima.UimaContext;
@@ -13,6 +15,7 @@ import org.apache.uima.collection.CollectionException;
 import org.apache.uima.fit.component.JCasCollectionReader_ImplBase;
 import org.apache.uima.fit.descriptor.ConfigurationParameter;
 import org.apache.uima.jcas.JCas;
+import org.apache.uima.jcas.cas.StringArray;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.Progress;
 import org.apache.uima.util.ProgressImpl;
@@ -22,14 +25,24 @@ import org.dkpro.tc.api.type.TextClassificationTarget;
 import de.tudarmstadt.ukp.dkpro.core.api.metadata.type.DocumentMetaData;
 import de.tudarmstadt.ukp.dkpro.core.api.resources.ResourceUtils;
 import de.unidue.ltl.escrito.core.types.LearnerAnswer;
+import de.unidue.ltl.escrito.core.types.LearnerAnswerWithReferenceAnswer;
 import de.unidue.ltl.escrito.io.util.Utils;
 
 
-/*
- * We expect a generic data format with one item per line, and at least 4 columns: promptid (can be the same for all items), answerid, answer text and score.
+/**
+ * We expect a generic data format with one item per line, and at least 4 columns: 
+ *  1: promptid (can be the same for all items),
+ *  2: answerid, 
+ *  3: answer text and 
+ *  4: score.
  * The score has to be either numeric or categorial.
  * If it is numeric, then is should be mappable to an integer, to ensure that the values are equally spaced. 
  * (a suitable factor is needed in that case, e.g. 2, if the scores in the dataset are 0.0, 0.5, 1.0 etc)
+ * Optional, a reference answer can be provided in column 5, and the question string in column 6 in which case you also have to set the parameters
+ * corpusName, TargetAnswerPrefix and questionPrefix.
+ * These parameters have also be handed over to any similarity-based feature extractor.
+ * We expect that there is only one reference answer and one question for all answers that belong to the same prompt.
+ *
  *
  */
 
@@ -65,15 +78,32 @@ public class GenericDatasetReader  extends JCasCollectionReader_ImplBase{
 	@ConfigurationParameter(name = PARAM_IGNORE_FIRST_LINE, mandatory = false, defaultValue = "false")
 	private Boolean ignoreFirstLine;
 
+	public static final String PARAM_QUESTION_PREFIX = "QuestionPrefix";
+	@ConfigurationParameter(name = PARAM_QUESTION_PREFIX, mandatory = true)
+	private String questionPrefix;
+
+	public static final String PARAM_TARGET_ANSWER_PREFIX = "TargetAnswerPrefix";
+	@ConfigurationParameter(name = PARAM_TARGET_ANSWER_PREFIX, mandatory = true)
+	private String targetAnswerPrefix;
+
+	public static final String PARAM_CORPUSNAME = "corpusName";
+	@ConfigurationParameter(name = PARAM_CORPUSNAME, mandatory = true)
+	protected String corpusName;
+
 	protected int currentIndex;    
 
 	protected Queue<GenericDatasetItem> items;
+
+	private Map<String, String> questions;
+	private Map<String, String> targetAnswers;
 
 	@Override
 	public void initialize(UimaContext aContext)
 			throws ResourceInitializationException
 	{
 		items = new LinkedList<GenericDatasetItem>();
+		questions = new HashMap<String, String>();
+		targetAnswers = new HashMap<String, String>();
 		try {
 			inputFileURL = ResourceUtils.resolveLocation(inputFileString, this, aContext);
 			BufferedReader reader = new BufferedReader(
@@ -95,6 +125,7 @@ public class GenericDatasetReader  extends JCasCollectionReader_ImplBase{
 				int score    = -1;
 
 				if (nextItem.length>=4) {
+					GenericDatasetItem newItem = null ;
 					promptId  = nextItem[0];
 					answerId = nextItem[1];
 					text       = nextItem[2];
@@ -103,12 +134,18 @@ public class GenericDatasetReader  extends JCasCollectionReader_ImplBase{
 						score = (int) rawScore;
 					} else {
 						System.err.println("Problem processing score "+rawScore+" with multiplication factor " + scoreMultiplicationFactor
-					+ "Your scores are not integers and you did not provide a suitable multiplication factor.");
+								+ "Your scores are not integers and you did not provide a suitable multiplication factor.");
 						System.exit(-1);
 					}
 					text = Utils.cleanString(text);
-					GenericDatasetItem newItem = new GenericDatasetItem(promptId, answerId, text, score);
-			//		System.out.println(newItem.toString());
+					if (nextItem.length >=5){
+						targetAnswers.put(promptId, Utils.cleanString(nextItem[4]));
+					}
+					if (nextItem.length >=6){
+						questions.put(promptId, Utils.cleanString(nextItem[5]));
+					} 
+					newItem = new GenericDatasetItem(promptId, answerId, text, score, promptId);
+					//		System.out.println(newItem.toString());
 					items.add(newItem);   
 				}
 			}   
@@ -150,8 +187,12 @@ public class GenericDatasetReader  extends JCasCollectionReader_ImplBase{
 			throw new CollectionException(e);
 		}
 
-		LearnerAnswer learnerAnswer = new LearnerAnswer(jcas, 0, jcas.getDocumentText().length());
-		learnerAnswer.setPromptId("-1");
+		LearnerAnswerWithReferenceAnswer learnerAnswer = new LearnerAnswerWithReferenceAnswer(jcas, 0, jcas.getDocumentText().length());
+		learnerAnswer.setPromptId(item.getPromptId());
+		StringArray ids = new StringArray(jcas, 1);
+		// We only have one exactly target answer per learner, so we use the same id as for the prompt
+		ids.set(0, String.valueOf(item.getPromptId()));
+		learnerAnswer.setReferenceAnswerIds(ids);
 		learnerAnswer.addToIndexes();
 
 		TextClassificationTarget unit = new TextClassificationTarget(jcas, 0, jcas.getDocumentText().length());

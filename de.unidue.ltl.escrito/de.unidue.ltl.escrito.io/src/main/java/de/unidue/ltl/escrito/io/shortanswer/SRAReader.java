@@ -23,6 +23,8 @@ import org.apache.uima.util.ProgressImpl;
 
 import de.tudarmstadt.ukp.dkpro.core.api.metadata.type.DocumentMetaData;
 import de.tudarmstadt.ukp.dkpro.core.api.resources.ResourceUtils;
+import de.unidue.ltl.escrito.core.types.LearnerAnswerWithReferenceAnswer;
+import de.unidue.ltl.escrito.io.util.Utils;
 
 import org.dkpro.tc.api.type.TextClassificationOutcome;
 import org.dkpro.tc.api.type.TextClassificationTarget;
@@ -227,8 +229,8 @@ public class SRAReader extends JCasCollectionReader_ImplBase{
 			throw new ResourceInitializationException(e);
 		}		
 		currentIndex = 0;
-	//	Utils.preprocessConnectedTexts(targetAnswers, corpusName, targetAnswerPrefix, "en");
-	//	Utils.preprocessConnectedTexts(questions, corpusName, questionPrefix, "en");
+		Utils.preprocessConnectedTexts(targetAnswers, corpusName, targetAnswerPrefix, "en");
+		Utils.preprocessConnectedTexts(questions, corpusName, questionPrefix, "en");
 	}
 
 
@@ -277,14 +279,14 @@ public class SRAReader extends JCasCollectionReader_ImplBase{
 		TextClassificationOutcome outcome = new TextClassificationOutcome(jcas, 0, jcas.getDocumentText().length());
 		outcome.setOutcome(item.getnWayGrade());
 		outcome.addToIndexes();
-//		LearnerAnswerWithReferenceAnswer learnerAnswer = new LearnerAnswerWithReferenceAnswer(jcas, 0, jcas.getDocumentText().length());
-//		learnerAnswer.setPromptId(item.getQuestionId());
-//		StringArray ids = new StringArray(jcas, item.getTargetAnswerIds().size());
-//		for (int i = 0; i<item.getTargetAnswerIds().size(); i++){
-//			ids.set(i, item.getTargetAnswerIds().get(i));
-//		}
-//		learnerAnswer.setReferenceAnswerIds(ids);
-//		learnerAnswer.addToIndexes();
+		LearnerAnswerWithReferenceAnswer learnerAnswer = new LearnerAnswerWithReferenceAnswer(jcas, 0, jcas.getDocumentText().length());
+		learnerAnswer.setPromptId(item.getQuestionId());
+		StringArray ids = new StringArray(jcas, item.getTargetAnswerIds().size());
+		for (int i = 0; i<item.getTargetAnswerIds().size(); i++){
+			ids.set(i, item.getTargetAnswerIds().get(i));
+		}
+		learnerAnswer.setReferenceAnswerIds(ids);
+		learnerAnswer.addToIndexes();
 
 		currentIndex++;
 	}

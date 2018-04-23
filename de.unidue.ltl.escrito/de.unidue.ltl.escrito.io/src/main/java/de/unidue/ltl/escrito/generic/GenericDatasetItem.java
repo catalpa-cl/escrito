@@ -1,11 +1,15 @@
 package de.unidue.ltl.escrito.generic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GenericDatasetItem {
 
 	private int grade;
 	private String text;
 	private String promptId;
 	private String answerId;
+	private String  targetAnswerId;
 	
 
 	@Override
@@ -18,18 +22,21 @@ public class GenericDatasetItem {
 		sb.append(" ");
 		sb.append(grade);
 		sb.append(" ");
+		sb.append(targetAnswerId);
+		sb.append(" ");
 		String subStringText = text.length() > 40 ? text.substring(0, 40) : text.substring(0, text.length());
 		sb.append(subStringText);
 		sb.append(" ...");
 
 		return sb.toString();        
 	}
-
-	public GenericDatasetItem(String promptId, String answerId, String text, int grade) {
+	
+	public GenericDatasetItem(String promptId, String answerId, String text, int grade, String targetAnswerId) {
 		this.promptId = promptId;
 		this.answerId = answerId;
 		this.text = text;
 		this.grade = grade;
+		this.targetAnswerId = targetAnswerId;
 	}
 
 	public int getGrade() {
@@ -46,6 +53,10 @@ public class GenericDatasetItem {
 
 	public String getAnswerId() {
 		return answerId;
+	}
+	
+	public String getTargetAnswerId() {
+		return targetAnswerId;
 	}
 	
 }
