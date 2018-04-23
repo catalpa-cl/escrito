@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.uima.fit.descriptor.ConfigurationParameter;
+import org.apache.uima.fit.descriptor.TypeCapability;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 
@@ -20,14 +21,16 @@ import org.dkpro.tc.api.features.FeatureExtractorResource_ImplBase;
 import org.dkpro.tc.api.features.FeatureType;
 import org.dkpro.tc.api.type.TextClassificationTarget;
 
+/**
+ * Computes the readability measures ari, coleman_liau, flesch, fog, kincaid, lix and smog as
+ * implemented in de.tudarmstadt.ukp.dkpro.core.readability-asl s
+ */
+@TypeCapability(inputs = {"de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
+		"de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence"})
 public class TraditionalReadabilityMeasures
     extends FeatureExtractorResource_ImplBase
     implements FeatureExtractor
 {
-    /**
-     * Computes the readability measures ari, coleman_liau, flesch, fog, kincaid, lix and smog as
-     * implemented in de.tudarmstadt.ukp.dkpro.core.readability-asl s
-     */
     // having all these parameters is not nice
     // better: several instances of extractor with measure as resource
     public static final String PARAM_ADD_KINCAID = "kincaid";

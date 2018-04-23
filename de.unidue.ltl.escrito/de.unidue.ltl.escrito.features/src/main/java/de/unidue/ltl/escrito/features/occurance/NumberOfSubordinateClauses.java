@@ -61,7 +61,7 @@ public class NumberOfSubordinateClauses extends FeatureExtractorResource_ImplBas
 	private ArrayList<String> targetTags = new ArrayList<String>();
 
 	@Override
-	public boolean initialize(ResourceSpecifier aSpecifier, Map aAdditionalParams)
+	public boolean initialize(ResourceSpecifier aSpecifier, Map<String, Object> aAdditionalParams)
 			throws ResourceInitializationException {
 		if (!super.initialize(aSpecifier, aAdditionalParams)) {
 			return false;

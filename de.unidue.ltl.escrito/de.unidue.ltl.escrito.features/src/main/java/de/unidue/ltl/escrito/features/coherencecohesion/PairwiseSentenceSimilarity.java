@@ -31,10 +31,10 @@ import dkpro.similarity.algorithms.lexical.string.GreedyStringTiling;
  * @author Michael
  * 
  */
-@TypeCapability(inputs = {
-		"de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
+@TypeCapability(inputs = {"de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
 		"de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence",
-"de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma" })
+		"de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS",
+		"de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma" })
 public class PairwiseSentenceSimilarity 
 extends	FeatureExtractorResource_ImplBase 
 implements FeatureExtractor {
@@ -53,7 +53,7 @@ implements FeatureExtractor {
 	{
 		Map<Integer, Double> greedyStringTilingDataPoints = new HashMap<Integer, Double>();
 		Map<Integer, Double> greedyStringSampledValues = null;
-		// iniatilze startPoint TODO change value?
+		// Initialize startPoint TODO change value?
 		greedyStringTilingDataPoints.put(0, 0.0);
 		int nOfDataPoints = 0;
 
@@ -118,7 +118,7 @@ implements FeatureExtractor {
 
 	/**
 	 * 
-	 * sample values from given datapoints. If x of the current step is a direct
+	 * sample values from given data points. If x of the current step is a direct
 	 * match the value is chosen directly. Else the value is interpolated from
 	 * the the points in direct neighborhood
 	 * 

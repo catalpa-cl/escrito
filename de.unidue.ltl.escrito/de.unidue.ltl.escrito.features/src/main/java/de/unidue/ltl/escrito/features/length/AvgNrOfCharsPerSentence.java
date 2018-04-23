@@ -19,7 +19,8 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 /**
  * Extracts the average number of characters per sentence
  */
-@TypeCapability(inputs = { "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token" })
+@TypeCapability(inputs = { "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
+		"de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence"})
 public class AvgNrOfCharsPerSentence
     extends FeatureExtractorResource_ImplBase
     implements FeatureExtractor

@@ -3,6 +3,8 @@ package de.unidue.ltl.escrito.features.fachsprache;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.apache.uima.fit.descriptor.TypeCapability;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.dkpro.tc.api.exception.TextClassificationException;
@@ -19,7 +21,10 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
  * 
  * @author Yuning
  */
-
+@TypeCapability(inputs = {"de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
+		"de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence",
+		"de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS",
+		"de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma" })
 public class PassiveSentenceExtractor  extends FeatureExtractorResource_ImplBase implements FeatureExtractor {
 
 	@Override

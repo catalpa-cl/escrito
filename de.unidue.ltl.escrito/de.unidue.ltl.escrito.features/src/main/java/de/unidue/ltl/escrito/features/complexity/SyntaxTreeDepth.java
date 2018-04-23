@@ -23,7 +23,8 @@ import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent;
  * Calculates the average and total depths of berkley parsing trees via counting
  * underlying constituents
  */
-@TypeCapability(inputs = { "import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.PennTree" })
+@TypeCapability(inputs = { "import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.PennTree",
+		"de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent"})
 public class SyntaxTreeDepth 
 	extends FeatureExtractorResource_ImplBase
 	implements FeatureExtractor

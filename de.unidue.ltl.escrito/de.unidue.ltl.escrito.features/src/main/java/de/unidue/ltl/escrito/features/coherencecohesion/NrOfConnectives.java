@@ -27,7 +27,8 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma;
  * Counts the appearance of the specified connectives, checks if they appear at
  * first position of a S in a penntree constituent
  */
-@TypeCapability(inputs = { "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token" })
+@TypeCapability(inputs = { "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token", 
+		"de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma"})
 public class NrOfConnectives extends FeatureExtractorResource_ImplBase
 		implements FeatureExtractor {
 
@@ -41,7 +42,7 @@ public class NrOfConnectives extends FeatureExtractorResource_ImplBase
 
 	@Override
 	public boolean initialize(ResourceSpecifier aSpecifier,
-			Map aAdditionalParams) throws ResourceInitializationException {
+			Map<String, Object> aAdditionalParams) throws ResourceInitializationException {
 		if (!super.initialize(aSpecifier, aAdditionalParams)) {
 			return false;
 		}

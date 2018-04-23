@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.uima.fit.descriptor.ConfigurationParameter;
+import org.apache.uima.fit.descriptor.TypeCapability;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
@@ -27,7 +28,13 @@ import org.dkpro.tc.api.type.TextClassificationTarget;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
-
+/**
+ * counts the appearance of direct and indirect report representation. 
+ * 
+ */
+@TypeCapability(inputs = {"de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence",
+		"de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS",
+		"de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma" })
 public class SpeechThoughtWritingRepresentation 
 	extends FeatureExtractorResource_ImplBase
 	implements FeatureExtractor{
@@ -51,7 +58,7 @@ public class SpeechThoughtWritingRepresentation
 
 	@Override
 	public boolean initialize(ResourceSpecifier aSpecifier,
-			Map aAdditionalParams) throws ResourceInitializationException {
+			Map<String,Object> aAdditionalParams) throws ResourceInitializationException {
 		if (!super.initialize(aSpecifier, aAdditionalParams)) {
 			return false;
 		}

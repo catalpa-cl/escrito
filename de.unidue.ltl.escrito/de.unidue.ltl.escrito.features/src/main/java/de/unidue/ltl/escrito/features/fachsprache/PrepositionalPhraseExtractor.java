@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.uima.fit.descriptor.TypeCapability;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.dkpro.tc.api.exception.TextClassificationException;
@@ -21,7 +22,8 @@ import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent;
  * 
  * @author Yuning
  */
-
+@TypeCapability(inputs = {"de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS",
+		"de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent"})
 public class PrepositionalPhraseExtractor extends FeatureExtractorResource_ImplBase implements FeatureExtractor {
 	@Override
 	public Set<Feature> extract(JCas view, TextClassificationTarget target) throws TextClassificationException {

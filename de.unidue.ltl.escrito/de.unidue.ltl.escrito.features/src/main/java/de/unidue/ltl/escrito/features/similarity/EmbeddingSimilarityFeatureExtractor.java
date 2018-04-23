@@ -55,7 +55,7 @@ implements PairFeatureExtractor{
 
 	@Override
 	public boolean initialize(ResourceSpecifier aSpecifier,
-			Map aAdditionalParams) throws ResourceInitializationException {
+			Map<String, Object> aAdditionalParams) throws ResourceInitializationException {
 		if (!super.initialize(aSpecifier, aAdditionalParams)) {
 			return false;
 		}

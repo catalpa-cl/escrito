@@ -29,8 +29,9 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
  * @author Yuning
  */
 
-@TypeCapability(inputs = { "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token" })
-
+@TypeCapability(inputs = { "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
+		"de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS",
+		"de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma" })
 public class SubstantivierungExtractor extends FeatureExtractorResource_ImplBase implements FeatureExtractor {
 
 	public static final String PARAM_SUFFIXES_FILE_PATH = "suffixesFilePath";

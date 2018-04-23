@@ -2,12 +2,10 @@ package de.unidue.ltl.escrito.features.similarity;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -26,16 +24,12 @@ import org.dkpro.tc.api.features.FeatureType;
 import org.dkpro.tc.api.features.PairFeatureExtractor;
 import org.dkpro.tc.api.features.meta.MetaCollectorConfiguration;
 import org.dkpro.tc.api.features.meta.MetaDependent;
-import org.dkpro.tc.features.ngram.util.TermFreqTuple;
-
-import de.tudarmstadt.ukp.dkpro.core.api.frequency.util.FrequencyDistribution;
 import de.tudarmstadt.ukp.dkpro.core.api.parameter.ComponentParameters;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
-import de.unidue.ltl.escrito.features.ngrams.DependencyMetaCollector;
-import de.unidue.ltl.escrito.features.ngrams.DependencyTripleFeatureExtractor;
 import de.unidue.ltl.escrito.features.similarity.meta.DependencyTripleIdfCollector;
 
-@TypeCapability(inputs = {"de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency" })
+@TypeCapability(inputs = {"de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency",
+		"de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma" })
 public class DependencyTripleOverlapFeatureExtractor extends FeatureExtractorResource_ImplBase
 implements PairFeatureExtractor, MetaDependent{
 
