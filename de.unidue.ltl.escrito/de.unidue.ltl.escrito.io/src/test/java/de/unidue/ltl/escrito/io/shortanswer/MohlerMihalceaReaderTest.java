@@ -13,11 +13,14 @@ public class MohlerMihalceaReaderTest {
 
 	
 	 @Test
-	    public void powerGradingReaderTest() throws Exception {
+	    public void mohlerMihalceaReaderTest() throws Exception {
 	        
 	        CollectionReaderDescription reader = CollectionReaderFactory.createReaderDescription(
 	        		MohlerMihalceaReader.class,
-	        		MohlerMihalceaReader.PARAM_INPUT_FILE, "src/test/resources/shortanswer/mohlermihalcea/mohler_mihalcea_dummy.txt"
+	        		MohlerMihalceaReader.PARAM_INPUT_FILE, "src/test/resources/shortanswer/mohlermihalcea/mohler_mihalcea_dummy.txt",
+	        		MohlerMihalceaReader.PARAM_CORPUSNAME, "MM,",
+	        		MohlerMihalceaReader.PARAM_QUESTION_PREFIX, "Q",
+	        		MohlerMihalceaReader.PARAM_TARGET_ANSWER_PREFIX, "TA"
 	        );
 
 	        int i=0;
@@ -35,7 +38,10 @@ public class MohlerMihalceaReaderTest {
 	        CollectionReaderDescription reader = CollectionReaderFactory.createReaderDescription(
 	        		MohlerMihalceaReader.class,
 	        		MohlerMihalceaReader.PARAM_INPUT_FILE, "src/test/resources/shortanswer/mohlermihalcea/mohler_mihalcea_dummy.txt",
-	        		MohlerMihalceaReader.PARAM_PROMPT_IDS, requestedPromptIds
+	        		MohlerMihalceaReader.PARAM_PROMPT_IDS, requestedPromptIds,
+	        		MohlerMihalceaReader.PARAM_CORPUSNAME, "MM,",
+	        		MohlerMihalceaReader.PARAM_QUESTION_PREFIX, "Q",
+	        		MohlerMihalceaReader.PARAM_TARGET_ANSWER_PREFIX, "TA"
 	       );
 
 	        int i=0;

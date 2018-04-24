@@ -17,7 +17,8 @@ public class PowerGradingReaderTest
         
         CollectionReaderDescription reader = CollectionReaderFactory.createReaderDescription(
                 PowerGradingReader.class,
-                PowerGradingReader.PARAM_INPUT_FILE, "src/test/resources/shortanswer/powergrading/powergrading_dummy.tsv"
+                PowerGradingReader.PARAM_INPUT_FILE, "src/test/resources/shortanswer/powergrading/powergrading_dummy.tsv",
+                PowerGradingReader.PARAM_CORPUSNAME, "PG"
         );
 
         int i=0;
@@ -35,7 +36,8 @@ public class PowerGradingReaderTest
         CollectionReaderDescription reader = CollectionReaderFactory.createReaderDescription(
                 PowerGradingReader.class,
                 PowerGradingReader.PARAM_INPUT_FILE, "src/test/resources/shortanswer/powergrading/powergrading_dummy.tsv",
-                PowerGradingReader.PARAM_PROMPT_IDS, requestedPromptIds
+                PowerGradingReader.PARAM_PROMPT_IDS, requestedPromptIds,
+                PowerGradingReader.PARAM_CORPUSNAME, "PG"
        );
 
         int i=0;

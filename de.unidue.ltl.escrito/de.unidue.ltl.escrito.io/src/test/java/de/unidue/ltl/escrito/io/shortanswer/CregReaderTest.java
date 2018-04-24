@@ -26,7 +26,9 @@ public class CregReaderTest
 		CollectionReaderDescription reader = CollectionReaderFactory.createReaderDescription(
 				CregReader.class,
 				CregReader.PARAM_INPUT_FILE, inputDataFile,
-				CregReader.PARAM_CORPUSNAME, "CREG"
+				CregReader.PARAM_CORPUSNAME, "CREG",
+				CregReader.PARAM_QUESTION_PREFIX, "Q",
+				CregReader.PARAM_TARGET_ANSWER_PREFIX, "TA"
 				);
 
 		int i=0;
@@ -48,7 +50,9 @@ public class CregReaderTest
 		CollectionReaderDescription reader = CollectionReaderFactory.createReaderDescription(
 				CregReader.class,
 				CregReader.PARAM_INPUT_FILE, inputDataFile,
-				CregReader.PARAM_CORPUSNAME, "CREG"
+				CregReader.PARAM_CORPUSNAME, "CREG",
+				CregReader.PARAM_QUESTION_PREFIX, "Q",
+				CregReader.PARAM_TARGET_ANSWER_PREFIX, "TA"
 				);
 
 		int i=0;
@@ -71,7 +75,9 @@ public class CregReaderTest
 		CollectionReaderDescription reader = CollectionReaderFactory.createReaderDescription(
 				CregReader.class,
 				CregReader.PARAM_INPUT_FILE, inputDataFile,
-				CregReader.PARAM_CORPUSNAME, "CREG"
+				CregReader.PARAM_CORPUSNAME, "CREG",
+				CregReader.PARAM_QUESTION_PREFIX, "Q",
+				CregReader.PARAM_TARGET_ANSWER_PREFIX, "TA"
 				);
 
 		int i=0;
