@@ -14,7 +14,7 @@ import de.unidue.ltl.escrito.features.fachsprache.PrepositionalPhraseExtractor;
 public class PrepositionalPhraseExtractorTest extends EssayGradingTestBase {
 	@Test
 	public void PrepositionalPhraseInEssayTest() throws Exception {
-		AnalysisEngine engine = getPreprocessingEngine("de");
+		AnalysisEngine engine = getPreprocessingEngine("de",true);
 
 		JCas jcas = engine.newJCas();
 		jcas.setDocumentLanguage("de");
