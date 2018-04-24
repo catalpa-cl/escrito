@@ -24,7 +24,7 @@ public class NumberOfQuotationsTest
     public void regexMatcherFeatureExtractorTest()
         throws Exception
     {
-		AnalysisEngine engine = getPreprocessingEngine("de");
+		AnalysisEngine engine = getPreprocessingEngine("de",false);
        		
         JCas jcas = engine.newJCas();
         jcas.setDocumentLanguage("de");

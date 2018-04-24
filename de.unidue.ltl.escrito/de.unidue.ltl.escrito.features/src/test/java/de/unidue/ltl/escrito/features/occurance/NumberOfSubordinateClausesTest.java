@@ -24,7 +24,7 @@ public class NumberOfSubordinateClausesTest
     public void subOrdinateClauseFeatureExtractorTest_de()
         throws Exception
     {
-		AnalysisEngine engine = getPreprocessingEngine("de");
+		AnalysisEngine engine = getPreprocessingEngine("de",false);
         		
         JCas jcas = engine.newJCas();
         jcas.setDocumentLanguage("de");
@@ -53,7 +53,7 @@ public class NumberOfSubordinateClausesTest
     public void subOrdinateClauseFeatureExtractorTest()
         throws Exception
     {
-		AnalysisEngine engine = getPreprocessingEngine("en");
+		AnalysisEngine engine = getPreprocessingEngine("en",false);
         		
         JCas jcas = engine.newJCas();
         jcas.setDocumentLanguage("en");
