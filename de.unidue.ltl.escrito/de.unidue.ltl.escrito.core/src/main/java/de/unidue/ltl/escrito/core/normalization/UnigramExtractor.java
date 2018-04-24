@@ -23,20 +23,30 @@ import de.tudarmstadt.ukp.dkpro.core.api.anomaly.type.SpellingAnomaly;
 import de.tudarmstadt.ukp.dkpro.core.api.frequency.util.FrequencyDistribution;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 
+/**
+ * 
+ * Extracts all lexical material not occuring in a certain spelling dictionary.
+ * Used to process reading texts, which we assume to be error free but to contain unusual words not present in a spelling dictionary.
+ * If these words are used by a learner, they should not be marked as spelling mistakes.
+ * 
+ * @author andrea
+ *
+ */
+
 public class UnigramExtractor extends JCasAnnotator_ImplBase{
 	public static final String PARAM_OUTPUT_LOCATION = "locationOfOutputTexts";
 	@ConfigurationParameter(name = PARAM_OUTPUT_LOCATION, mandatory = true)
 	private String locationOfUnigram;
 	
-	public static final String PARAM_PROMPTID = "promptId";
-	@ConfigurationParameter(name = PARAM_PROMPTID, mandatory = true)
-	private String promptId;
+	public static final String PARAM_NAME = "name";
+	@ConfigurationParameter(name = PARAM_NAME, mandatory = true)
+	private String name;
 	
 	@Override
 	public void initialize(UimaContext context) throws ResourceInitializationException  {
 		super.initialize(context);
-		promptId =(String) context.getConfigParameterValue(PARAM_PROMPTID);
-		locationOfUnigram = (String) context.getConfigParameterValue(PARAM_OUTPUT_LOCATION)+"extentionList_sorted.txt";
+		name =(String) context.getConfigParameterValue(PARAM_NAME);
+		locationOfUnigram = (String) context.getConfigParameterValue(PARAM_OUTPUT_LOCATION)+name;
 	}
 	
 	@Override
@@ -50,11 +60,13 @@ public class UnigramExtractor extends JCasAnnotator_ImplBase{
 		}
 		for(Token t: tokens){
 			String tokenText = t.getCoveredText().toLowerCase();
+			System.out.println(tokenText);
 			if(spellingErrorSet.contains(tokenText)){
 				if(tokenText.matches("^[a-zA-Z].*$"))
 					fd.inc(tokenText);
 			}		
 		}
+		System.out.println(fd.getKeys().size());
 		List<String> unigram=fd.getMostFrequentSamples(fd.getKeys().size());
 		Collections.sort(unigram, new Comparator<String>() {
 		    @Override

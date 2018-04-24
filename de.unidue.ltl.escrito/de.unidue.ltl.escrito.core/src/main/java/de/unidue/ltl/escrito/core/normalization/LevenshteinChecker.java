@@ -39,6 +39,18 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 
 
 
+/**
+ * 
+ * Spellcheckoption based on Levenshtein distance. Extracts all suggestions from the dictionary up to a certain Levenshtein distance.
+ * Also contains methods for determining problems with merged words.
+ * 
+ * 
+ * @author andrea
+ *
+ */
+
+
+
 @TypeCapability(
 		inputs={
 		"de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token"},
@@ -127,84 +139,22 @@ extends JCasAnnotator_ImplBase {
 		for (Token t : select(jcas, Token.class)) {
 			String tokenText = t.getCoveredText().toLowerCase();
 
-			// Do not correct punctuation marks, i.e. tokens without any letter or character
-			if (tokenText.matches("[^a-zA-Z0-9]+")) {
-				//		System.out.println("1 Do not correct token "+tokenText);
-				continue;
-			}
-			// Do not correct tokens that consist only of numbers
-			if (tokenText.matches("[\\d]+")) {
-				//		System.out.println("2 Do not correct token "+tokenText);
-				continue;
-			}
-
-			// some tokenization artifacts are not in our dictionaries, but should not be treated as errors
-			// TODO: read that in from a separate file
-			if (tokenText.equals("'re")
-					|| tokenText.equals("'m")
-					|| tokenText.equals("'s")
-					|| tokenText.equals("'d")
-					|| tokenText.equals("'ll")
-					|| tokenText.equals("n't")
-					|| tokenText.equals("'ve")
-					|| tokenText.equals("wo")
-					|| tokenText.equals("ca")){ 
-				continue;
-			}
-			
-			// we also want to ignore bullet point markers
-			if (tokenText.equals("a.")
-					|| tokenText.equals("b.")
-					|| tokenText.equals("c.")
-					|| tokenText.equals("d.")
-					|| tokenText.equals("(a)")
-					|| tokenText.equals("(b)")
-					|| tokenText.equals("(c)")
-					|| tokenText.equals("(d)")){ 
-				continue;
-			}
-
-			// Do not correct tokens that consist only of numbers followed by at most 2 letters to acount for "20mm" etc
-			if (tokenText.matches("[\\d]+[A-Za-z]{1,2}")) {
-			//	System.out.println("3 Do not correct token "+tokenText);
-				continue;
-			}
-
-			// Do not correct tokens that consist only of numbers followed by at most 2 letters to acount for "20mm" etc
-			if (tokenText.matches("[\\d]+\\.[\\d][A-Za-z]{0,2}")) {
-			//	System.out.println("4 Do not correct token "+tokenText);
-				continue;
-			}
-			if (tokenText.matches("[\\d]+,[\\d][A-Za-z]{0,2}")) {
-			//	System.out.println("4 Do not correct token "+tokenText);
+			if (SpellingUtils.doNotSpellcheck(tokenText)){
 				continue;
 			}
 
 			if (!dictionary.contains(tokenText)) {
 
-				
-				// only try to correct single character tokens if they are letters
-				/*if (tokenText.length() == 1 && !Character.isLetter(tokenText.charAt(0))) {
-				    continue;
-				}*/
-
-				//only try to correct tokens begin with a letter and end with a letter
-				// TODO: to discuss: I think we should not do that and keep those items
-				//				if (!Character.isLetter(tokenText.charAt(0))||!Character.isLetter(tokenText.charAt(tokenText.length()-1))) {
-				//					System.out.println("3 Do not correct token "+tokenText);
-				//					continue;
-				//				}
-				//System.err.println("error:"+tokenText);
 				SpellingAnomaly anomaly = new SpellingAnomaly(jcas, t.getBegin(), t.getEnd());
 
 				SuggestionCostTuples tuples = new SuggestionCostTuples();
 				
-				// this is another possible correction candidate
+				// merged words: if we split the word, both supparts exist in the lexicon
 				for (int i = 0; i<tokenText.length(); i++){
 					String word1 = tokenText.substring(0, i);
 					String word2 = tokenText.substring(i, tokenText.length());
 					if (dictionary.contains(word1) && dictionary.contains(word2)){
-				//		System.out.println("Found\t"+tokenText+"\t"+word1+"\t"+word2);
+		//				System.out.println("Found\t"+tokenText+"\t"+word1+"\t"+word2);
 						tuples.addTuple(word1+" "+word2, 1);
 						break;
 					}
@@ -257,13 +207,16 @@ extends JCasAnnotator_ImplBase {
 				if (tuples.size() > 0) {
 					FSArray actions = new FSArray(jcas, tuples.size());
 					int i=0;
+				//	System.out.print(anomaly.getCoveredText()+"\t");
 					for (SuggestionCostTuple tuple : tuples) {
 						SuggestedAction action = new SuggestedAction(jcas);
 						action.setReplacement(tuple.getSuggestion());
 						action.setCertainty(tuple.getNormalizedCost(tuples.getMaxCost()));
 						actions.set(i, action);
 						i++;
+				//		System.out.print(action.getReplacement()+"\t");
 					}
+				//	System.out.println();
 					anomaly.setSuggestions(actions);
 					anomaly.addToIndexes();
 				}else{

@@ -50,6 +50,9 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 
 /**
  * This annotator uses Jazzy for the decision whether a word is spelled correctly or not.
+ * Suggestions are based on phonetic representations of words.
+ * 
+ * 
  */
 
 @TypeCapability(
@@ -76,14 +79,6 @@ extends JCasAnnotator_ImplBase
 	public static final String PARAM_MODEL_ENCODING = ComponentParameters.PARAM_MODEL_ENCODING;
 	@ConfigurationParameter(name = PARAM_MODEL_ENCODING, mandatory = true, defaultValue = "UTF-8")
 	private String dictEncoding;
-
-	/**
-	 * Determines the maximum edit distance (as an int value) that a suggestion for a spelling error may have.
-	 * E.g. if set to one suggestions are limited to words within edit distance 1 to the original word.
-	 */
-	public static final String PARAM_SCORE_THRESHOLD = "ScoreThreshold";
-	@ConfigurationParameter(name = PARAM_SCORE_THRESHOLD, mandatory = true, defaultValue = "1")
-	private int scoreThreshold;
 
 	private SpellDictionary dict;
 
@@ -121,89 +116,20 @@ extends JCasAnnotator_ImplBase
 		for (Token t : select(jcas, Token.class)) {
 			String tokenText = t.getCoveredText().toLowerCase();
 
-			// Do not correct punctuation marks, i.e. tokens without any letter or character
-			if (tokenText.matches("[^a-zA-Z0-9]+")) {
-				//		System.out.println("1 Do not correct token "+tokenText);
-				continue;
-			}
-			// Do not correct tokens that consist only of numbers
-			if (tokenText.matches("[\\d]+")) {
-				//		System.out.println("2 Do not correct token "+tokenText);
+			if (SpellingUtils.doNotSpellcheck(tokenText)){
 				continue;
 			}
 
-			// some tokenization artifacts are not in our dictionaries, but should not be treated as errors
-			// TODO: read that in from a separate file
-			if (tokenText.equals("'re")
-					|| tokenText.equals("'m")
-					|| tokenText.equals("'s")
-					|| tokenText.equals("'d")
-					|| tokenText.equals("'ll")
-					|| tokenText.equals("n't")
-					|| tokenText.equals("'ve")
-					|| tokenText.equals("wo")
-					|| tokenText.equals("ca")){ 
-				continue;
-			}
-
-			// we also want to ignore bullet point markers
-			if (tokenText.equals("a.")
-					|| tokenText.equals("b.")
-					|| tokenText.equals("c.")
-					|| tokenText.equals("d.")
-					|| tokenText.equals("(a)")
-					|| tokenText.equals("(b)")
-					|| tokenText.equals("(c)")
-					|| tokenText.equals("(d)")){ 
-				continue;
-			}
-			
-			
-			// Do not correct tokens that consist only of numbers followed by at most 2 letters to acount for "20mm" etc
-			if (tokenText.matches("[\\d]+[A-Za-z]{1,2}")) {
-				//System.out.println("3 Do not correct token "+tokenText);
-				continue;
-			}
-
-			// Do not correct tokens that consist only of numbers followed by at most 2 letters to acount for "20mm" etc
-			if (tokenText.matches("[\\d]+\\.[\\d][A-Za-z]{0,2}")) {
-				//System.out.println("4 Do not correct token "+tokenText);
-				continue;
-			}
-			if (tokenText.matches("[\\d]+,[\\d][A-Za-z]{0,2}")) {
-				//System.out.println("4 Do not correct token "+tokenText);
-				continue;
-			}
-			
 
 			if (!dict.isCorrect(tokenText)) {
-
-				// only try to correct single character tokens if they are letters
-				/*if (tokenText.length() == 1 && !Character.isLetter(tokenText.charAt(0))) {
-				    continue;
-				}*/
-
-				//only try to correct tokens begin with a letter and end with a letter
-				// TODO: to discuss: I think we should not do that and keep those items
-				//				if (!Character.isLetter(tokenText.charAt(0))||!Character.isLetter(tokenText.charAt(tokenText.length()-1))) {
-				//					System.out.println("3 Do not correct token "+tokenText);
-				//					continue;
-				//				}
-				//System.err.println("error:"+tokenText);
 				SpellingAnomaly anomaly = new SpellingAnomaly(jcas, t.getBegin(), t.getEnd());
 
-				//System.out.println(scoreThreshold);
-
-				List<Word> suggestions = dict.getSuggestions(tokenText, scoreThreshold);
-
-				//System.out.println(dict.getSuggestions(tokenText, scoreThreshold).size());
-				//System.out.println(dict.getSuggestions(tokenText, scoreThreshold+5).size());
-
+				List<Word> suggestions = dict.getSuggestions(tokenText, -1);
 				SuggestionCostTuples tuples = new SuggestionCostTuples();
 				for (Word suggestion : suggestions) {
 					String suggestionString = suggestion.getWord();
 					int cost = suggestion.getCost();
-
+				//	System.out.println(tokenText+"\t"+suggestionString+"\t"+cost);
 					if (suggestionString != null) {
 						tuples.addTuple(suggestionString, cost);
 					}
@@ -225,7 +151,7 @@ extends JCasAnnotator_ImplBase
 				}else{
 					anomaly.addToIndexes(jcas);
 				}
-				System.out.println("incorrect: "+tokenText);
+			//	System.out.println("incorrect: "+tokenText);
 			} else {
 				//System.out.println("correct: "+tokenText);
 			}

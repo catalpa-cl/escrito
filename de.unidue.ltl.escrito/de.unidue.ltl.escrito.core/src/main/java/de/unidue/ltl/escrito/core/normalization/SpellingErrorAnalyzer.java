@@ -45,9 +45,6 @@ public class SpellingErrorAnalyzer extends JCasAnnotator_ImplBase {
 	private String locationOfFrequencyListOutput;
 	private String locationOfStatisticOutput;
 
-	public static final String PARAM_DICTIONAY = "extention";
-	@ConfigurationParameter(name = PARAM_DICTIONAY, mandatory = false)
-	private String extention;
 
 	public static final String PARAM_PROMPTID = "promptId";
 	@ConfigurationParameter(name = PARAM_PROMPTID, mandatory = true)
@@ -70,19 +67,19 @@ public class SpellingErrorAnalyzer extends JCasAnnotator_ImplBase {
 	protected double errorTokenRation=0d;
 	// #answers
 	protected int countAnswers = 0;
-	
-	
+
+
 	private String lineSeparator = System.getProperty("line.separator");
 
 	@Override
 	public void initialize(UimaContext context) throws ResourceInitializationException  {
 		super.initialize(context);
 		promptId = (String) context.getConfigParameterValue(PARAM_PROMPTID);
-		locationOfOutputs = System.getenv("DKPRO_HOME")+"/processedData/ASAP/"+(String) context.getConfigParameterValue(PARAM_OUTPUT_TEXTS_LOCATION)+"/";
-		locationOfFrequencyListOutput = locationOfOutputs + promptId+"_"+(String) context.getConfigParameterValue(PARAM_DICTIONAY)+"_deteleDachP.txt";
+		locationOfOutputs = (String) context.getConfigParameterValue(PARAM_OUTPUT_TEXTS_LOCATION)+"/";
 		locationOfStatisticOutput = locationOfOutputs +	promptId+"_"+"statistic.txt";
+		locationOfFrequencyListOutput = locationOfOutputs +	promptId+"_"+"frequencies.txt";
 	}
-	
+
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		countAnswers ++;
@@ -102,7 +99,7 @@ public class SpellingErrorAnalyzer extends JCasAnnotator_ImplBase {
 	}
 	@Override
 	public void destroy(){
-		System.out.println("#Answer in Prompt "+promptId +": "+countAnswers);
+		System.out.println("#Answers in Prompt "+promptId +": "+countAnswers);
 		//calculate the error token ratio
 		errorTokenRation= (double)countTotalErrorTokens/countTotalToken;
 		//count the frequency of every spelling errors
@@ -113,33 +110,36 @@ public class SpellingErrorAnalyzer extends JCasAnnotator_ImplBase {
 				errorFrequency.put(error, errorFrequency.get(error)+1);
 			}
 		}
-		
+
 		//write out the frequency List
 		try {
 			writeSortedErrorFrequency(locationOfFrequencyListOutput);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		//calculate and write out the statistics
-		double pearson = PearsonCorrelation.computeCorrelation(countErrors, goldClass);
-		double pearsonWithNormalization = PearsonCorrelation.computeCorrelation(errorRatio, goldClass);
-		double spearman = SpearmansRankCorrelation.computeCorrelation(countErrors, goldClass);
-		double spearmanWithNormalization = SpearmansRankCorrelation.computeCorrelation(errorRatio, goldClass);
-		try {
-			BufferedWriter statisticWriter = new BufferedWriter(new FileWriter(new File(locationOfStatisticOutput)));
-			statisticWriter.write("pearson"+"\t"+pearson+lineSeparator);
-			statisticWriter.write("pearson after normalisation"+"\t"+pearsonWithNormalization+lineSeparator);
-			statisticWriter.write("spearman"+"\t"+spearman+lineSeparator);
-			statisticWriter.write("spearman after normalisation"+"\t"+spearmanWithNormalization+lineSeparator);
-			statisticWriter.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+
+		//calculate and write out the statistics: is there a correlation between the score and the number of errors?
+		if (!(countErrors.isEmpty())){
+			double pearson = PearsonCorrelation.computeCorrelation(countErrors, goldClass);
+			double pearsonWithNormalization = PearsonCorrelation.computeCorrelation(errorRatio, goldClass);
+			double spearman = SpearmansRankCorrelation.computeCorrelation(countErrors, goldClass);
+			double spearmanWithNormalization = SpearmansRankCorrelation.computeCorrelation(errorRatio, goldClass);
+			try {
+				BufferedWriter statisticWriter = new BufferedWriter(new FileWriter(new File(locationOfStatisticOutput)));
+				statisticWriter.write("pearson"+"\t"+pearson+lineSeparator);
+				statisticWriter.write("pearson after normalisation"+"\t"+pearsonWithNormalization+lineSeparator);
+				statisticWriter.write("spearman"+"\t"+spearman+lineSeparator);
+				statisticWriter.write("spearman after normalisation"+"\t"+spearmanWithNormalization+lineSeparator);
+				statisticWriter.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
-	
-	private void writeSortedErrorFrequency(String locationOfOutputTexts) throws IOException{	
+
+	private void writeSortedErrorFrequency(String locationOfOutputTexts) throws IOException{
+		System.out.println(locationOfOutputTexts);
 		BufferedWriter frequencyWriter = new BufferedWriter(new FileWriter(new File(locationOfOutputTexts)));
 		frequencyWriter.write("#SpellingErrors: "+countTotalErrorTokens+lineSeparator);
 		frequencyWriter.write("#Answers: "+countAnswers+lineSeparator);
@@ -154,7 +154,7 @@ public class SpellingErrorAnalyzer extends JCasAnnotator_ImplBase {
 		}
 		frequencyWriter.close();
 	}
-	
+
 	private static Map<String, Integer> sortByComparator(Map<String, Integer> unsortMap, boolean order) {
 		List<Entry<String, Integer>> list = new LinkedList<Entry<String, Integer>>(unsortMap.entrySet());
 		// Sorting the list based on values
