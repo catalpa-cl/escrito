@@ -15,7 +15,7 @@ import de.unidue.ltl.escrito.features.core.EssayGradingTestBase;
 
 public class StringSimilarityFETest extends EssayGradingTestBase{
 	@Test
-	public void PrepositionalPhraseInEssayTest() throws Exception {
+	public void StringSimilarityEssayTest() throws Exception {
 		AnalysisEngine engine = getPreprocessingEngine("de",false);
 
 		JCas jcas1 = engine.newJCas();
