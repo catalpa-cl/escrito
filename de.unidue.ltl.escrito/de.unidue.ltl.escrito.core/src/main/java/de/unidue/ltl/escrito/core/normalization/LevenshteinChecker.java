@@ -203,7 +203,6 @@ extends JCasAnnotator_ImplBase {
 						tuples.addTuple(suggestionString, cost);
 					}
 				}
-
 				if (tuples.size() > 0) {
 					FSArray actions = new FSArray(jcas, tuples.size());
 					int i=0;

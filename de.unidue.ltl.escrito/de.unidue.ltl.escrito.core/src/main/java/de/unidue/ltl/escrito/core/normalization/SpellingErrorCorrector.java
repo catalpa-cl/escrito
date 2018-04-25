@@ -33,11 +33,13 @@ import org.apache.uima.fit.descriptor.ConfigurationParameter;
 import org.apache.uima.fit.factory.JCasFactory;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
+import org.apache.uima.jcas.cas.StringArray;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.dkpro.tc.api.type.TextClassificationOutcome;
 import org.dkpro.tc.api.type.TextClassificationTarget;
 
 import de.tudarmstadt.ukp.dkpro.core.api.anomaly.type.SpellingAnomaly;
+import de.tudarmstadt.ukp.dkpro.core.api.anomaly.type.SuggestedAction;
 import de.tudarmstadt.ukp.dkpro.core.api.metadata.type.DocumentMetaData;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.io.bincas.BinaryCasWriter;
@@ -86,7 +88,7 @@ public class SpellingErrorCorrector extends JCasAnnotator_ImplBase {
 	Map<String, String> errorTextMap= new HashMap<String, String>();
 	Map<String, String> preTextMap = new HashMap<String, String>();
 	Map<String, String> postTextMap = new HashMap<String, String>();
-	Map<String, String> suggestionMap = new HashMap<String, String>();
+	Map<String, String> bestSuggestionMap = new HashMap<String, String>();
 	Map<String, SpellingAnomaly> anomalyMap = new HashMap<String, SpellingAnomaly>();
 
 
@@ -108,21 +110,24 @@ public class SpellingErrorCorrector extends JCasAnnotator_ImplBase {
 		String ID = dmd.getDocumentId();
 		Collection<SpellingAnomaly> spellingErrors = JCasUtil.select(aJCas, SpellingAnomaly.class);
 		for (SpellingAnomaly s : spellingErrors) {
+			System.out.println(s.getCoveredText());
 			int errorBegin = s.getBegin();
 			String errorText = s.getCoveredText().toLowerCase();
 			String bestSuggestion = getBestSuggestion(s, errorText);
+			System.out.println(s.getCoveredText()+"\t"+bestSuggestion);
 			if (bestSuggestion != null) {
-				suggestionMap.put(ID+"_"+errorBegin, bestSuggestion);
-			} else {
-				suggestionMap.put(ID+"_"+errorBegin, "***");
-			}
+				//	System.out.println(s.getCoveredText()+"_"+errorBegin);
+				bestSuggestionMap.put(s.getCoveredText()+"_"+errorBegin, bestSuggestion);
+			} 
 		}
 		String correctedText = getTextWithoutErrors(aJCas);
-		System.out.println(correctedText);
+		System.out.println("original: "+aJCas.getDocumentText());
+		System.out.println("corrected: "+correctedText);
 		try {
 
 			AnalysisEngineDescription description= createEngineDescription(createEngineDescription(BinaryCasWriter.class,
-					BinaryCasWriter.PARAM_TARGET_LOCATION, "src/main/resources/spellingCorrection/"	));
+					BinaryCasWriter.PARAM_TARGET_LOCATION, "src/main/resources/spellingCorrection/",
+					BinaryCasWriter.PARAM_OVERWRITE, true));
 			AnalysisEngine engine=createEngine(description);
 
 			JCas corrected = engine.newJCas();
@@ -138,7 +143,11 @@ public class SpellingErrorCorrector extends JCasAnnotator_ImplBase {
 				LearnerAnswerWithReferenceAnswer learnerAnswerOld = JCasUtil.selectSingle(aJCas, LearnerAnswerWithReferenceAnswer.class);
 				LearnerAnswerWithReferenceAnswer learnerAnswer = new LearnerAnswerWithReferenceAnswer(corrected, 0, corrected.getDocumentText().length());
 				learnerAnswer.setPromptId(learnerAnswerOld.getPromptId());
-				learnerAnswer.setReferenceAnswerIds(learnerAnswerOld.getReferenceAnswerIds());
+				StringArray ids = new StringArray(corrected, learnerAnswerOld.getReferenceAnswerIds().size());
+				for (int i = 0; i<learnerAnswerOld.getReferenceAnswerIds().size(); i++){
+					ids.set(i, learnerAnswerOld.getReferenceAnswerIds().get(i));
+				}
+				learnerAnswer.setReferenceAnswerIds(ids);
 				learnerAnswer.addToIndexes();
 			} else {
 				LearnerAnswer learnerAnswerOld = JCasUtil.selectSingle(aJCas, LearnerAnswer.class);
@@ -157,8 +166,6 @@ public class SpellingErrorCorrector extends JCasAnnotator_ImplBase {
 			outcome.setOutcome(outcome_old.getOutcome());
 			outcome.addToIndexes();
 			engine.process(corrected);
-
-
 		} catch (UIMAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -193,8 +200,8 @@ public class SpellingErrorCorrector extends JCasAnnotator_ImplBase {
 			// if there are several suggestions, then...
 		} else if (s.getSuggestions().size() > 1) {
 			boolean foundBestSuggestion = false;
+			// 1) check whether it is a splitting mistake with punctuation involved
 			for (int i = 0; i < s.getSuggestions().size(); i++) {
-				// 1) check whether it is a splitting mistake with punctuation involved
 				if (foundBestSuggestion == false) {
 					if (s.getSuggestions(i).getReplacement().replaceAll(" ", "").equals(tokenText) 
 							&& (tokenText.contains(".") || tokenText.contains(":"))) {
@@ -209,8 +216,8 @@ public class SpellingErrorCorrector extends JCasAnnotator_ImplBase {
 				}
 			}
 
+			// 2) check whether it is a splitting mistake without punctuation involved
 			for (int i = 0; i < s.getSuggestions().size(); i++) {
-				// 1) check whether it is a splitting mistake without punctuation involved
 				if (foundBestSuggestion == false) {
 					if (s.getSuggestions(i).getReplacement().contains(" ")) {
 						String replacement = s.getSuggestions(i).getReplacement();
@@ -271,6 +278,22 @@ public class SpellingErrorCorrector extends JCasAnnotator_ImplBase {
 				}
 				errorSuggestionsWithNoUnigram.put(s.getCoveredText().toLowerCase(), suggestions);
 			}
+
+			//Fallback: take the one with the lowest costs
+			double minCost = Double.MAX_VALUE;
+			String replacement = tokenText;
+			if (foundBestSuggestion == false) {
+				for (int i = 0; i < s.getSuggestions().size(); i++) {
+					SuggestedAction sa = s.getSuggestions(i);
+					double cost = sa.getCertainty();
+					if (cost < minCost){
+					//	System.out.println(sa.getReplacement()+"\t"+sa.getCertainty());
+						minCost = cost;
+						replacement = sa.getReplacement();
+					}
+				}
+			}
+			bestSuggestion = replacement;
 		}
 		return bestSuggestion;
 	}
@@ -281,9 +304,10 @@ public class SpellingErrorCorrector extends JCasAnnotator_ImplBase {
 		result +=outcome.getOutcome() + "\t";
 		Collection<Token> tokens = JCasUtil.select(aJCas, Token.class);
 		for (Token t : tokens) {
-			String tokenText = t.getCoveredText().toLowerCase();
-			if (errorToOneSuggestion.keySet().contains(tokenText)) {
-				tokenText = errorToOneSuggestion.get(tokenText);
+			String tokenText = t.getCoveredText();
+			String key = tokenText.toLowerCase()+"_"+t.getStart();
+			if (bestSuggestionMap.keySet().contains(key)) {
+				tokenText = bestSuggestionMap.get(key);
 			}
 			result +=tokenText + " ";	
 		}
