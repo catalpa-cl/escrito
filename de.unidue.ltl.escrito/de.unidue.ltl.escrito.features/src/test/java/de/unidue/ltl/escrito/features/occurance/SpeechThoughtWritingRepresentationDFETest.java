@@ -17,7 +17,7 @@ import de.unidue.ltl.escrito.features.core.EssayGradingTestBase;
 public class SpeechThoughtWritingRepresentationDFETest extends EssayGradingTestBase{
 	@Test
 	public void speechThoughtWritingRepresentationTest_DE() throws Exception {
-		AnalysisEngine engine = getPreprocessingEngine("de");
+		AnalysisEngine engine = getPreprocessingEngine("de",false);
 
 		JCas jcas = engine.newJCas();
 		jcas.setDocumentLanguage("de");
@@ -48,7 +48,7 @@ public class SpeechThoughtWritingRepresentationDFETest extends EssayGradingTestB
 	
 	@Test
 	public void speechThoughtWritingRepresentationDFETest_EN() throws Exception {
-		AnalysisEngine engine = getPreprocessingEngine("en");
+		AnalysisEngine engine = getPreprocessingEngine("en",false);
 
 		JCas jcas = engine.newJCas();
 		jcas.setDocumentLanguage("en");

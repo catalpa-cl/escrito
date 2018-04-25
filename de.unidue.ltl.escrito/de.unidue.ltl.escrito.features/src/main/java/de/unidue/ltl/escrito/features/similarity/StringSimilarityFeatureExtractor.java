@@ -1,13 +1,10 @@
 package de.unidue.ltl.escrito.features.similarity;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.uima.fit.descriptor.ConfigurationParameter;
 import org.apache.uima.jcas.JCas;
-import org.apache.uima.resource.ResourceInitializationException;
-import org.apache.uima.resource.ResourceSpecifier;
 import org.dkpro.tc.api.exception.TextClassificationException;
 import org.dkpro.tc.api.features.Feature;
 import org.dkpro.tc.api.features.FeatureExtractorResource_ImplBase;
@@ -28,8 +25,6 @@ implements PairFeatureExtractor{
 	 * - standard Levenshtein
 	 * - Greedy String Tiling
 	 * 
-	 * TODO make parametrizable which metrics are used
-	 * 
 	 */
 
 
@@ -37,10 +32,13 @@ implements PairFeatureExtractor{
 
 	public static final String FEAT_GREEDY_STRING_TILING = "GreedyStringTiling";
 
-	// TODO: make this parametrizable
-	private int stringTilingMin=3;	
-	private int stringTilingMax=7;	
-
+	public static final String PARAM_STRING_TILING_MIN = "stringTilingMin";
+    @ConfigurationParameter(name = PARAM_STRING_TILING_MIN, mandatory = true)
+    private String stringTilingMin;
+    
+    public static final String PARAM_STRING_TILING_MAX = "stringTilingMax";
+    @ConfigurationParameter(name = PARAM_STRING_TILING_MAX, mandatory = true)
+    private String stringTilingMax;
 
 
 	@Override
@@ -62,11 +60,12 @@ implements PairFeatureExtractor{
 		//	System.out.println(levenshteinDistance);
 		features.add(new Feature(FEAT_LEVENSHTEIN, levenshteinDistance, FeatureType.NUMERIC));
 
-		for (int minMatchLength = stringTilingMin; minMatchLength <= stringTilingMax; minMatchLength++){
+		for (int minMatchLength = Integer.parseInt(stringTilingMin); minMatchLength <= Integer.parseInt(stringTilingMax); minMatchLength++){
 			GreedyStringTiling gst = new GreedyStringTiling(minMatchLength);
 			double gst_distance = -1;
 			try {
 				gst_distance = gst.getSimilarity(text1, text2);
+				//System.out.println(minMatchLength+":"+gst_distance);
 			} catch (SimilarityException e) {
 				System.err.println("Problem while computing greedy String Tiling similarity between "+text1+" and "+text2);
 				System.exit(-1);

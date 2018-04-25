@@ -24,7 +24,7 @@ public class SyntaxTreeDepthTest
 	public void syntaxTreeDepthFeatureExtractorTest_DE()
 	        throws Exception
 	  {
-		AnalysisEngine engine = getPreprocessingEngine("de");
+		AnalysisEngine engine = getPreprocessingEngine("de",true);
 
         JCas jcas = engine.newJCas();
         jcas.setDocumentLanguage("de");
@@ -50,7 +50,7 @@ public class SyntaxTreeDepthTest
 	public void syntaxTreeDepthFeatureExtractorTest_EN()
 	        throws Exception
 	    {
-			AnalysisEngine engine = getPreprocessingEngine("en");
+			AnalysisEngine engine = getPreprocessingEngine("en",true);
 
 	        JCas jcas = engine.newJCas();
 	        jcas.setDocumentLanguage("en");

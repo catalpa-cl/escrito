@@ -17,7 +17,7 @@ import de.unidue.ltl.escrito.features.fachsprache.SubstantivierungExtractor;
 public class SubstantivierungExtractorTest extends EssayGradingTestBase {
 	@Test
 	public void SubstantivierungFeatureExtractorTest() throws Exception {
-		AnalysisEngine engine = getPreprocessingEngine("de");
+		AnalysisEngine engine = getPreprocessingEngine("de",false);
 
 		JCas jcas = engine.newJCas();
 		jcas.setDocumentLanguage("de");
