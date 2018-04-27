@@ -18,6 +18,7 @@
  */
 package de.unidue.ltl.escrito.core.learningcurve;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -49,6 +50,7 @@ import de.unidue.ltl.evaluation.core.EvaluationData;
 import de.unidue.ltl.evaluation.measures.agreement.QuadraticallyWeightedKappa;
 import weka.core.Instance;
 import weka.core.SerializationHelper;
+
 
 /**
  * Report that computes evaluation results given the classification results.
@@ -204,9 +206,9 @@ implements Constants
 		bw_gesamt.write(report);
 		bw_gesamt.close();
 		XYChartPlotter plotter = new XYChartPlotter("# training data", "QWK", "LearningCurve");
-		plotter.addSeries(numInstances, minValues, "min");
-		plotter.addSeries(numInstances, maxValues, "max");
-		plotter.addSeries(numInstances, avgValues, "mean");
+		plotter.addSeries(numInstances, minValues, "min", Color.red);
+		plotter.addSeries(numInstances, maxValues, "max", Color.GREEN);
+		plotter.addSeries(numInstances, avgValues, "mean", Color.BLACK);
 		plotter.plot(getContext().getStorageService().locateKey(LearningCurveTaskId, "learningCurve.jpeg"));
 	}
 }
