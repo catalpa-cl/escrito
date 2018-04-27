@@ -34,6 +34,11 @@ public class Asap2Reader extends JCasCollectionReader_ImplBase {
 
 	protected static final String LANGUAGE = "en";
 
+	public static final String PARAM_CORPUSNAME = "corpusName";
+	@ConfigurationParameter(name = PARAM_CORPUSNAME, mandatory = false, defaultValue = "ASAP")
+	protected String corpusName;
+
+	
 	public static final String PARAM_INPUT_FILE = "InputFile";
 	@ConfigurationParameter(name = PARAM_INPUT_FILE, mandatory = true)
 	protected String inputFileString;

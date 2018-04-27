@@ -53,7 +53,7 @@ extends JCasCollectionReader_ImplBase
 	protected Integer[] requestedPromptIds; 
 	
 	public static final String PARAM_CORPUSNAME = "corpusName";
-	@ConfigurationParameter(name = PARAM_CORPUSNAME, mandatory = true)
+	@ConfigurationParameter(name = PARAM_CORPUSNAME, mandatory = false, defaultValue = "PG")
 	protected String corpusName;
 
 	protected int currentIndex;    

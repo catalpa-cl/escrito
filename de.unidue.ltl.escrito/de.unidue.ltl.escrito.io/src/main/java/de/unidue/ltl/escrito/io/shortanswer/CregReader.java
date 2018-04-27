@@ -51,7 +51,7 @@ public class CregReader extends JCasCollectionReader_ImplBase {
 	protected URL  inputURL;
 
 	public static final String PARAM_CORPUSNAME = "corpusName";
-	@ConfigurationParameter(name = PARAM_CORPUSNAME, mandatory = true)
+	@ConfigurationParameter(name = PARAM_CORPUSNAME, mandatory = false, defaultValue = "CREG")
 	protected String corpusName;
 
 	public static final String PARAM_LANGUAGE = "Language";

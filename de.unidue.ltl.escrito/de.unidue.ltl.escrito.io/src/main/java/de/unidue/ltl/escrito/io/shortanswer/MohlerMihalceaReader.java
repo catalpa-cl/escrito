@@ -66,7 +66,7 @@ extends JCasCollectionReader_ImplBase
 	private String targetAnswerPrefix;
 
 	public static final String PARAM_CORPUSNAME = "corpusName";
-	@ConfigurationParameter(name = PARAM_CORPUSNAME, mandatory = true)
+	@ConfigurationParameter(name = PARAM_CORPUSNAME, mandatory = false, defaultValue="MohlerMihalcea")
 	protected String corpusName;
 
 	protected int currentIndex;    
