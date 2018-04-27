@@ -157,7 +157,7 @@ implements Constants
 				// train the classifier on the train set split - not necessary in multilabel setup, but
 				// in single label setup
 				
-				Classifier cl = trainer.train(trainData, model, getParameters(classificationArguments));
+				Classifier cl = trainer.train(trainData, model, Utils.getParameters(classificationArguments));
 
 				//cl.buildClassifier(trainData);
 
@@ -197,16 +197,6 @@ implements Constants
 	}
 
 	
-	   private List<String> getParameters(List<Object> classificationArguments)
-	    {
-	        List<String> o = new ArrayList<>();
-
-	        for (int i = 1; i < classificationArguments.size(); i++) {
-	            o.add((String) classificationArguments.get(i));
-	        }
-
-	        return o;
-	    }
 	
 
 }

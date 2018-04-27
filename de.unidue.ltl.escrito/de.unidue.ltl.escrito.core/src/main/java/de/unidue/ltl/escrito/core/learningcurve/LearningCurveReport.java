@@ -44,6 +44,7 @@ import org.dkpro.tc.ml.weka.core._eka;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
 
 import de.unidue.ltl.escrito.core.report.ReportUtils;
+import de.unidue.ltl.escrito.core.vizualization.XYChartPlotter;
 import de.unidue.ltl.evaluation.core.EvaluationData;
 import de.unidue.ltl.evaluation.measures.agreement.QuadraticallyWeightedKappa;
 import weka.core.Instance;
@@ -73,7 +74,7 @@ implements Constants
 	// holds PR curve data
 	List<double[][]> prcData = new ArrayList<double[][]>();
 	public static Double [][] accumulatedArrayResults = new Double[LearningCurveTask.NUMBER_OF_TRAINING_INSTANCES.length][10];
-	
+
 	@Discriminator(name = "dimension_iterations")
 	public Integer ITERATIONS;
 
@@ -82,13 +83,19 @@ implements Constants
 			throws Exception
 	{
 		System.out.println("Execute Learning Curve Report");
+		String LearningCurveTaskId = null;
+		String report = "";
+		List<Double> numInstances = new ArrayList<Double>();
+		List<Double> minValues = new ArrayList<Double>();
+		List<Double> maxValues = new ArrayList<Double>();
+		List<Double> avgValues = new ArrayList<Double>();
 		for (Integer numberOfInstances : LearningCurveTask.NUMBER_OF_TRAINING_INSTANCES) {
+			numInstances.add(numberOfInstances*1.0);
 			List<Configuration> selectedItemsOverall = new ArrayList<Configuration>();
 			Properties props = new Properties();
 			List<Double> kappas = new ArrayList<Double>();
-			String LearningCurveTaskId = null;
 			for (int iteration=0; iteration<LearningCurveTask.ITERATIONS; iteration++) {
-			//	System.out.println("Iteration: "+iteration);
+				//	System.out.println("Iteration: "+iteration);
 				File evaluationFile = null;
 				File selectedItemFile = null;
 				StorageService storageService = getContext().getStorageService();
@@ -103,12 +110,12 @@ implements Constants
 					evaluationFile = storageService.locateKey(id, Constants.TEST_TASK_OUTPUT_KEY+"/"+Constants.EVAL_FILE_NAME+"_" + numberOfInstances + "_" + iteration);
 					selectedItemFile = storageService.locateKey(id, Constants.TEST_TASK_OUTPUT_KEY+"/"+Constants.EVAL_FILE_NAME+"_" + numberOfInstances + "_" + iteration+"_itemIds.txt");
 				}
-				
+
 				// we need to check non-existing files as we might skip some training sizes
 				if (!evaluationFile.exists()) {
 					continue;
 				}
-				
+
 				// read selected Items
 				BufferedReader br = new BufferedReader(new FileReader(selectedItemFile));
 				Set<String> selectedItems = new HashSet<String>();
@@ -146,18 +153,18 @@ implements Constants
 						}
 					}
 				}
-				
+
 				EvaluationData<Integer> evalData = new EvaluationData<Integer>();
 				for (int i = 0; i<goldLabelsList.size(); i++){
 					evalData.register(goldLabelsList.get(i), predictedLabelsList.get(i));
 				}
 				QuadraticallyWeightedKappa<Integer> qwk = new QuadraticallyWeightedKappa<Integer>(evalData);
 				double kappa = qwk.getResult();
-				
+
 				kappas.add(kappa);
 				selectedItemsOverall.add(new Configuration(kappa, selectedItems));
 			}
-		
+
 			double min = -1.0;
 			double max = -1.0;
 			if (kappas.size() > 0) {
@@ -169,35 +176,47 @@ implements Constants
 			results.put(QUADRATIC_WEIGHTED_KAPPA_MIN, min);
 			results.put(QUADRATIC_WEIGHTED_KAPPA_MAX, max);
 			System.out.println(numberOfInstances + "\t" + meanKappa + "\t" + min + "\t" + max);
-
+			report += (numberOfInstances + "\t" + meanKappa + "\t" + min + "\t" + max + "\n");
+			minValues.add(min);
+			maxValues.add(max);
+			avgValues.add(meanKappa);
+			
 			for (String s : results.keySet()) {
 				props.setProperty(s, results.get(s).toString());
 			}
-
+			
 			// Write out properties
 			getContext().getStorageService().storeBinary(LearningCurveTaskId, RESULTS_FILENAME + "_" + numberOfInstances+".txt", new PropertiesAdapter(props));
-		//	getContext().storeBinary(RESULTS_FILENAME + "_" + numberOfInstances+".txt", new PropertiesAdapter(props));
-			
-			
+			//	getContext().storeBinary(RESULTS_FILENAME + "_" + numberOfInstances+".txt", new PropertiesAdapter(props));
+
+
 			selectedItemsOverall.sort(null);
-			
+
 			BufferedWriter bw = new BufferedWriter(new FileWriter(getContext().getStorageService().locateKey(LearningCurveTaskId, "selectedItemIds_"+numberOfInstances+".txt")));
-		//	BufferedWriter bw = new BufferedWriter(new FileWriter(getContext().getFile("selectedItemIds_"+numberOfInstances+".txt", AccessMode.READWRITE)));
-			
+			//	BufferedWriter bw = new BufferedWriter(new FileWriter(getContext().getFile("selectedItemIds_"+numberOfInstances+".txt", AccessMode.READWRITE)));
+
 			for (Configuration c : selectedItemsOverall){
 				bw.write(c.toString()+"\n");
 			}
 			bw.close();
 		}
+		BufferedWriter bw_gesamt = new BufferedWriter(new FileWriter(getContext().getStorageService().locateKey(LearningCurveTaskId, "learningCurveResult.txt")));
+		bw_gesamt.write(report);
+		bw_gesamt.close();
+		XYChartPlotter plotter = new XYChartPlotter("# training data", "QWK", "LearningCurve");
+		plotter.addSeries(numInstances, minValues, "min");
+		plotter.addSeries(numInstances, maxValues, "max");
+		plotter.addSeries(numInstances, avgValues, "mean");
+		plotter.plot(getContext().getStorageService().locateKey(LearningCurveTaskId, "learningCurve.jpeg"));
 	}
 }
 
 
 class Configuration implements Comparable<Configuration>{
-	
+
 	double kappa;
 	Set<String> itemIds;
-	
+
 	public Configuration(double kappa, Set<String> itemIds){
 		this.kappa = kappa;
 		this.itemIds = itemIds;
@@ -206,10 +225,10 @@ class Configuration implements Comparable<Configuration>{
 	public String toString(){
 		return this.kappa+"\t"+this.itemIds.toString();
 	}
-	
+
 	@Override
 	public int compareTo(Configuration c) {
 		return Double.compare(this.kappa,c.kappa); 
 	}
-	
+
 }

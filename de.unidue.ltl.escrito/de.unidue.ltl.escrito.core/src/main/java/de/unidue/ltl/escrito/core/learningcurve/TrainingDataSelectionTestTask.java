@@ -1,9 +1,12 @@
 package de.unidue.ltl.escrito.core.learningcurve;
 
 import org.dkpro.lab.task.impl.TaskBase;
+import org.dkpro.tc.ml.weka.core.WekaTrainer;
 import org.dkpro.tc.ml.weka.core._eka;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import meka.core.Result;
@@ -17,11 +20,15 @@ import org.dkpro.lab.task.impl.ExecutableTaskBase;
 
 import weka.attributeSelection.AttributeSelection;
 import weka.classifiers.Classifier;
+import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.converters.ArffSaver;
 import weka.core.converters.ConverterUtils.DataSink;
+import weka.core.converters.Saver;
 import weka.filters.unsupervised.attribute.Remove;
 import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.ml.weka.util.MultilabelResult;
+import org.dkpro.tc.ml.weka.writer.WekaDataWriter;
 
 import de.unidue.ltl.escrito.core.Utils;
 
@@ -58,7 +65,7 @@ implements Constants
 	@Discriminator(name = "dimension_number_of_training_instances")
 	public static int[] NUMBER_OF_TRAINING_INSTANCES;
 
-
+	
 	@Override
 	public void execute(TaskContext aContext)
 			throws Exception
@@ -104,8 +111,6 @@ implements Constants
 //				}
 //			}
 
-			// build classifier
-			Classifier cl = Utils.getClassifier(learningMode, classificationArguments);
 
 			// evaluation & prediction generation
 
@@ -116,7 +121,11 @@ implements Constants
 					+ "/" + Constants.EVAL_FILE_NAME + "_" + numberOfClusters);
 				// train the classifier on the train set split - not necessary in multilabel setup, but
 				// in single label setup
-				cl.buildClassifier(trainData);
+			
+			File model = aContext.getFile(MODEL_CLASSIFIER, AccessMode.READWRITE);		
+			WekaTrainer trainer = new WekaTrainer();
+			Classifier cl = trainer.train(trainData, model, Utils.getParameters(classificationArguments));
+
 				weka.core.SerializationHelper.write(evalOutput.getAbsolutePath(),
 						Utils.getEvaluationSinglelabel(cl, trainData, testData));
 				testData = Utils.getPredictionInstancesSingleLabel(testData, cl);
@@ -127,14 +136,27 @@ implements Constants
 			File predictionFile = Utils.getFile(aContext,"", FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READWRITE);
 
 			String predictions = predictionFile.getAbsolutePath();
-			System.out.println(predictions);
-			predictions = predictions.replaceAll(".arff", "_"+numberOfClusters+".arff");
-			System.out.println(predictions);
+			//System.out.println(predictions);
+			predictions = predictions.replaceAll(".txt", "_"+numberOfClusters+".txt");
+			//System.out.println(predictions);
 			predictionFile = new File(predictions);
-
-			DataSink.write(predictionFile.getAbsolutePath(), testData);
+			
+			
+//			WekaDataWriter wdw = new WekaDataWriter();
+//			Collection<Instance> instances = new ArrayList<Instance>();
+//			instances.addAll(testData);
+//			wdw.writeGenericFormat(instances);
+			ArffSaver saver = new ArffSaver();
+			saver.setInstances(testData);
+			saver.setDestination(predictionFile);
+			saver.writeBatch();
+		//	DataSink.write(predictionFile.getAbsolutePath(), testData);
 		}
 
 	}
+	
+	
+	
+	
 
 }
