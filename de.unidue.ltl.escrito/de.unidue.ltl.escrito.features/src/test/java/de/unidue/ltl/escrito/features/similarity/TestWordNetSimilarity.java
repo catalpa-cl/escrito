@@ -1,6 +1,6 @@
 package de.unidue.ltl.escrito.features.similarity;
 
-import java.util.Collection;
+//import java.util.Collection;
 import java.util.List;
 
 import edu.cmu.lti.jawjaw.pobj.POS;
@@ -9,14 +9,7 @@ import edu.cmu.lti.lexical_db.NictWordNet;
 import edu.cmu.lti.lexical_db.data.Concept;
 import edu.cmu.lti.ws4j.Relatedness;
 import edu.cmu.lti.ws4j.RelatednessCalculator;
-import edu.cmu.lti.ws4j.impl.HirstStOnge;
 import edu.cmu.lti.ws4j.impl.JiangConrath;
-import edu.cmu.lti.ws4j.impl.LeacockChodorow;
-import edu.cmu.lti.ws4j.impl.Lesk;
-import edu.cmu.lti.ws4j.impl.Lin;
-import edu.cmu.lti.ws4j.impl.Path;
-import edu.cmu.lti.ws4j.impl.Resnik;
-import edu.cmu.lti.ws4j.impl.WuPalmer;
 
 
 public class TestWordNetSimilarity {
@@ -65,8 +58,8 @@ public class TestWordNetSimilarity {
 	}
 	public static void main(String[] args) {
 		long t0 = System.currentTimeMillis();
-		Collection<Concept> synsets = db.getAllConcepts("house", "n");
-		Collection<Concept> synsets2 = db.getAllConcepts("home", "n");
+		//Collection<Concept> synsets = db.getAllConcepts("house", "n");
+		//Collection<Concept> synsets2 = db.getAllConcepts("home", "n");
 		/*for (Concept synset1 : synsets){
 			System.out.println("Gloss: "+db.getGloss(synset1, ""));
 			System.out.println(synset1.getSynset());

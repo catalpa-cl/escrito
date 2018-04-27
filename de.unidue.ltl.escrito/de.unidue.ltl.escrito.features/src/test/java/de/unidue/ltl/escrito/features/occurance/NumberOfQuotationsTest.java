@@ -2,17 +2,13 @@ package de.unidue.ltl.escrito.features.occurance;
 
 import static org.dkpro.tc.testing.FeatureTestUtil.assertFeatures;
 
-import java.util.Iterator;
 import java.util.Set;
-
 import org.junit.Assert;
-
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.jcas.JCas;
 import org.dkpro.tc.api.features.Feature;
 import org.dkpro.tc.api.type.TextClassificationTarget;
 import org.junit.Test;
-
 import de.unidue.ltl.escrito.features.core.EssayGradingTestBase;
 import de.unidue.ltl.escrito.features.occurance.NumberOfQuotations;
 
@@ -24,7 +20,7 @@ public class NumberOfQuotationsTest
     public void regexMatcherFeatureExtractorTest()
         throws Exception
     {
-		AnalysisEngine engine = getPreprocessingEngine("de",false);
+		AnalysisEngine engine = getPreprocessingEngine("de",ParserType.noParser);
        		
         JCas jcas = engine.newJCas();
         jcas.setDocumentLanguage("de");

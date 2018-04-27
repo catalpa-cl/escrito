@@ -3,20 +3,18 @@ package de.unidue.ltl.escrito.features.similarity;
 import static org.dkpro.tc.testing.FeatureTestUtil.assertFeatures;
 
 import java.util.Set;
-
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.jcas.JCas;
 import org.dkpro.tc.api.features.Feature;
 import org.dkpro.tc.api.features.util.FeatureUtil;
 import org.junit.Assert;
 import org.junit.Test;
-
 import de.unidue.ltl.escrito.features.core.EssayGradingTestBase;
 
 public class StringSimilarityFETest extends EssayGradingTestBase{
 	@Test
 	public void StringSimilarityEssayTest() throws Exception {
-		AnalysisEngine engine = getPreprocessingEngine("de",false);
+		AnalysisEngine engine = getPreprocessingEngine("de",ParserType.noParser);
 
 		JCas jcas1 = engine.newJCas();
 		jcas1.setDocumentLanguage("de");

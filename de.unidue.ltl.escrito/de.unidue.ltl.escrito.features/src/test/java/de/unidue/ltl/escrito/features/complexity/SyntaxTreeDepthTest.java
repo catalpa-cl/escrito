@@ -3,16 +3,13 @@ package de.unidue.ltl.escrito.features.complexity;
 import static org.dkpro.tc.testing.FeatureTestUtil.assertFeatures;
 
 import java.util.Set;
-
 import org.junit.Assert;
-
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.jcas.JCas;
 import org.dkpro.tc.api.features.Feature;
 import org.dkpro.tc.api.features.util.FeatureUtil;
 import org.dkpro.tc.api.type.TextClassificationTarget;
 import org.junit.Test;
-
 import de.unidue.ltl.escrito.features.core.EssayGradingTestBase;
 
 
@@ -24,7 +21,7 @@ public class SyntaxTreeDepthTest
 	public void syntaxTreeDepthFeatureExtractorTest_DE()
 	        throws Exception
 	  {
-		AnalysisEngine engine = getPreprocessingEngine("de",true);
+		AnalysisEngine engine = getPreprocessingEngine("de",ParserType.constituentParser);
 
         JCas jcas = engine.newJCas();
         jcas.setDocumentLanguage("de");
@@ -50,7 +47,7 @@ public class SyntaxTreeDepthTest
 	public void syntaxTreeDepthFeatureExtractorTest_EN()
 	        throws Exception
 	    {
-			AnalysisEngine engine = getPreprocessingEngine("en",true);
+			AnalysisEngine engine = getPreprocessingEngine("en",ParserType.constituentParser);
 
 	        JCas jcas = engine.newJCas();
 	        jcas.setDocumentLanguage("en");

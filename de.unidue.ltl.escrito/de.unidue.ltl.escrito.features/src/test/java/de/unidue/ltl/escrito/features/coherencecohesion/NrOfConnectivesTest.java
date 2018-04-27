@@ -22,7 +22,7 @@ public class NrOfConnectivesTest
 {
 	@Test
 	public void nrOfConnectivesFeatureExtractorTest_de() throws Exception {
-		AnalysisEngine engine = getPreprocessingEngine("de",false);
+		AnalysisEngine engine = getPreprocessingEngine("de",ParserType.noParser);
 
 		JCas jcas = engine.newJCas();
 		jcas.setDocumentLanguage("de");
@@ -49,7 +49,7 @@ public class NrOfConnectivesTest
 	
 	@Test
 	public void nrOfConnectivesFeatureExtractorTest_en() throws Exception {
-		AnalysisEngine engine = getPreprocessingEngine("en",false);
+		AnalysisEngine engine = getPreprocessingEngine("en",ParserType.noParser);
 
 		JCas jcas = engine.newJCas();
 		jcas.setDocumentLanguage("en");

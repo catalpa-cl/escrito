@@ -3,7 +3,6 @@ package de.unidue.ltl.escrito.features.fachsprache;
 import static org.dkpro.tc.testing.FeatureTestUtil.assertFeatures;
 
 import java.util.Set;
-
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.jcas.JCas;
 import org.dkpro.tc.api.features.Feature;
@@ -11,7 +10,6 @@ import org.dkpro.tc.api.features.util.FeatureUtil;
 import org.dkpro.tc.api.type.TextClassificationTarget;
 import org.junit.Assert;
 import org.junit.Test;
-
 import de.unidue.ltl.escrito.features.core.EssayGradingTestBase;
 import de.unidue.ltl.escrito.features.fachsprache.PassiveSentenceExtractor;
 
@@ -20,7 +18,7 @@ public class PassiveSentenceExtractorTest extends EssayGradingTestBase {
 	
 	@Test
 	public void PassiveFeatureExtractorTest() throws Exception {
-		AnalysisEngine engine = getPreprocessingEngine("de",false);
+		AnalysisEngine engine = getPreprocessingEngine("de",ParserType.noParser);
 
 		JCas jcas = engine.newJCas();
 		jcas.setDocumentLanguage("de");
@@ -54,7 +52,7 @@ public class PassiveSentenceExtractorTest extends EssayGradingTestBase {
 	
 	@Test
 	public void PassiveFeatureInEssayTest() throws Exception {
-		AnalysisEngine engine = getPreprocessingEngine("de",false);
+		AnalysisEngine engine = getPreprocessingEngine("de",ParserType.noParser);
 
 		JCas jcas = engine.newJCas();
 		jcas.setDocumentLanguage("de");

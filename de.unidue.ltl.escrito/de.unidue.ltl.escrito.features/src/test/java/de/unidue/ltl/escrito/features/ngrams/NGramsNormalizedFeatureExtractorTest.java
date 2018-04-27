@@ -28,14 +28,8 @@ import org.dkpro.tc.core.io.JsonDataWriter;
 import org.dkpro.tc.core.util.TaskUtils;
 import org.dkpro.tc.features.ngram.meta.WordNGramMC;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-
-import com.google.gson.Gson;
-
 import de.tudarmstadt.ukp.dkpro.core.tokit.BreakIteratorSegmenter;
-import de.unidue.ltl.escrito.features.core.io.TestReaderSingleLabel;
 import de.unidue.ltl.escrito.features.core.io.TestReaderSingleLabelDocumentReader;
 
 public class NGramsNormalizedFeatureExtractorTest

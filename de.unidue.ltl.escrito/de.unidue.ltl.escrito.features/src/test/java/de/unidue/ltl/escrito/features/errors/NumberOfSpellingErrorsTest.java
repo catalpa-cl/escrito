@@ -18,7 +18,7 @@ public class NumberOfSpellingErrorsTest extends EssayGradingTestBase {
 
 	@Test
 	public void spellCheckingFeatureExtractorTest_DE() throws Exception {
-		AnalysisEngine engine = getPreprocessingEngine("de",false);
+		AnalysisEngine engine = getPreprocessingEngine("de",ParserType.noParser);
 
 		JCas jcas = engine.newJCas();
 		jcas.setDocumentLanguage("de");
@@ -44,7 +44,7 @@ public class NumberOfSpellingErrorsTest extends EssayGradingTestBase {
 	
 	@Test
 	public void spellCheckingFeatureExtractorTest_EN() throws Exception {
-		AnalysisEngine engine = getPreprocessingEngine("en",false);
+		AnalysisEngine engine = getPreprocessingEngine("en",ParserType.noParser);
 
 		JCas jcas = engine.newJCas();
 		jcas.setDocumentLanguage("en");

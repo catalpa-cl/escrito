@@ -1,14 +1,10 @@
 package de.unidue.ltl.escrito.features.ngrams;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.Feature;
