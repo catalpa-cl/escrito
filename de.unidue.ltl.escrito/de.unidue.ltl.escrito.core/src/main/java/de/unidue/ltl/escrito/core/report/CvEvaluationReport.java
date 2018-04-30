@@ -130,7 +130,7 @@ implements Constants{
 			}
 
 			File itemsFile = new File(id2oFile.getParentFile(), LABELED_ITEMS_FILENAME);
-			ReportUtils.writeLabeledOutput(instanceId2TextMap, evaluationString, itemsFile);
+			ReportUtils.writeLabeledOutput(instanceId2TextMap, evaluationString, itemsFile, null);
 
 
 			// Write out properties

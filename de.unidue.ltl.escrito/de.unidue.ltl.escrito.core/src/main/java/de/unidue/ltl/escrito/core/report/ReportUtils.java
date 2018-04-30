@@ -29,7 +29,7 @@ public class ReportUtils {
 			String line;
 			Map<String, String> labelMappings = null;
 			while ((line = br.readLine())!= null){
-				 if (line.startsWith("#labels")) {
+				if (line.startsWith("#labels")) {
 					labelMappings = computeLabelMapping(line);	
 				} else if (line.startsWith("#")){
 					// do not do anything
@@ -40,7 +40,7 @@ public class ReportUtils {
 					String prediction = everythingElse.split(";")[0];
 					String gold = everythingElse.split(";")[1];
 					evaluationDouble.register(Double.parseDouble(labelMappings.get(String.valueOf(gold))), Double.parseDouble(labelMappings.get(String.valueOf(prediction))), id);
-		//			System.out.println(line+"\t"+prediction+"\t"+gold);
+					//			System.out.println(line+"\t"+prediction+"\t"+gold);
 				}
 			}
 			br.close();
@@ -71,7 +71,7 @@ public class ReportUtils {
 					String prediction = everythingElse.split(";")[0];
 					String gold = everythingElse.split(";")[1];
 					evaluationString.register(labelMappings.get(String.valueOf(gold)), labelMappings.get(String.valueOf(prediction)), id);
-		//			System.out.println(line+"\t"+prediction+"\t"+gold);
+					//			System.out.println(line+"\t"+prediction+"\t"+gold);
 				}
 			}
 			br.close();
@@ -80,7 +80,7 @@ public class ReportUtils {
 		}
 		return evaluationString;
 	}
-	
+
 	private static Map<String, String> computeLabelMapping(String line) {
 		Map<String, String> labelMappings = new HashMap<>();
 		// example #labels 0=10 1=11 2=12 3=2 4=3 5=4 6=5 7=6 8=7 9=8 10=9
@@ -93,77 +93,106 @@ public class ReportUtils {
 		}
 		return labelMappings;
 	}
-	
-	
-	   public static double getMeanKappa(Double[] kappas) {
-	        return getMeanKappa(Arrays.asList(kappas));
-	    }
 
-	    public static double getMeanKappa(List<Double> kappas) {
-	        List<Double> weights = new ArrayList<Double>();
-	        for (int i=0; i<kappas.size(); i++) {
-	            weights.add(1.0);
-	        }
-	        return getMeanWeightedKappa(kappas, weights);
-	    }
-	
-	    /**
-	     * Compute mean for Fisher-Z score transformed kappas and then transform back.
-	     * 
-	     * @param kappas kappa values
-	     * @param weights 
-	     * @return The mean kappa value.
-	     */
-	    public static double getMeanWeightedKappa(List<Double> kappas, List<Double> weights) {
-	        
-	        // ensure that kappas are in the range [-.999, .999]
-	        for (int i=0; i< kappas.size(); i++) {
-	            if (kappas.get(i) < -0.999) {
-	                kappas.set(i, -0.999);
-	            }
-	            else if (kappas.get(i) > 0.999) {
-	                kappas.set(i, 0.999);
-	            }
-	        }
 
-	        // normalize weights
-	        double meanWeight = StatUtils.mean( ArrayUtils.toPrimitive(weights.toArray(new Double[weights.size()]) ));
-	        for (int i=0; i<weights.size(); i++) {
-	            weights.set(i, weights.get(i) / meanWeight);
-	        }
-	        
-	        List<Double> zValues = new ArrayList<Double>();
-	        for (int i=0; i< kappas.size(); i++) {
-	            zValues.add(
-	                    0.5 * Math.log( (1+kappas.get(i))/(1-kappas.get(i))) * weights.get(i)
-	            );
-	        }
-	        double z = StatUtils.mean( ArrayUtils.toPrimitive(zValues.toArray(new Double[zValues.size()]) ));
-	        
-	        double kappa = (Math.exp(2*z)-1) / (Math.exp(2*z)+1);
-	        
-	        return kappa;
-	    }
-	    
-	
-	    public static void writeLabeledOutput(Map<String, String> instanceId2TextMap, EvaluationData<String> evaluationString, File itemsFile) {
-			try {
-				BufferedWriter bw = new BufferedWriter(new FileWriter(itemsFile.getAbsolutePath()));
-				Iterator<EvaluationEntry<String>> iter = evaluationString.iterator();
-				bw.write("#id itemText Gold Predicted\n");
-				while (iter.hasNext()){
-					EvaluationEntry<String> e = iter.next();
-					String id = e.getName();
-					id = id.substring(id.indexOf("_0_")+3);
-					bw.write(id+"\t"+instanceId2TextMap.get(id)
-					+"\t"+e.getGold()+"\t"+e.getPredicted()+"\n");
-				}
-				bw.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
+	public static double getMeanKappa(Double[] kappas) {
+		return getMeanKappa(Arrays.asList(kappas));
+	}
+
+	public static double getMeanKappa(List<Double> kappas) {
+		List<Double> weights = new ArrayList<Double>();
+		for (int i=0; i<kappas.size(); i++) {
+			weights.add(1.0);
 		}
-	
+		return getMeanWeightedKappa(kappas, weights);
+	}
+
+	/**
+	 * Compute mean for Fisher-Z score transformed kappas and then transform back.
+	 * 
+	 * @param kappas kappa values
+	 * @param weights 
+	 * @return The mean kappa value.
+	 */
+	public static double getMeanWeightedKappa(List<Double> kappas, List<Double> weights) {
+
+		// ensure that kappas are in the range [-.999, .999]
+		for (int i=0; i< kappas.size(); i++) {
+			if (kappas.get(i) < -0.999) {
+				kappas.set(i, -0.999);
+			}
+			else if (kappas.get(i) > 0.999) {
+				kappas.set(i, 0.999);
+			}
+		}
+
+		// normalize weights
+		double meanWeight = StatUtils.mean( ArrayUtils.toPrimitive(weights.toArray(new Double[weights.size()]) ));
+		for (int i=0; i<weights.size(); i++) {
+			weights.set(i, weights.get(i) / meanWeight);
+		}
+
+		List<Double> zValues = new ArrayList<Double>();
+		for (int i=0; i< kappas.size(); i++) {
+			zValues.add(
+					0.5 * Math.log( (1+kappas.get(i))/(1-kappas.get(i))) * weights.get(i)
+					);
+		}
+		double z = StatUtils.mean( ArrayUtils.toPrimitive(zValues.toArray(new Double[zValues.size()]) ));
+
+		double kappa = (Math.exp(2*z)-1) / (Math.exp(2*z)+1);
+
+		return kappa;
+	}
+
+
+	public static void writeLabeledOutput(Map<String, String> instanceId2TextMap, EvaluationData<String> evaluationString, File itemsFile, Map<Integer, Double> confScoreMap) {
+		try {
+			BufferedWriter bw = new BufferedWriter(new FileWriter(itemsFile.getAbsolutePath()));
+			Iterator<EvaluationEntry<String>> iter = evaluationString.iterator();
+			bw.write("#id\titemText\tGold\tPredicted\tconfidence\n");
+			while (iter.hasNext()){
+				EvaluationEntry<String> e = iter.next();
+				String id = e.getName();
+				String id_internal = id.substring(0, id.indexOf("_0_"));
+			//	System.out.println(id_internal);
+				String confidence = "-1";
+				if (confScoreMap!=null){
+					confidence = String.valueOf(confScoreMap.get(Integer.valueOf(id_internal)));
+				}
+				id = id.substring(id.indexOf("_0_")+3);
+				bw.write(id+"\t"+instanceId2TextMap.get(id)
+				+"\t"+e.getGold()+"\t"+e.getPredicted()+"\t"+confidence+"\n");
+			}
+			bw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+
+
+	public static Map<Integer, Double> readId2ConfidenceScore(File id2ConfidenceScoreFile) {
+		Map<Integer, Double> id2Conf = new HashMap<Integer, Double>();
+		BufferedReader br; 
+		String line;
+		try {
+			br = new BufferedReader(new FileReader(id2ConfidenceScoreFile));
+			line = br.readLine();
+			while (line != null){
+				String[] parts = line.split("\t");
+				if (parts.length == 2){
+					id2Conf.put((int) Double.parseDouble(parts[0]), Double.parseDouble(parts[1]));
+				}
+				line = br.readLine();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return id2Conf;
+	}
+
 }

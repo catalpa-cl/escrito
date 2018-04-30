@@ -58,6 +58,7 @@ public class GradingEvaluationReport extends TcBatchReportBase {
 		System.out.println("Grading Evaluation Report:");
 		File evaluationFile = null;
 		File evaluationFileMajority = null;
+		File id2ConfidenceScoreFile = null;
 		StorageService storageService = getContext().getStorageService();
 		Map<String, String> instanceId2TextMap = new HashMap<String, String>();
 
@@ -86,6 +87,7 @@ public class GradingEvaluationReport extends TcBatchReportBase {
 				}
 				evaluationFile = storageService.locateKey(subId, Constants.ID_OUTCOME_KEY);
 				evaluationFileMajority = storageService.locateKey(subId, Constants.BASELINE_MAJORITIY_ID_OUTCOME_KEY);
+				id2ConfidenceScoreFile = storageService.locateKey(subId, "id2ConfScore.txt");
 				System.out.println(evaluationFile);
 				System.out.println(evaluationFileMajority);
 			}
@@ -97,7 +99,7 @@ public class GradingEvaluationReport extends TcBatchReportBase {
 		EvaluationData<String> evaluationString = ReportUtils.readId2OutcomeAsString(evaluationFile);
 		EvaluationData<String> evaluationStringMajority = ReportUtils.readId2OutcomeAsString(evaluationFileMajority);
 
-
+		Map<Integer, Double> confScoreMap = ReportUtils.readId2ConfidenceScore(id2ConfidenceScoreFile);
 
 
 
@@ -142,7 +144,7 @@ public class GradingEvaluationReport extends TcBatchReportBase {
 		}
 
 		File itemsFile = new File(evaluationFile.getParentFile(), LABELED_ITEMS_FILENAME);
-		ReportUtils.writeLabeledOutput(instanceId2TextMap, evaluationString, itemsFile);
+		ReportUtils.writeLabeledOutput(instanceId2TextMap, evaluationString, itemsFile, confScoreMap);
 
 		// Write results
 		File outfile = new File(evaluationFile.getParentFile(), RESULTS_FILENAME);
