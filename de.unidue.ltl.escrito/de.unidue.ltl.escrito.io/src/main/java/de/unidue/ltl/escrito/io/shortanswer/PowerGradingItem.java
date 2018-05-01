@@ -18,9 +18,8 @@ public class PowerGradingItem
 		sb.append(" (");
 		sb.append(grader1 + "/" + grader2 + "/" + grader3);
 		sb.append(") ");
-		String subStringText = text.length() > 40 ? text.substring(0, 40) : text.substring(0, text.length());
+		String subStringText = text.length() > 40 ? text.substring(0, 40)+" ..." : text.substring(0, text.length());
 		sb.append(subStringText);
-		sb.append(" ...");
 
 		return sb.toString();        
 	}

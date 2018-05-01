@@ -51,7 +51,7 @@ extends JCasCollectionReader_ImplBase
 	public static final String PARAM_PROMPT_IDS = "PromptId";
 	@ConfigurationParameter(name = PARAM_PROMPT_IDS, mandatory = false, defaultValue = "-1")
 	protected Integer[] requestedPromptIds; 
-	
+
 	public static final String PARAM_CORPUSNAME = "corpusName";
 	@ConfigurationParameter(name = PARAM_CORPUSNAME, mandatory = false, defaultValue = "PG")
 	protected String corpusName;
@@ -128,8 +128,10 @@ extends JCasCollectionReader_ImplBase
 				}
 
 				PowerGradingItem newItem = new PowerGradingItem(studentId, promptId, text, grader1, grader2, grader3);
-
-				items.add(newItem);
+			//	System.out.println(newItem.toString());
+				if (!(text.trim().equals(""))){
+					items.add(newItem);
+				}
 
 				if (newItem.getGrader1() != -1) {
 					grades1.add(newItem.getGrader1());
@@ -142,8 +144,8 @@ extends JCasCollectionReader_ImplBase
 			throw new ResourceInitializationException(e);
 		}
 		currentIndex = 0;
-//		Utils.preprocessConnectedTexts(targetAnswers, corpusName, targetAnswerPrefix, "en");
-//		Utils.preprocessConnectedTexts(questions, corpusName, questionPrefix, "en");
+		//		Utils.preprocessConnectedTexts(targetAnswers, corpusName, targetAnswerPrefix, "en");
+		//		Utils.preprocessConnectedTexts(questions, corpusName, questionPrefix, "en");
 	}
 
 	@Override

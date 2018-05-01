@@ -48,8 +48,11 @@ public class Utils {
 						// TODO: reintegrate that
 						//	createEngineDescription(LanguageToolChecker.class,
 						//			LanguageToolChecker.PARAM_LANGUAGE, lang),
-						createEngineDescription(OpenNlpPosTagger.class),
-						createEngineDescription(MateLemmatizer.class),
+						createEngineDescription(OpenNlpPosTagger.class,
+								OpenNlpPosTagger.PARAM_LANGUAGE, "de",
+								MateLemmatizer.PARAM_LANGUAGE, "de"),
+						createEngineDescription(MateLemmatizer.class,
+								MateLemmatizer.PARAM_LANGUAGE, "de"),
 						createEngineDescription(
 								BerkeleyParser.class,
 								BerkeleyParser.PARAM_LANGUAGE,"de",
@@ -65,9 +68,12 @@ public class Utils {
 						// TODO: reintegrate that
 						//	createEngineDescription(LanguageToolChecker.class,
 						//			LanguageToolChecker.PARAM_LANGUAGE, lang),
-						createEngineDescription(OpenNlpPosTagger.class),
-						createEngineDescription(OpenNlpChunker.class),
-						createEngineDescription(MateLemmatizer.class),
+						createEngineDescription(OpenNlpPosTagger.class,
+								OpenNlpPosTagger.PARAM_LANGUAGE, "en"),
+						createEngineDescription(OpenNlpChunker.class,
+								OpenNlpChunker.PARAM_LANGUAGE, "en"),
+						createEngineDescription(MateLemmatizer.class,
+								MateLemmatizer.PARAM_LANGUAGE, "en"),
 						createEngineDescription(
 								BerkeleyParser.class,
 								BerkeleyParser.PARAM_LANGUAGE,"en",
