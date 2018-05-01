@@ -45,9 +45,8 @@ public class Utils {
 
 	public static Map<String, String> getInstanceId2TextMapTrain(TaskContext aContext)
 			throws ResourceInitializationException{
-		String path = aContext.getFolder(Constants.TEST_TASK_INPUT_KEY_TEST_DATA, AccessMode.READONLY).getPath()
+		String path = aContext.getFolder(Constants.TEST_TASK_INPUT_KEY_TRAINING_DATA, AccessMode.READONLY).getPath()
 				+"/documentMetaData.txt";
-		System.out.println(path);
 		return getInstanceId2TextMap(path);
 	}
 
