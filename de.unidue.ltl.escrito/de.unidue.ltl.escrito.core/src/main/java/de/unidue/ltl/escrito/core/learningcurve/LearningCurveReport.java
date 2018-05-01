@@ -219,7 +219,7 @@ implements Constants
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(getContext().getStorageService().locateKey(taskId, "learningCurveResult.tex")));
 			bw.write("\\begin{tikzpicture}\n"
-					+ "		\\node [draw=none] at (1,3) {2.3};\n"
+				//	+ "		\\node [draw=none] at (1,3) {2.3};\n"
 					+ "\\begin{semilogxaxis}[\n"
 					+ "ylabel = {QWK},\n"
 					+ "xlabel={\\# Trainingsdaten},\n"
