@@ -1,0 +1,3 @@
+#Feature mode used to train this model
+#Tue May 01 15:27:18 CEST 2018
+featureMode=unit

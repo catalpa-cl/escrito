@@ -1,0 +1,3 @@
+#Bipartition threshold used to train this model (only multi-label classification)
+#Tue May 01 16:42:28 CEST 2018
+threshold=0.5

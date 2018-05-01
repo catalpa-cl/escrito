@@ -1,0 +1,3 @@
+#Version of DKPro TC used to train this model
+#Tue May 01 16:42:28 CEST 2018
+TcVersion=1.0.0-SNAPSHOT

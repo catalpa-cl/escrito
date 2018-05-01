@@ -1,0 +1,2 @@
+org.dkpro.tc.features.ngram.WordNGram	ngramMinN=1	uniqueFeatureExtractorName=WordNGram324033687002463	ngramUseTopK=500	ngramMaxN=3
+de.unidue.ltl.escrito.features.length.NrOfChars	uniqueFeatureExtractorName=NrOfChars324033689837980
