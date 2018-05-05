@@ -24,56 +24,72 @@ import org.dkpro.tc.api.features.TcFeatureSet;
 import org.dkpro.tc.api.type.TextClassificationOutcome;
 import org.dkpro.tc.features.ngram.WordNGram;
 import org.dkpro.tc.ml.ExperimentSaveModel;
+import org.dkpro.tc.ml.builder.LearningMode;
 import org.dkpro.tc.ml.uima.TcAnnotator;
 import org.dkpro.tc.ml.weka.WekaAdapter;
 import org.junit.rules.TemporaryFolder;
 
 import de.unidue.ltl.escrito.core.types.LearnerAnswer;
 import de.unidue.ltl.escrito.examples.basics.Experiments_ImplBase;
-import de.unidue.ltl.escrito.features.length.NrOfChars;
 import de.unidue.ltl.escrito.io.shortanswer.MohlerMihalceaReader;
+import de.unidue.ltl.escrito.io.shortanswer.PowerGradingReader;
 import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.functions.LinearRegression;
 
 public class WriteAndReadModelApplicationExample extends Experiments_ImplBase{
 
-	
-	
+
+
 	public static void main(String[] args) throws Exception{
 		setDkproHome(WriteAndReadModelApplicationExample.class.getSimpleName());
 		String exampleAnswer = "This is an exampleAnswer";
 		documentRoundTripWekaSingleLabel(exampleAnswer);
 	}
 
-   
-      
-	
-	
+
+
+
+
 	public static ParameterSpace documentGetParameterSpaceSingleLabel()
 			throws ResourceInitializationException
 	{
 		System.out.println("Starting setup");
 		Map<String, Object> dimReaders = new HashMap<String, Object>();
-		String inputDataFile = System.getenv("DKPRO_HOME")+"/datasets/mohler_and_mihalcea/basicDataset/assign.txt";
+		String inputDataFile = System.getenv("DKPRO_HOME")+"/datasets/mohler_and_mihalcea/basicDataset/assign_EXTENDED.txt";
 		CollectionReaderDescription readerTrain = CollectionReaderFactory.createReaderDescription(
 				MohlerMihalceaReader.class,
 				MohlerMihalceaReader.PARAM_INPUT_FILE, inputDataFile,
 				MohlerMihalceaReader.PARAM_CORPUSNAME, "MohlerMihalcea",
-				MohlerMihalceaReader.PARAM_PROMPT_IDS, 1,
+				MohlerMihalceaReader.PARAM_PROMPT_IDS, 8,
 				MohlerMihalceaReader.PARAM_QUESTION_PREFIX, "Q",
 				MohlerMihalceaReader.PARAM_TARGET_ANSWER_PREFIX, "TA");
+				
+//				String inputDataFile = System.getenv("DKPRO_HOME")+"/datasets/powergrading/studentanswers_grades_698.tsv";
+//				CollectionReaderDescription readerTrain = CollectionReaderFactory.createReaderDescription(
+//						PowerGradingReader.class,
+//						PowerGradingReader.PARAM_INPUT_FILE, inputDataFile,
+//						PowerGradingReader.PARAM_CORPUSNAME, "PG",
+//						PowerGradingReader.PARAM_PROMPT_IDS, 20);
+//				
+
 		dimReaders.put(DIM_READER_TRAIN, readerTrain);
 
 		@SuppressWarnings("unchecked")
 		Dimension<List<Object>> dimClassificationArgs = Dimension.create(DIM_CLASSIFICATION_ARGS,
-				Arrays.asList(new Object[] { new WekaAdapter(), NaiveBayes.class.getName() }));
+			//	Arrays.asList(new Object[] { new WekaAdapter(), NaiveBayes.class.getName() }));
+				Arrays.asList(new Object[] { new WekaAdapter(), LinearRegression.class.getName() }));
 
 		Dimension<TcFeatureSet> dimFeatureSets = Dimension.create(DIM_FEATURE_SET, new TcFeatureSet(
-				TcFeatureFactory.create(WordNGram.class, WordNGram.PARAM_NGRAM_USE_TOP_K, 500,
-						WordNGram.PARAM_NGRAM_MIN_N, 1, WordNGram.PARAM_NGRAM_MAX_N, 3),
-				TcFeatureFactory.create(NrOfChars.class)));
+				TcFeatureFactory.create(WordNGram.class, WordNGram.PARAM_NGRAM_USE_TOP_K, 10000,
+						WordNGram.PARAM_NGRAM_MIN_N, 1, WordNGram.PARAM_NGRAM_MAX_N, 3)//,
+//				TcFeatureFactory.create(CharacterNGram.class, CharacterNGram.PARAM_NGRAM_USE_TOP_K, 10000,
+//						CharacterNGram.PARAM_NGRAM_MIN_N, 2, CharacterNGram.PARAM_NGRAM_MAX_N, 4),
+//				TcFeatureFactory.create(NrOfChars.class)
+				));
 
 		ParameterSpace pSpace = new ParameterSpace(Dimension.createBundle("readers", dimReaders),
-				Dimension.create(DIM_LEARNING_MODE, LM_SINGLE_LABEL),
+				Dimension.create(DIM_LEARNING_MODE, LM_REGRESSION),
+			//	Dimension.create(DIM_LEARNING_MODE, LM_SINGLE_LABEL),
 				Dimension.create(DIM_FEATURE_MODE, FM_UNIT), dimFeatureSets,
 				Dimension.create(DIM_DATA_WRITER, new WekaAdapter().getDataWriterClass()),
 				//Dimension.create(DIM_FEATURE_MODE, FM_DOCUMENT), dimFeatureSets,
@@ -82,11 +98,12 @@ public class WriteAndReadModelApplicationExample extends Experiments_ImplBase{
 		return pSpace;
 	}
 
-	
+
 	public static void documentRoundTripWekaSingleLabel(String exampleAnswer)
 			throws Exception
 	{
-		File modelFolder = new File("src/main/resources/serializationExample/model");
+		File modelFolder = new File("src/main/resources/serializationExample/model_mm");
+	//	File modelFolder = new File("src/main/resources/serializationExample/model_pg");
 		ParameterSpace docParamSpace = documentGetParameterSpaceSingleLabel();
 		documentWriteModel(docParamSpace, modelFolder);
 		documentLoadModelSingleLabel(modelFolder, exampleAnswer);
@@ -101,20 +118,20 @@ public class WriteAndReadModelApplicationExample extends Experiments_ImplBase{
 
 		File extractorOverride = new File(
 				modelFolder.getAbsolutePath() + "/" + META_EXTRACTOR_OVERRIDE);
-//		assertTrue(extractorOverride.exists());
+		//		assertTrue(extractorOverride.exists());
 
 		File modelMetaFile = new File(modelFolder.getAbsolutePath() + "/" + MODEL_META);
-//		assertTrue(modelMetaFile.exists());
+		//		assertTrue(modelMetaFile.exists());
 
 		File featureMode = new File(modelFolder.getAbsolutePath() + "/" + MODEL_FEATURE_MODE);
-//		assertTrue(featureMode.exists());
+		//		assertTrue(featureMode.exists());
 
 		File learningMode = new File(modelFolder.getAbsolutePath() + "/" + MODEL_LEARNING_MODE);
-//		assertTrue(learningMode.exists());
+		//		assertTrue(learningMode.exists());
 
 		File bipartitionThreshold = new File(
 				modelFolder.getAbsolutePath() + "/" + MODEL_BIPARTITION_THRESHOLD);
-//		assertTrue(bipartitionThreshold.exists());
+		//		assertTrue(bipartitionThreshold.exists());
 
 		modelFolder.deleteOnExit();
 	}
@@ -131,9 +148,9 @@ public class WriteAndReadModelApplicationExample extends Experiments_ImplBase{
 		batch.setOutputFolder(modelFolder);
 		Lab.getInstance().run(batch);
 	}
-	
-	
-	
+
+
+
 
 	private static void documentLoadModelSingleLabel(File modelFile, String exampleAnswer)
 			throws Exception
@@ -146,7 +163,7 @@ public class WriteAndReadModelApplicationExample extends Experiments_ImplBase{
 				// Achtung: It seems like you MAY NOT use the class TextClassificationTarget (as we do in the reader)
 				// to indicate the unit to be considered
 				// as far as I can see, a TextClassifcationTarget is produced by the classifier and we only want to have one in the end!
-					TcAnnotator.PARAM_TC_MODEL_LOCATION, modelFile.getAbsolutePath());
+				TcAnnotator.PARAM_TC_MODEL_LOCATION, modelFile.getAbsolutePath());
 
 		JCas jcas = JCasFactory.createJCas();
 		jcas.setDocumentText(exampleAnswer);
@@ -155,11 +172,11 @@ public class WriteAndReadModelApplicationExample extends Experiments_ImplBase{
 		LearnerAnswer unit = new LearnerAnswer(jcas, 0, jcas.getDocumentText().length());
 		unit.addToIndexes();
 
-		
+
 		// redo the preprocessing
 		preprocessing.process(jcas);
 		tcAnno.process(jcas);
-		
+
 		// redo the processing done by the classifier
 
 		List<TextClassificationOutcome> outcomes = new ArrayList<>(
@@ -167,29 +184,29 @@ public class WriteAndReadModelApplicationExample extends Experiments_ImplBase{
 		System.out.println(jcas.getDocumentText()+"\nOutcome: "+outcomes.get(0).getOutcome());
 	}
 
-	
-	
+
+
 	public static boolean setDkproHome(String experimentName) {
-    	String dkproHome = "DKPRO_HOME";
-    	Map<String, String> env = System.getenv();
-    	if (!env.containsKey(dkproHome)) {
-    		System.out.println("DKPRO_HOME not set.");
-    		
-        	File folder = new File("target/results/" + experimentName);
-        	folder.mkdirs();
-        	
-        	System.setProperty(dkproHome, folder.getPath());
-        	System.out.println("Setting DKPRO_HOME to: " + folder.getPath());
-        	
-        	return true;
-    	}
-    	else {
-    		System.out.println("DKPRO_HOME already set to: " + env.get(dkproHome));
-    		System.out.println("Keeping those settings.");
-    		
-    		return false;
-    	}
-    }
-	
-	
+		String dkproHome = "DKPRO_HOME";
+		Map<String, String> env = System.getenv();
+		if (!env.containsKey(dkproHome)) {
+			System.out.println("DKPRO_HOME not set.");
+
+			File folder = new File("target/results/" + experimentName);
+			folder.mkdirs();
+
+			System.setProperty(dkproHome, folder.getPath());
+			System.out.println("Setting DKPRO_HOME to: " + folder.getPath());
+
+			return true;
+		}
+		else {
+			System.out.println("DKPRO_HOME already set to: " + env.get(dkproHome));
+			System.out.println("Keeping those settings.");
+
+			return false;
+		}
+	}
+
+
 }

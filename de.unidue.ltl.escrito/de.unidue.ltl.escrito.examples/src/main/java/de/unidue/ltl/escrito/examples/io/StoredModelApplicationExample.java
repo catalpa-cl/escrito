@@ -30,7 +30,6 @@ import org.junit.rules.TemporaryFolder;
 
 import de.unidue.ltl.escrito.core.types.LearnerAnswer;
 import de.unidue.ltl.escrito.examples.basics.Experiments_ImplBase;
-import de.unidue.ltl.escrito.features.length.NrOfChars;
 import de.unidue.ltl.escrito.io.shortanswer.MohlerMihalceaReader;
 import weka.classifiers.bayes.NaiveBayes;
 
@@ -70,8 +69,7 @@ public class StoredModelApplicationExample extends Experiments_ImplBase{
 
 		Dimension<TcFeatureSet> dimFeatureSets = Dimension.create(DIM_FEATURE_SET, new TcFeatureSet(
 				TcFeatureFactory.create(WordNGram.class, WordNGram.PARAM_NGRAM_USE_TOP_K, 500,
-						WordNGram.PARAM_NGRAM_MIN_N, 1, WordNGram.PARAM_NGRAM_MAX_N, 3),
-				TcFeatureFactory.create(NrOfChars.class)));
+						WordNGram.PARAM_NGRAM_MIN_N, 1, WordNGram.PARAM_NGRAM_MAX_N, 3)));
 
 		ParameterSpace pSpace = new ParameterSpace(Dimension.createBundle("readers", dimReaders),
 				Dimension.create(DIM_LEARNING_MODE, LM_SINGLE_LABEL),
