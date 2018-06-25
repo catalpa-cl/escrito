@@ -26,9 +26,32 @@
 			<artifactId>de.unidue.ltl.escrito.core</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+
+		<!-- conflict with stanford parser -->
+		<!-- <dependency> -->
+		<!-- <groupId>de.tudarmstadt.ukp.dkpro.core</groupId> -->
+		<!-- <artifactId>de.tudarmstadt.ukp.dkpro.core.matetools-gpl</artifactId> -->
+		<!-- </dependency> -->
+		<dependency>
+			<groupId>edu.stanford.nlp</groupId>
+			<artifactId>stanford-corenlp</artifactId>
+			<version>3.6.0</version>
+		</dependency>
+		
+			<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.corenlp-gpl</artifactId>
+		</dependency>
+		
+
 		<dependency>
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
-			<artifactId>de.tudarmstadt.ukp.dkpro.core.matetools-gpl</artifactId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.ixa-asl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.ixa-model-lemmatizer-de-perceptron-conll09</artifactId>
+			<version>20160213.1</version>
 		</dependency>
 		<dependency>
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
@@ -53,8 +76,8 @@
 		<dependency>
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
 			<artifactId>
-                de.tudarmstadt.ukp.dkpro.core.io.tei-asl
-            </artifactId>
+					de.tudarmstadt.ukp.dkpro.core.io.tei-asl
+				</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
@@ -75,11 +98,20 @@
 			<artifactId>de.tudarmstadt.ukp.dkpro.core.opennlp-model-tagger-de-maxent</artifactId>
 			<version>20120616.1</version>
 		</dependency>
-		<dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId> -->
+<!-- 			<artifactId>de.tudarmstadt.ukp.dkpro.core.stanfordnlp-model-parser-de-pcfg</artifactId> -->
+<!-- 			<version>20150129.1</version> -->
+<!-- 		</dependency> -->
+		
+		
+			<dependency>
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
-			<artifactId>de.tudarmstadt.ukp.dkpro.core.stanfordnlp-model-parser-de-pcfg</artifactId>
-			<version>20140104.1</version>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.corenlp-model-depparser-de-ud</artifactId>
+			<version>20161213.1</version>
 		</dependency>
+
+		
 		<dependency>
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
 			<artifactId>de.tudarmstadt.ukp.dkpro.core.decompounding-asl</artifactId>
@@ -200,8 +232,8 @@
 		<dependency>
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
 			<artifactId>
-				de.tudarmstadt.ukp.dkpro.core.berkeleyparser-gpl
-			</artifactId>
+					de.tudarmstadt.ukp.dkpro.core.berkeleyparser-gpl
+				</artifactId>
 		</dependency>
 		<!-- <dependency> -->
 		<!-- <groupId>de.tudarmstadt.ukp.dkpro.lexsemresource</groupId> -->
@@ -223,11 +255,11 @@
 			<systemPath>${basedir}/lib/ws4j-1.0.1.jar</systemPath>
 		</dependency>
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId> -->
-<!-- 			<artifactId>de.tudarmstadt.ukp.dkpro.core.languagetool-asl</artifactId> -->
-<!-- 			<version>1.8.0</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>de.tudarmstadt.ukp.dkpro.core</groupId> -->
+		<!-- <artifactId>de.tudarmstadt.ukp.dkpro.core.languagetool-asl</artifactId> -->
+		<!-- <version>1.8.0</version> -->
+		<!-- </dependency> -->
 
 
 	</dependencies>
