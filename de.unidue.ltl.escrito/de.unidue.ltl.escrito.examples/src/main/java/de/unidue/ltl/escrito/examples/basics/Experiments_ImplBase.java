@@ -2,18 +2,16 @@ package de.unidue.ltl.escrito.examples.basics;
 
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDescription;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
 import org.apache.uima.fit.component.NoOpAnnotator;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.dkpro.lab.Lab;
+import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
 import org.dkpro.lab.task.Dimension;
 import org.dkpro.lab.task.ParameterSpace;
-import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
 import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.ml.ExperimentCrossValidation;
 import org.dkpro.tc.ml.ExperimentTrainTest;
@@ -22,10 +20,11 @@ import org.dkpro.tc.ml.report.BatchRuntimeReport;
 import org.dkpro.tc.ml.report.BatchTrainTestReport;
 import org.dkpro.tc.ml.weka.WekaAdapter;
 
+import weka.classifiers.functions.SMO;
+import weka.classifiers.trees.J48;
 import de.tudarmstadt.ukp.dkpro.core.clearnlp.ClearNlpLemmatizer;
 import de.tudarmstadt.ukp.dkpro.core.clearnlp.ClearNlpParser;
 import de.tudarmstadt.ukp.dkpro.core.clearnlp.ClearNlpSegmenter;
-import de.tudarmstadt.ukp.dkpro.core.matetools.MateLemmatizer;
 import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpPosTagger;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordSegmenter;
 import de.unidue.ltl.escrito.core.clustering.BatchTaskClusterClassificationExemplar;
@@ -37,14 +36,12 @@ import de.unidue.ltl.escrito.core.report.CvEvaluationReport;
 import de.unidue.ltl.escrito.core.report.GradingEvaluationReport;
 import de.unidue.ltl.escrito.core.report.GradingEvaluationReportClusteringCurve;
 import de.unidue.ltl.escrito.core.tc.WekaAdapterConfidenceScores;
-import weka.classifiers.bayes.NaiveBayes;
-import weka.classifiers.functions.SMO;
-import weka.classifiers.trees.J48;
 
-public class Experiments_ImplBase implements Constants {
+public abstract class Experiments_ImplBase
+	implements Constants
+{
 
 
-	@SuppressWarnings("unchecked")
 	public static Dimension<Map<String, Object>> getStandardWekaClassificationArgsDim()
 	{	
 		Map<String, Object> config = new HashMap<>();
@@ -58,7 +55,6 @@ public class Experiments_ImplBase implements Constants {
 	}
 
 
-	@SuppressWarnings("unchecked")
 	public static Dimension<Map<String, Object>> getWekaLearningCurveClassificationArgsDim()
 	{	
 		Map<String, Object> config = new HashMap<>();
