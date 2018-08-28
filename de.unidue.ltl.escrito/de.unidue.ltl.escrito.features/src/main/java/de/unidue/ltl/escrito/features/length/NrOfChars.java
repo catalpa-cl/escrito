@@ -30,5 +30,5 @@ public class NrOfChars
     {
         int nrOfChars = target.getEnd() - target.getBegin();
         return new Feature(NR_OF_CHARS, nrOfChars, FeatureType.NUMERIC).asSet();
-    }
+    } 
 }

@@ -11,7 +11,6 @@ import org.apache.uima.jcas.JCas;
 import org.dkpro.tc.api.features.Feature;
 import org.dkpro.tc.api.type.TextClassificationTarget;
 import org.junit.Test;
-import de.tudarmstadt.ukp.dkpro.core.matetools.MateLemmatizer;
 import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpPosTagger;
 import de.tudarmstadt.ukp.dkpro.core.tokit.BreakIteratorSegmenter;
 
@@ -22,8 +21,9 @@ public class PairwiseSentenceSimilarityTest {
     {
 		AnalysisEngineDescription description= createEngineDescription(
 				createEngineDescription(BreakIteratorSegmenter.class),
-				createEngineDescription(OpenNlpPosTagger.class),
-				createEngineDescription(MateLemmatizer.class));
+				createEngineDescription(OpenNlpPosTagger.class)//,
+			//	createEngineDescription(MateLemmatizer.class)
+				);
         AnalysisEngine engine=createEngine(description);
         		
         JCas jcas = engine.newJCas();
@@ -71,7 +71,10 @@ public class PairwiseSentenceSimilarityTest {
     public void pairwiseSentenceSimilarityFeatureExtractorTest_en()
         throws Exception
     {
-		AnalysisEngineDescription description= createEngineDescription(createEngineDescription(BreakIteratorSegmenter.class), createEngineDescription(OpenNlpPosTagger.class),createEngineDescription(MateLemmatizer.class));
+		AnalysisEngineDescription description= createEngineDescription(createEngineDescription(BreakIteratorSegmenter.class), 
+				createEngineDescription(OpenNlpPosTagger.class)//,
+			//	createEngineDescription(MateLemmatizer.class)
+				);
         AnalysisEngine engine=createEngine(description);
         		
         JCas jcas = engine.newJCas();
