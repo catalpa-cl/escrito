@@ -14,7 +14,7 @@ import de.unidue.ltl.escrito.generic.GenericDatasetReader;
 
 
 public class GenericReaderTest {
-	@Test 
+	@Test
     public void genericReaderTest_utf8() throws Exception {
         
         CollectionReaderDescription reader = CollectionReaderFactory.createReaderDescription(
@@ -23,7 +23,10 @@ public class GenericReaderTest {
                 GenericDatasetReader.PARAM_IGNORE_FIRST_LINE, false,
                 GenericDatasetReader.PARAM_ENCODING, "UTF-8",
                 GenericDatasetReader.PARAM_LANGUAGE, "de",
-                GenericDatasetReader.PARAM_SEPARATOR, "\t"
+                GenericDatasetReader.PARAM_SEPARATOR, "\t",
+                GenericDatasetReader.PARAM_QUESTION_PREFIX, "Q",
+                GenericDatasetReader.PARAM_TARGET_ANSWER_PREFIX, "TA",
+                GenericDatasetReader.PARAM_CORPUSNAME, "dummy"
         );
         int i=0;
         for (JCas jcas : new JCasIterable(reader)) {
@@ -40,7 +43,10 @@ public class GenericReaderTest {
                 GenericDatasetReader.PARAM_IGNORE_FIRST_LINE, false,
                 GenericDatasetReader.PARAM_ENCODING, "UTF-8",
                 GenericDatasetReader.PARAM_LANGUAGE, "de",
-                GenericDatasetReader.PARAM_SEPARATOR, ","
+                GenericDatasetReader.PARAM_SEPARATOR, ",",
+                GenericDatasetReader.PARAM_QUESTION_PREFIX, "Q",
+                GenericDatasetReader.PARAM_TARGET_ANSWER_PREFIX, "TA",
+                GenericDatasetReader.PARAM_CORPUSNAME, "dummy"
         );
 
         i=0;
@@ -61,7 +67,10 @@ public class GenericReaderTest {
                 GenericDatasetReader.PARAM_IGNORE_FIRST_LINE, false,
                 GenericDatasetReader.PARAM_ENCODING, "ISO-8859-1",
                 GenericDatasetReader.PARAM_LANGUAGE, "de",
-                GenericDatasetReader.PARAM_SEPARATOR, "\t"
+                GenericDatasetReader.PARAM_SEPARATOR, "\t",
+                GenericDatasetReader.PARAM_QUESTION_PREFIX, "Q",
+                GenericDatasetReader.PARAM_TARGET_ANSWER_PREFIX, "TA",
+                GenericDatasetReader.PARAM_CORPUSNAME, "dummy"
         );
         int i=0;
         for (JCas jcas : new JCasIterable(reader)) {
@@ -78,7 +87,10 @@ public class GenericReaderTest {
                 GenericDatasetReader.PARAM_IGNORE_FIRST_LINE, false,
                 GenericDatasetReader.PARAM_ENCODING, "ISO-8859-1",
                 GenericDatasetReader.PARAM_LANGUAGE, "de",
-                GenericDatasetReader.PARAM_SEPARATOR, ","
+                GenericDatasetReader.PARAM_SEPARATOR, ",",
+                GenericDatasetReader.PARAM_QUESTION_PREFIX, "Q",
+                GenericDatasetReader.PARAM_TARGET_ANSWER_PREFIX, "TA",
+                GenericDatasetReader.PARAM_CORPUSNAME, "dummy"
         );
 
         i=0;
