@@ -28,6 +28,8 @@ import de.tudarmstadt.ukp.dkpro.core.api.metadata.type.DocumentMetaData;
 import de.tudarmstadt.ukp.dkpro.core.api.resources.ResourceUtils;
 import de.unidue.ltl.escrito.core.types.LearnerAnswerWithReferenceAnswer;
 import de.unidue.ltl.escrito.io.util.Utils;
+import de.unidue.ltl.evaluation.core.EvaluationData;
+import de.unidue.ltl.evaluation.measures.agreement.QuadraticallyWeightedKappa;
 
 public class Asap2Reader extends JCasCollectionReader_ImplBase {
 	public static final Integer[] promptIds = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
@@ -38,7 +40,7 @@ public class Asap2Reader extends JCasCollectionReader_ImplBase {
 	@ConfigurationParameter(name = PARAM_CORPUSNAME, mandatory = false, defaultValue = "ASAP")
 	protected String corpusName;
 
-	
+
 	public static final String PARAM_INPUT_FILE = "InputFile";
 	@ConfigurationParameter(name = PARAM_INPUT_FILE, mandatory = true)
 	protected String inputFileString;
@@ -88,6 +90,7 @@ public class Asap2Reader extends JCasCollectionReader_ImplBase {
 							)
 					);
 			String nextLine;
+			EvaluationData<Integer> evalData = new EvaluationData<Integer>();
 
 			while ((nextLine = reader.readLine()) != null) {
 				// skip the header
@@ -125,7 +128,8 @@ public class Asap2Reader extends JCasCollectionReader_ImplBase {
 				if (requestedPromptIds != null && (!Arrays.asList(requestedPromptIds).contains(promptId))) {
 					continue;
 				}
-
+				evalData.register(Integer.parseInt(goldClass), Integer.parseInt(valClass));
+				
 				List<Asap2Item> itemList;
 				if (itemMap.containsKey(goldClass)) {
 					itemList = itemMap.get(goldClass);
@@ -139,12 +143,14 @@ public class Asap2Reader extends JCasCollectionReader_ImplBase {
 				asap2Items.add(newItem);
 				//	System.out.println("Added item");
 			}
+			// compute IAA
+			QuadraticallyWeightedKappa qwk = new QuadraticallyWeightedKappa(evalData);
+			System.out.println("QWK: "+qwk.getResult());
+			currentIndex = 0;
 		}
 		catch (Exception e) {
 			throw new ResourceInitializationException(e);
 		}
-
-		currentIndex = 0;
 	}
 
 	public Progress[] getProgress()
@@ -182,7 +188,7 @@ public class Asap2Reader extends JCasCollectionReader_ImplBase {
 		catch (URISyntaxException e) {
 			throw new CollectionException(e);
 		}
-		
+
 		LearnerAnswerWithReferenceAnswer learnerAnswer = new LearnerAnswerWithReferenceAnswer(jcas, 0, jcas.getDocumentText().length());
 		learnerAnswer.setPromptId(String.valueOf(asap2Item.getPromptId()));
 		// TODO set TA ids
