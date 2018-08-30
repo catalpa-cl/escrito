@@ -8,13 +8,14 @@ import org.dkpro.tc.api.features.Feature;
 import org.dkpro.tc.api.features.util.FeatureUtil;
 import org.dkpro.tc.api.type.TextClassificationTarget;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import de.unidue.ltl.escrito.features.core.EssayGradingTestBase;
 import de.unidue.ltl.escrito.features.fachsprache.SubstantivierungExtractor;
 
 
 public class SubstantivierungExtractorTest extends EssayGradingTestBase {
-	@Test
+	@Test @Ignore
 	public void SubstantivierungFeatureExtractorTest() throws Exception {
 		AnalysisEngine engine = getPreprocessingEngine("de",ParserType.noParser);
 

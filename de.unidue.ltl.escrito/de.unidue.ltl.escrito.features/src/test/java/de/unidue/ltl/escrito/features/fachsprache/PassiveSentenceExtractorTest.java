@@ -9,6 +9,7 @@ import org.dkpro.tc.api.features.Feature;
 import org.dkpro.tc.api.features.util.FeatureUtil;
 import org.dkpro.tc.api.type.TextClassificationTarget;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import de.unidue.ltl.escrito.features.core.EssayGradingTestBase;
 import de.unidue.ltl.escrito.features.fachsprache.PassiveSentenceExtractor;
@@ -16,7 +17,7 @@ import de.unidue.ltl.escrito.features.fachsprache.PassiveSentenceExtractor;
 
 public class PassiveSentenceExtractorTest extends EssayGradingTestBase {
 	
-	@Test
+	@Test @Ignore
 	public void PassiveFeatureExtractorTest() throws Exception {
 		AnalysisEngine engine = getPreprocessingEngine("de",ParserType.noParser);
 
@@ -50,7 +51,7 @@ public class PassiveSentenceExtractorTest extends EssayGradingTestBase {
 		assertFeatures("FrequencyOfPassiveSentences",0.8461538461538461,features,0.0001);//11/13
 	}
 	
-	@Test
+	@Test @Ignore
 	public void PassiveFeatureInEssayTest() throws Exception {
 		AnalysisEngine engine = getPreprocessingEngine("de",ParserType.noParser);
 

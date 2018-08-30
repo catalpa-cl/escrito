@@ -5,6 +5,7 @@ import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDesc
 import static org.dkpro.tc.testing.FeatureTestUtil.assertFeatures;
 import java.util.Set;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
 import org.apache.uima.jcas.JCas;
@@ -15,7 +16,7 @@ import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpPosTagger;
 import de.tudarmstadt.ukp.dkpro.core.tokit.BreakIteratorSegmenter;
 
 public class PairwiseSentenceSimilarityTest {
-	@Test
+	@Test @Ignore
     public void pairwiseSentenceSimilarityFeatureExtractorTest()
         throws Exception
     {
@@ -67,7 +68,7 @@ public class PairwiseSentenceSimilarityTest {
    
     }
 	
-	@Test
+	@Test @Ignore
     public void pairwiseSentenceSimilarityFeatureExtractorTest_en()
         throws Exception
     {

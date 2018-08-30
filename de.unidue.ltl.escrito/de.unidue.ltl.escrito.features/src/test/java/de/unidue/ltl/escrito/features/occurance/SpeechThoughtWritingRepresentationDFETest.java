@@ -6,6 +6,7 @@ import static org.dkpro.tc.testing.FeatureTestUtil.assertFeatures;
 import java.util.Iterator;
 import java.util.Set;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.jcas.JCas;
 import org.dkpro.tc.api.features.Feature;
@@ -15,7 +16,7 @@ import org.junit.Test;
 import de.unidue.ltl.escrito.features.core.EssayGradingTestBase;
 
 public class SpeechThoughtWritingRepresentationDFETest extends EssayGradingTestBase{
-	@Test
+	@Test @Ignore
 	public void speechThoughtWritingRepresentationTest_DE() throws Exception {
 		AnalysisEngine engine = getPreprocessingEngine("de",ParserType.noParser);
 
@@ -46,7 +47,7 @@ public class SpeechThoughtWritingRepresentationDFETest extends EssayGradingTestB
 	}
 	
 	
-	@Test
+	@Test @Ignore
 	public void speechThoughtWritingRepresentationDFETest_EN() throws Exception {
 		AnalysisEngine engine = getPreprocessingEngine("en",ParserType.noParser);
 

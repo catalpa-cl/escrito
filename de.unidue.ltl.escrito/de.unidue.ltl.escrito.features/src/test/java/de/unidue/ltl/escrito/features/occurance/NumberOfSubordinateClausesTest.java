@@ -4,6 +4,7 @@ import static org.dkpro.tc.testing.FeatureTestUtil.assertFeatures;
 
 import java.util.Set;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.jcas.JCas;
 import org.dkpro.tc.api.features.Feature;
@@ -17,7 +18,7 @@ public class NumberOfSubordinateClausesTest
 	extends EssayGradingTestBase
 {
 	
-	@Test
+	@Test @Ignore
     public void subOrdinateClauseFeatureExtractorTest_de()
         throws Exception
     {
@@ -46,7 +47,7 @@ public class NumberOfSubordinateClausesTest
 	
 	
 	
-	@Test
+	@Test @Ignore
     public void subOrdinateClauseFeatureExtractorTest()
         throws Exception
     {
