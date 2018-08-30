@@ -15,14 +15,17 @@ import org.junit.Test;
 public class CregReaderTest
 {
 
+	/*
+	 * Ignore these tests, because we only use them to test locally on the full dataset.
+	 */
 
 	/*
-	 * Test that we read 1032 learner answers overall
+	 * Test that we read 7 learner answers overall
 	 */
 	@Test 
 	public void cregReaderTestGesamt() throws Exception {
 
-		String inputDataFile = System.getenv("DKPRO_HOME")+"/datasets/CREG/CREG-1032/";
+		String inputDataFile = "src/test/resources/shortanswer/CREG-1032/";
 		CollectionReaderDescription reader = CollectionReaderFactory.createReaderDescription(
 				CregReader.class,
 				CregReader.PARAM_INPUT_FILE, inputDataFile,
@@ -37,16 +40,16 @@ public class CregReaderTest
 			i++;
 		}
 		System.out.println(i+" documents");
-		assertEquals(1032, i);
+		assertEquals(7, i);
 	}
 	
 	/*
-	 * Test that we read 610 learner answers
+	 * Test that we read 3 learner answers
 	 */
-	@Test 
+	@Test
 	public void cregReaderTest() throws Exception {
 
-		String inputDataFile = System.getenv("DKPRO_HOME")+"/datasets/CREG/CREG-1032/KU-data.xml";
+		String inputDataFile = "src/test/resources/shortanswer/CREG-1032/KU-data.xml";
 		CollectionReaderDescription reader = CollectionReaderFactory.createReaderDescription(
 				CregReader.class,
 				CregReader.PARAM_INPUT_FILE, inputDataFile,
@@ -61,17 +64,17 @@ public class CregReaderTest
 			i++;
 		}
 		System.out.println(i+" documents");
-		assertEquals(610, i);
+		assertEquals(3, i);
 	}
 
 	
 	/*
-	 * Test that we read 422 learner answers
+	 * Test that we read 4 learner answers
 	 */
-	@Test 
+	@Test  
 	public void cregReaderTest2() throws Exception {
 
-		String inputDataFile = System.getenv("DKPRO_HOME")+"/datasets/CREG/CREG-1032/OSU-data.xml";
+		String inputDataFile = "src/test/resources/shortanswer/CREG-1032/OSU-data.xml";
 		CollectionReaderDescription reader = CollectionReaderFactory.createReaderDescription(
 				CregReader.class,
 				CregReader.PARAM_INPUT_FILE, inputDataFile,
@@ -86,6 +89,6 @@ public class CregReaderTest
 			i++;
 		}
 		System.out.println(i+" documents");
-		assertEquals(422, i);
+		assertEquals(4, i);
 	}
 }

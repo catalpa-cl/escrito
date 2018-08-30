@@ -1,0 +1,70 @@
+
+<CAMCorpus>
+   <Texts>
+      
+  </Texts>
+   <Students/>
+   <Questions>
+      <Question id="71" text_id="11" questionForm="who" comprehensionType="literal">
+         <questionString>hjkshk hgk wrmb?</questionString>
+         <TargetAnswers>
+            <TargetAnswer id="98" addedLater="false" question_id="71">
+               <answerText>hqeb bw	xnouq grjhew.</answerText>
+            </TargetAnswer>
+            <TargetAnswer id="99" addedLater="false" question_id="71">
+               <answerText>bnwembxzu xr rwmlr.</answerText>
+            </TargetAnswer>
+         </TargetAnswers>
+         <StudentAnswers>
+            <StudentAnswer id="1613" random_key="0.13529029005462145" question_id="71" student_id="111"
+                           course="GERM_212"
+                           unanswered="false">
+               <diagnosis id="1613" binary="true" detailed="EXTRA_CONCEPT" teacher_id="5"
+                          closestTA_id="98">
+                  <answerText>neib sfvjö hf</answerText>
+               </diagnosis>
+               <diagnosis id="6988" binary="true" detailed="EXTRA_CONCEPT" teacher_id="2"
+                          closestTA_id="98">
+                  <answerText>iebbhvkda adv</answerText>
+               </diagnosis>
+               <agreementInfo agreementOnFeatures="1.0" textAvgLevenshtein="0.0"/>
+            </StudentAnswer>
+         </StudentAnswers>
+      </Question>
+      <Question id="72" text_id="11" questionForm="which" comprehensionType="literal">
+         <questionString>Wer?</questionString>
+         <TargetAnswers>
+            <TargetAnswer id="100" addedLater="false" question_id="72">
+               <answerText>Er.</answerText>
+            </TargetAnswer>
+         </TargetAnswers>
+         <StudentAnswers>
+            <StudentAnswer id="1684" random_key="0.8045417236710367" question_id="72" student_id="122"
+                           course="GERM_212"
+                           unanswered="false">
+               <diagnosis id="1684" binary="true" detailed="CORRECT" teacher_id="5" closestTA_id="100">
+                  <answerText>wir nicht</answerText>
+               </diagnosis>
+               <diagnosis id="7059" binary="true" detailed="CORRECT" teacher_id="2"
+                          closestTA_id="100">
+                  <answerText>wir nict</answerText>
+               </diagnosis>
+               <agreementInfo agreementOnFeatures="1.0" textAvgLevenshtein="0.0"/>
+            </StudentAnswer>
+            <StudentAnswer id="1659" random_key="0.7399428854653302" question_id="72" student_id="115"
+                           course="GERM_212"
+                           unanswered="false">
+               <diagnosis id="1659" binary="true" detailed="CORRECT" teacher_id="5">
+                  <answerText>sie</answerText>
+               </diagnosis>
+               <diagnosis id="7034" binary="true" detailed="CORRECT" teacher_id="2"
+                          closestTA_id="100">
+                  <answerText>sie</answerText>
+               </diagnosis>
+               <agreementInfo agreementOnFeatures="0.6666666666666666" textAvgLevenshtein="0.0"/>
+            </StudentAnswer>
+         </StudentAnswers>
+      </Question>
+   </Questions>
+</CAMCorpus>
+        

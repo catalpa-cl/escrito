@@ -1,0 +1,68 @@
+<CAMCorpus>
+   <Texts>
+  </Texts>
+   <Students/>
+   <Questions>
+      <Question id="1" text_id="1" questionForm="how" comprehensionType="literal">
+         <questionString>Wo?</questionString>
+         <TargetAnswers>
+            <TargetAnswer id="1" addedLater="false" question_id="1">
+               <answerText>Da.</answerText>
+            </TargetAnswer>
+            <TargetAnswer id="9" addedLater="true" question_id="1">
+               <answerText>Dort.</answerText>
+            </TargetAnswer>
+         </TargetAnswers>
+         <StudentAnswers>
+            <StudentAnswer id="72" random_key="0.6815961473115602" question_id="1" student_id="107"
+                           course="GERMAN_103_01"
+                           unanswered="false">
+               <diagnosis id="80" binary="true" detailed="EXTRA_CONCEPT" teacher_id="3"
+                          closestTA_id="1">
+                  <answerText>bla bla.</answerText>
+               </diagnosis>
+               <diagnosis id="2822" binary="true" detailed="CORRECT" teacher_id="4" closestTA_id="1">
+                  <answerText>bkwef wfkeh wjkehk.</answerText>
+               </diagnosis>
+               <agreementInfo agreementOnFeatures="0.6666666666666666" textAvgLevenshtein="0.0"/>
+            </StudentAnswer>
+            <StudentAnswer id="42" random_key="0.5239762022219165" question_id="1" student_id="94"
+                           course="GERMAN_103_01"
+                           unanswered="false">
+               <diagnosis id="50" binary="true" detailed="CORRECT" teacher_id="3" closestTA_id="1">
+                  <answerText>nchiuwe ciquzbiuqzr ciuewq</answerText>
+               </diagnosis>
+               <diagnosis id="2802" binary="true" detailed="CORRECT" teacher_id="4" closestTA_id="1">
+                  <answerText>cnqwui cuie cuizqrciewuq</answerText>
+               </diagnosis>
+               <agreementInfo agreementOnFeatures="1.0" textAvgLevenshtein="0.0"/>
+            </StudentAnswer>
+            <StudentAnswer id="32" random_key="0.35860192648070477" question_id="1" student_id="92"
+                           course="GERMAN_103_66"
+                           unanswered="false">
+               <diagnosis id="40" binary="true" detailed="CORRECT" teacher_id="3" closestTA_id="9">
+                  <answerText>cqwhiuwcn chwquiczwiuq cuiqwezur</answerText>
+               </diagnosis>
+               <diagnosis id="2792" binary="true" detailed="EXTRA_CONCEPT" teacher_id="4"
+                          closestTA_id="9">
+                  <answerText>kgh njkre mptz</answerText>
+               </diagnosis>
+               <agreementInfo agreementOnFeatures="0.6666666666666666" textAvgLevenshtein="0.0"/>
+            </StudentAnswer>
+            <StudentAnswer id="27" random_key="0.18547332008792483" question_id="1" student_id="89"
+                           course="GERMAN_103_66"
+                           unanswered="false">
+               <diagnosis id="35" binary="true" detailed="CORRECT" teacher_id="3" closestTA_id="9">
+                  <answerText>gkhkrth rhgjkghr hrtk</answerText>
+               </diagnosis>
+               <diagnosis id="2787" binary="true" detailed="EXTRA_CONCEPT" teacher_id="4"
+                          closestTA_id="1">
+                  <answerText>khgrwbg huiwrgzi r rwzui.</answerText>
+               </diagnosis>
+               <agreementInfo agreementOnFeatures="0.3333333333333333" textAvgLevenshtein="0.0"/>
+            </StudentAnswer>
+         </StudentAnswers>
+          </Question>
+   </Questions>
+</CAMCorpus>
+        
