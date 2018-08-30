@@ -17,7 +17,10 @@ import de.unidue.ltl.escrito.io.essay.AsapEssayReader.RatingBias;
 public class AsapReaderTest {
 	//!note that the values in the test-essays need to be in the range of the essayset (e.g. for asap 1 between 2 and 12)
 	//else the normalization won't compute values between 0 and 9!
-	@Test 
+	
+	// ignore local tests
+	// TODO: we need a test on a small dummy dataset
+	@Test @Ignore
     public void asapReaderTestMergedDomains() throws Exception {
         
         CollectionReaderDescription reader = CollectionReaderFactory.createReaderDescription(
