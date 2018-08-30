@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<question qtype="QES" id="BCVEW2" module="FF" stype="EVALUATE">
+<questionText>At vver eos et accusam dignissum qui blandit est praesent luptatum delenit aigue excepteur sint occae</questionText>
+  <referenceAnswers>
+  <referenceAnswer category="BEST" id="answer204" fileID="BCVEW2_ANS1">Et harumd dereud facilis est er expedit distinct.</referenceAnswer>
+  </referenceAnswers>
+  <studentAnswers>
+    <studentAnswer count="1" answerMatch="answer204" id="FF-BCVEW2.sbj3-l1.qa193" accuracy="correct">Tia non ob ea soluad incommod quae egen ium improb fugiend. </studentAnswer>
+	<studentAnswer count="1" id="FF-BCVEW2.sbj8-l1.qa224" accuracy="contradictory">Neque pecun modut est neque nonor et imper ned libidig met</studentAnswer>
+	</studentAnswers>
+</question>

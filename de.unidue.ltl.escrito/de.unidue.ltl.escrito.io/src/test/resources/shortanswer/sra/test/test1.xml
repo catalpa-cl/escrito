@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<question qtype="QES" id="BCVEW1" module="FF" stype="EVALUATE">
+<questionText>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</questionText>
+  <referenceAnswers>
+  <referenceAnswer category="BEST" id="answer204" fileID="BCVEW1_ANS1">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris</referenceAnswer>
+  </referenceAnswers>
+  <studentAnswers>
+    <studentAnswer count="1" answerMatch="answer204" id="FF-BCVEW1.sbj3-l1.qa193" accuracy="correct">Et tam neque pecun modut est neque nonor et imper ned libidig met, consectetur adipiscing elit</studentAnswer>
+	<studentAnswer count="1" id="FF-BCVEW1.sbj8-l1.qa224" accuracy="contradictory">Cak pwico siructiun ruos nust apoply tyu cak</studentAnswer>
+	</studentAnswers>
+</question>

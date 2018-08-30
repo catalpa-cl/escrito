@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<question id="EM_45b" module="EM">
+   <questionText>Zenme cong shui li ba yan fenli chulai?</questionText>
+   <referenceAnswers>
+     <referenceAnswer id="EM_45b-a1">Shuifen zhengfa liuxia yan.</referenceAnswer>
+   </referenceAnswers>
+   <studentAnswers>
+     <studentAnswer id="EM.45b.110.1" accuracy="irrelevant">Ba ta fangzai panzi limian dai yitian.</studentAnswer>
+     <studentAnswer id="EM.45b.113.1" accuracy="correct">Ba shui zhengfa diao</studentAnswer>
+   </studentAnswers>
+</question>

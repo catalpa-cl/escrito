@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<question id="LF_39" module="LF">
+   <questionText>Don xiangyao zai benzi shang hua yige ditu. Buzhou baokuo: 2.___,4.___</questionText>
+   <referenceAnswers>
+     <referenceAnswer id="LF_39-a1">2.zhuizong tezheng. 4.zhuanyi tezheng</referenceAnswer>
+   </referenceAnswers>
+   <studentAnswers>
+     <studentAnswer id="LF.39.387.1" accuracy="correct">2. Zhuizong tezheng. 4. zai benzi shang fuzhi tezheng.</studentAnswer>
+     <studentAnswer id="LF.39.397.1" accuracy="partially_correct_incomplete">2. zhuizhong bing jiang ta bian xiao.</studentAnswer>
+   </studentAnswers>
+</question>

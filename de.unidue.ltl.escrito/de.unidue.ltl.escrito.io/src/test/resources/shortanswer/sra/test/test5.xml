@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<question id="MX_1" module="MX">
+   <questionText>Weishenme yan keyi tongguo lvzhi danshi shazi que liu le xialai?</questionText>
+   <referenceAnswers>
+     <referenceAnswer id="MX_1-a1">yinwei yankeli zugou xiao, shaozi keli tai da le.</referenceAnswer>
+   </referenceAnswers>
+   <studentAnswers>
+     <studentAnswer id="MX.1.384.1" accuracy="correct">Yan tai xiao le.</studentAnswer>
+     <studentAnswer id="MX.1.426.1" accuracy="irrelevant">Yan bi shaozi ruan.</studentAnswer>
+	</studentAnswers>
+</question>

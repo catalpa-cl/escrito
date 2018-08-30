@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<question id="MX_1" module="MX">
+   <questionText>Weishenme yan keyi tongguo lvzhi danshi shazi que liu le xialai?</questionText>
+   <referenceAnswers>
+     <referenceAnswer id="MX_1-a1">yinwei yankeli zugou xiao, shaozi keli tai da le.</referenceAnswer>
+   </referenceAnswers>
+   <studentAnswers>
+     <studentAnswer id="MX.1.384.1" accuracy="correct">Yan tai xiao le.</studentAnswer>
+     <studentAnswer id="MX.1.426.1" accuracy="irrelevant">Yan bi shaozi ruan.</studentAnswer>
+     <studentAnswer id="MX.1.428.1" accuracy="partially_correct_incomplete">Yan rongyu shui, shaozi bu rongyu shui.</studentAnswer>
+     <studentAnswer id="MX.1.430.1" accuracy="partially_correct_incomplete">Yinwei yanshui shi rongye, shaozi shui shi hunhewu.</studentAnswer>
+     <studentAnswer id="MX.1.431.1" accuracy="partially_correct_incomplete">yin wei shazi limian you shitou</studentAnswer>
+	<studentAnswer id="MX.1.604.1" accuracy="correct">yinwei yan bi shazi xiao</studentAnswer>
+	</studentAnswers>
+</question>
