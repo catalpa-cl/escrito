@@ -9,11 +9,12 @@ import org.apache.uima.jcas.JCas;
 import org.dkpro.tc.api.features.Feature;
 import org.dkpro.tc.api.features.util.FeatureUtil;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import de.unidue.ltl.escrito.features.core.EssayGradingTestBase;
 
 public class WordOverlapFETest extends EssayGradingTestBase {
-	@Test
+	@Test @Ignore
 	public void WordOverlapWithoutIdfTest() throws Exception {
 		AnalysisEngine engine = getPreprocessingEngine("de",ParserType.noParser);
 
