@@ -94,7 +94,8 @@ public abstract class Experiments_ImplBase
 		} else if (languageCode.equals("de")){
 			return createEngineDescription(
 					createEngineDescription(
-							StanfordSegmenter.class
+							ClearNlpSegmenter.class
+							//StanfordSegmenter.class
 							),
 					tagger,
 					lemmatizer,
