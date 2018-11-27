@@ -69,6 +69,10 @@ extends JCasCollectionReader_ImplBase
 	@ConfigurationParameter(name = PARAM_CORPUSNAME, mandatory = false, defaultValue="MohlerMihalcea")
 	protected String corpusName;
 
+	public static final String PARAM_PREPROCESSING_OF_CONNECTED_TEXTS = "preproTexts";
+	@ConfigurationParameter(name = PARAM_PREPROCESSING_OF_CONNECTED_TEXTS, mandatory = false, defaultValue="true")
+	protected boolean preproTexts;
+
 	protected int currentIndex;    
 
 	protected Queue<MohlerMihalceaItem> items;
@@ -153,8 +157,10 @@ extends JCasCollectionReader_ImplBase
 			throw new ResourceInitializationException(e);
 		}
 		currentIndex = 0;
-		Utils.preprocessConnectedTexts(targetAnswers, corpusName, targetAnswerPrefix, "en");
-		Utils.preprocessConnectedTexts(questions, corpusName, questionPrefix, "en");
+		if (preproTexts){
+			Utils.preprocessConnectedTexts(targetAnswers, corpusName, targetAnswerPrefix, "en");
+			Utils.preprocessConnectedTexts(questions, corpusName, questionPrefix, "en");
+		}
 	}
 
 	@Override

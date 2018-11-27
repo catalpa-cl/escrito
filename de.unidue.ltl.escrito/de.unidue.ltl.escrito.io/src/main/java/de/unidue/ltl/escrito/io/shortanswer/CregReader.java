@@ -43,7 +43,7 @@ import de.unidue.ltl.escrito.io.util.Utils;
 
 public class CregReader extends JCasCollectionReader_ImplBase {
 
-	protected static final String DEFAULT_LANGUAGE = "en";
+	protected static final String DEFAULT_LANGUAGE = "de";
 
 	public static final String PARAM_INPUT_FILE = "InputFile";
 	@ConfigurationParameter(name = PARAM_INPUT_FILE, mandatory = true)
@@ -62,10 +62,6 @@ public class CregReader extends JCasCollectionReader_ImplBase {
 	@ConfigurationParameter(name = PARAM_ENCODING, mandatory = false, defaultValue = "UTF-8")
 	private String encoding;
 
-	public static final String PARAM_SEPARATOR = "Separator";
-	@ConfigurationParameter(name = PARAM_SEPARATOR, mandatory = false, defaultValue = "\t")
-	private String separator;
-
 	public static final String PARAM_PROMPT_SET_ID = "PromptSetId";
 	@ConfigurationParameter(name = PARAM_PROMPT_SET_ID, mandatory = false)
 	protected String requestedPromptSetId; 
@@ -78,6 +74,10 @@ public class CregReader extends JCasCollectionReader_ImplBase {
 	@ConfigurationParameter(name = PARAM_TARGET_ANSWER_PREFIX, mandatory = true)
 	private String targetAnswerPrefix;
 
+	public static final String PARAM_PREPROCESSING_OF_CONNECTED_TEXTS = "preproTexts";
+	@ConfigurationParameter(name = PARAM_PREPROCESSING_OF_CONNECTED_TEXTS, mandatory = false, defaultValue="true")
+	protected boolean preproTexts;
+
 	protected int currentIndex;    
 
 	protected Queue<CregItem> items;
@@ -85,7 +85,26 @@ public class CregReader extends JCasCollectionReader_ImplBase {
 	private Map<String, String> questions;
 
 	private List<Integer> grades;
+	
+	
+	public static final String[] PromptIds_OSU  = new String[] {"OSU_82", "OSU_83", "OSU_40", "OSU_84", "OSU_85", "OSU_42", "OSU_86", 
+			"OSU_43", "OSU_87", "OSU_44", "OSU_88", "OSU_45", "OSU_89", "OSU_80", "OSU_81", "OSU_46", "OSU_48", "OSU_50", "OSU_51",
+			"OSU_52", "OSU_53", "OSU_10", "OSU_54", "OSU_11", "OSU_55", "OSU_12", "OSU_13", "OSU_15", "OSU_16", "OSU_17", "OSU_62",
+			"OSU_63", "OSU_64", "OSU_65", "OSU_66", "OSU_68", "OSU_69", "OSU_71", "OSU_72", "OSU_73", "OSU_1", "OSU_74", "OSU_2", 
+			"OSU_75", "OSU_3", "OSU_76", "OSU_4", "OSU_77", "OSU_5", "OSU_78", "OSU_6", "OSU_7", "OSU_8", "OSU_9", "OSU_70", "OSU_79",
+			"OSU_36", "OSU_37", "OSU_38", "OSU_39"};
+    public static final String[] PromptIds_KU  = new String[] {"KU_244", "KU_243", "KU_240", "KU_120", "KU_241", "KU_119", "KU_116",
+    		"KU_237", "KU_115", "KU_236", "KU_118", "KU_239", "KU_117", "KU_238", "KU_136", "KU_378", "KU_135", "KU_377", "KU_90",
+    		"KU_101", "KU_189", "KU_100", "KU_188", "KU_103", "KU_102", "KU_187", "KU_98", "KU_99", "KU_191", "KU_194", "KU_190", 
+    		"KU_112", "KU_233", "KU_232", "KU_235", "KU_234", "KU_110", "KU_231", "KU_230", "KU_161", "KU_160", "KU_71", "KU_167",
+    		"KU_166", "KU_169", "KU_168", "KU_163", "KU_162", "KU_165", "KU_164", "KU_159", "KU_72", "KU_73", "KU_74", "KU_75", 
+    		"KU_77", "KU_78", "KU_79", "KU_170", "KU_171", "KU_80", "KU_81", "KU_82", "KU_299", "KU_298", "KU_331", "KU_334", "KU_333",
+    		"KU_297", "KU_328", "KU_325", "KU_324", "KU_327", "KU_326", "KU_84", "KU_85", "KU_86", "KU_87", "KU_88", "KU_89", "KU_381",
+    		"KU_380", "KU_145", "KU_387", "KU_144", "KU_386", "KU_147", "KU_301", "KU_389", "KU_146", "KU_300", "KU_388", "KU_141", "KU_383", 
+    		"KU_140", "KU_382", "KU_143", "KU_385", "KU_142", "KU_384", "KU_138", "KU_137", "KU_379", "KU_139", "KU_390", "KU_150", "KU_155",
+    		"KU_158", "KU_157", "KU_152", "KU_151", "KU_154", "KU_153", "KU_307", "KU_306", "KU_149", "KU_148"};
 
+	
 	@Override
 	public void initialize(UimaContext aContext)
 			throws ResourceInitializationException
@@ -130,12 +149,13 @@ public class CregReader extends JCasCollectionReader_ImplBase {
 			throw new ResourceInitializationException(e);
 		}
 		currentIndex = 0;	
-		Utils.preprocessConnectedTexts(targetAnswers, corpusName, targetAnswerPrefix, "de");
-		Utils.preprocessConnectedTexts(questions, corpusName, questionPrefix, "de");
+		if (preproTexts){
+			Utils.preprocessConnectedTexts(targetAnswers, corpusName, targetAnswerPrefix, "de");
+			Utils.preprocessConnectedTexts(questions, corpusName, questionPrefix, "de");
+		}
 	}
 
 	private void extractLearnerAnswersFromFile(URL fileURL) throws JDOMException, IOException {
-		System.out.println("extract");
 		String prefix = "KU_";
 		if (fileURL.getFile().contains("OSU")){
 			prefix = "OSU_";
@@ -203,7 +223,7 @@ public class CregReader extends JCasCollectionReader_ImplBase {
 				String closestTa = targetAnswers.get(closestTaId1);
 				String closestTaId = closestTaId1;
 				if (closestTa == null){
-					System.err.println("Empy closest target answer. We take the first TA");
+				//	System.err.println("Empy closest target answer. We take the first TA");
 					closestTa = firstTargetAnswer;
 					closestTaId = firstTargetAnswerId;
 				}
@@ -220,7 +240,11 @@ public class CregReader extends JCasCollectionReader_ImplBase {
 				item.setAnswerText2(answertext2);
 				item.setDiagnosisId1(diagnosisId1);
 				item.setDiagnosisId2(diagnosisId2);
+				if (requestedPromptSetId != null && !requestedPromptSetId.equals(qid)) {
+					break;
+				} else {
 				items.add(item);
+				}
 			}   
 		}
 	}

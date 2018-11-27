@@ -1,4 +1,4 @@
-package de.unidue.ltl.escrito.io.shortanswer
+package de.unidue.ltl.escrito.io.shortanswer;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -76,6 +76,11 @@ public class CssagReader extends JCasCollectionReader_ImplBase {
 	@ConfigurationParameter(name = PARAM_TARGET_ANSWER_PREFIX, mandatory = false)
 	private String targetAnswerPrefix;
 
+
+	public static final String PARAM_PREPROCESSING_OF_CONNECTED_TEXTS = "preproTexts";
+	@ConfigurationParameter(name = PARAM_PREPROCESSING_OF_CONNECTED_TEXTS, mandatory = false, defaultValue="true")
+	protected boolean preproTexts;
+
 	protected int currentIndex;    
 
 	protected Queue<CssagItem> items;
@@ -83,7 +88,7 @@ public class CssagReader extends JCasCollectionReader_ImplBase {
 	private Map<String, String> questions;
 
 	private List<Integer> grades;
-	
+
 	private Integer refAId;  // target answers don't have IDs in CSSAG; this is a counter to create unique IDs
 
 	@Override
@@ -95,7 +100,7 @@ public class CssagReader extends JCasCollectionReader_ImplBase {
 		grades = new ArrayList<Integer>();
 		targetAnswers = new HashMap<String, String>();
 		questions = new HashMap<String, String>();
-		
+
 		refAId = 0;
 
 		try {
@@ -132,32 +137,32 @@ public class CssagReader extends JCasCollectionReader_ImplBase {
 			throw new ResourceInitializationException(e);
 		}
 		currentIndex = 0;	
-		Utils.preprocessConnectedTexts(targetAnswers, corpusName, targetAnswerPrefix, "de");
-		Utils.preprocessConnectedTexts(questions, corpusName, questionPrefix, "de");
+		if (preproTexts){
+			Utils.preprocessConnectedTexts(targetAnswers, corpusName, targetAnswerPrefix, "de");
+			Utils.preprocessConnectedTexts(questions, corpusName, questionPrefix, "de");
+		}
 	}
 
 
-private void extractLearnerAnswersFromFile(URL fileURL) throws JDOMException, IOException {
+	private void extractLearnerAnswersFromFile(URL fileURL) throws JDOMException, IOException {
 
-	 /*
+		/*
 	 items = new LinkedList<CssagItem>();
 
 		grades = new ArrayList<Integer>();
 		targetAnswers = new HashMap<String, String>();
 		questions = new HashMap<String, String>();
-		
-		refAId = 0;
-	 */
-		 System.out.println("extract");
 
+		refAId = 0;
+		 */
 		Document doc = new SAXBuilder().build(fileURL);
-		 
+
 		Element qNode = doc.getRootElement();
 
 		String qid = qNode.getChild("questionID").getText().trim();
 		String questionText = qNode.getChild("questionText").getText().trim();
 		questions.put(qid, Utils.cleanString(questionText));
-		System.out.println("Question "+qid+": "+questionText);
+		//System.out.println("Question "+qid+": "+questionText);
 
 
 		// CSSAG specific fields
@@ -165,11 +170,11 @@ private void extractLearnerAnswersFromFile(URL fileURL) throws JDOMException, IO
 		float irtDifficulty = Float.parseFloat(qNode.getChildText("IRTdifficulty").trim());
 		String bcpNoContext = qNode.getChildText("BCPNoContext").trim();
 		String bcpContext = qNode.getChildText("BCPContext").trim();
-		
+
 		String firstAnswerID = "";
 
 		List<Element> targetAnswerNodes = qNode.getChildren("referenceAnswer");
-		
+
 		for (Element targetAnswer : targetAnswerNodes) {
 			String taid = refAId.toString();
 			if (firstAnswerID == "") {
@@ -178,11 +183,11 @@ private void extractLearnerAnswersFromFile(URL fileURL) throws JDOMException, IO
 			refAId++;
 
 			String taText = targetAnswer.getText().trim();
-			
+
 			// BerkeleyParser can't process directions to human graders like "1 P" 
-			
+
 			taText = taText.replaceAll("[\\d\\.,]+ P( |\\n|\\.|,|\\)|$)","");
-			
+
 			targetAnswers.put(taid, Utils.cleanString(taText));
 		}
 
@@ -194,12 +199,12 @@ private void extractLearnerAnswersFromFile(URL fileURL) throws JDOMException, IO
 			String studentId = sAnswer.getChildText("studentID").trim();
 
 			String answertext = sAnswer.getChild("studentAnswer").getText().trim();
-			
+
 			// scores in CSSAG are floats; normalise to int
 			int score = (int) (Float.parseFloat(sAnswer.getChild("score").getText().trim()) * 100);
 
 			CssagItem item = new CssagItem(studentId, qid, answertext, score, targetAnswers.get(firstAnswerID));
-			
+
 			// add CSSAG specific fields
 			item.setQuestion(questionText);
 			item.setMaxPoints(maxPoints);
@@ -207,19 +212,19 @@ private void extractLearnerAnswersFromFile(URL fileURL) throws JDOMException, IO
 			item.setIrtDifficulty(irtDifficulty);
 			item.setBcpNoContext(bcpNoContext);
 			item.setBcpContext(bcpContext);
-			
-			
+
+
 			// add any additional target answers
 			for (String key : targetAnswers.keySet()) {
 				if (!key.equals(firstAnswerID))
 					item.setTargetAnswer(targetAnswers.get(key));
 			}
-			
+
 			items.add(item);
 
 		}
-		
-		
+
+
 	}
 
 	@Override
@@ -248,7 +253,7 @@ private void extractLearnerAnswersFromFile(URL fileURL) throws JDOMException, IO
 
 			jcas.setDocumentText(item.getText());
 
-			
+
 			DocumentMetaData dmd = DocumentMetaData.create(jcas);
 			dmd.setDocumentId(itemId); 
 			dmd.setDocumentTitle(itemId);
@@ -261,13 +266,13 @@ private void extractLearnerAnswersFromFile(URL fileURL) throws JDOMException, IO
 		}
 		LearnerAnswerWithReferenceAnswer learnerAnswer = new LearnerAnswerWithReferenceAnswer(jcas, 0, jcas.getDocumentText().length());
 		learnerAnswer.setPromptId(item.getQuestionId());
-		
+
 		// add all possible target answers
 		StringArray ids = new StringArray(jcas, targetAnswers.size());
 		for (int i=0; i<targetAnswers.size();i++) {
 			ids.set(i, targetAnswers.get(""+i));
 		}
-	
+
 		learnerAnswer.setReferenceAnswerIds(ids);
 		learnerAnswer.addToIndexes();
 		TextClassificationTarget unit = new TextClassificationTarget(jcas, 0, jcas.getDocumentText().length());
@@ -347,7 +352,7 @@ class CssagItem extends ItemWithTargetAnswer {
 
 
 
-	
+
 	String question; 
 	// use list of target answers from the mother class to hold target answers
 	float maxPoints;
@@ -356,8 +361,8 @@ class CssagItem extends ItemWithTargetAnswer {
 	float irtDifficulty;
 	String bcpNoContext;
 	String bcpContext;
-	
-	
+
+
 	public CssagItem(String studentId, String questionId, String answerText, int grade, String targetAnswer) {
 		super(studentId, questionId, answerText, grade, targetAnswer);
 	}

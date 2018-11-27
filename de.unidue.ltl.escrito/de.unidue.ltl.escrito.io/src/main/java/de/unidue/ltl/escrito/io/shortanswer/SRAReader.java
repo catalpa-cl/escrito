@@ -58,7 +58,47 @@ public class SRAReader extends JCasCollectionReader_ImplBase{
 	@ConfigurationParameter(name = PARAM_CORPUSNAME, mandatory = false, defaultValue = "SRA")
 	protected String corpusName;
 
-	public static final String[] PromptSetIds = new String[] {"BULB_C_VOLTAGE_EXPLAIN_WHY1","BULB_C_VOLTAGE_EXPLAIN_WHY2","BULB_C_VOLTAGE_EXPLAIN_WHY6","BULB_ONLY_EXPLAIN_WHY2","BULB_ONLY_EXPLAIN_WHY4","BULB_ONLY_EXPLAIN_WHY6","BURNED_BULB_LOCATE_EXPLAIN_Q","OTHER_TERMINAL_STATE_EXPLAIN_Q","TERMINAL_STATE_EXPLAIN_Q","VOLTAGE_AND_GAP_DISCUSS_Q","VOLTAGE_DEFINE_Q","VOLTAGE_DIFF_DISCUSS_1_Q","VOLTAGE_DIFF_DISCUSS_2_Q","VOLTAGE_GAP_EXPLAIN_WHY1","VOLTAGE_GAP_EXPLAIN_WHY3","VOLTAGE_GAP_EXPLAIN_WHY4","VOLTAGE_GAP_EXPLAIN_WHY5","VOLTAGE_GAP_EXPLAIN_WHY6","VOLTAGE_INCOMPLETE_CIRCUIT_2_Q","BURNED_BULB_PARALLEL_EXPLAIN_Q1","BURNED_BULB_PARALLEL_EXPLAIN_Q2","BURNED_BULB_PARALLEL_EXPLAIN_Q3","BURNED_BULB_PARALLEL_WHY_Q","GIVE_CIRCUIT_TYPE_HYBRID_EXPLAIN_Q2","GIVE_CIRCUIT_TYPE_HYBRID_EXPLAIN_Q3","GIVE_CIRCUIT_TYPE_PARALLEL_EXPLAIN_Q2","HYBRID_BURNED_OUT_EXPLAIN_Q1","HYBRID_BURNED_OUT_EXPLAIN_Q3","HYBRID_BURNED_OUT_WHY_Q2","HYBRID_BURNED_OUT_WHY_Q3","OPT1_EXPLAIN_Q2","OPT2_EXPLAIN_Q","PARALLEL_SWITCH_EXPLAIN_Q1","PARALLEL_SWITCH_EXPLAIN_Q2","PARALLEL_SWITCH_EXPLAIN_Q3","SWITCH_TABLE_EXPLAIN_Q1","SWITCH_TABLE_EXPLAIN_Q2","SWITCH_TABLE_EXPLAIN_Q3","CONDITIONS_FOR_BULB_TO_LIGHT","DAMAGED_BUILD_EXPLAIN_Q","DAMAGED_BULB_EXPLAIN_2_Q","GIVE_CIRCUIT_TYPE_SERIES_EXPLAIN_Q","SHORT_CIRCUIT_EXPLAIN_Q_2","SHORT_CIRCUIT_EXPLAIN_Q_4","SHORT_CIRCUIT_EXPLAIN_Q_5","SHORT_CIRCUIT_X_Q","SWITCH_OPEN_EXPLAIN_Q","EM_45b","EM_45c","EM_16b","EM_21a","EM_21b","EM_43b","EM_46","EM_48b","EM_26","EM_27b","EM_35","EM_47","FN_20a","FN_20b","FN_19b","FN_24b","FN_24c","FN_17a","FN_17c","FN_27a","FN_27b","II_13a","II_26","II_13b","II_24b","II_20b","II_38","LF_39","LF_31b","LF_33b","LF_34b","LF_18a","LF_28a2","LF_26a2","LF_26b2","LF_13a","LF_27a","LF_6b","LP_15c","LP_16d","ME_27b","ME_28b","ME_30","ME_5b","ME_66a","ME_66b","ME_6b","ME_72","ME_7a","ME_7b","ME_17a","ME_17b","ME_17c","ME_17d","ME_17e","ME_38a","ME_10","ME_78b","ME_79","ME_65a","ME_65b","ME_69b","ME_73","MS_64a","MS_43a","MS_43b","MS_39","MS_50a","MS_14b","MS_30b","MX_1","MX_22a","MX_24","MX_52b","MX_42a","MX_16a","MX_46b","MX_47b","MX_10","MX_18","MX_19","MX_36a","MX_36b","MX_41","MX_11a","MX_11c","MX_11e","MX_11f","MX_49","MX_53","PS_2a","PS_45b","PS_44","PS_12","PS_51a","PS_51b","PS_15bp","PS_26p","PS_46b","PS_4ap","PS_4bp","SE_10","SE_24a","SE_3c","SE_4a","SE_16b2","SE_22a","SE_22b","SE_22c","SE_47b","SE_51b","SE_25a","SE_31b","SE_45","SE_46","SE_48","ST_54b2","ST_54b3","ST_58","ST_25b1","ST_25b2","ST_52a","ST_31b","ST_59","VB_1","VB_12d","VB_40a","VB_5a","VB_5b","VB_22c","VB_42","VB_15a","VB_15b","VB_15c","VB_29"};
+	public static final String[] PromptSetIds = new String[] {"BULB_C_VOLTAGE_EXPLAIN_WHY1","BULB_C_VOLTAGE_EXPLAIN_WHY2","BULB_C_VOLTAGE_EXPLAIN_WHY6",
+			"BULB_ONLY_EXPLAIN_WHY2","BULB_ONLY_EXPLAIN_WHY4","BULB_ONLY_EXPLAIN_WHY6","BURNED_BULB_LOCATE_EXPLAIN_Q","OTHER_TERMINAL_STATE_EXPLAIN_Q",
+			"TERMINAL_STATE_EXPLAIN_Q","VOLTAGE_AND_GAP_DISCUSS_Q","VOLTAGE_DEFINE_Q","VOLTAGE_DIFF_DISCUSS_1_Q","VOLTAGE_DIFF_DISCUSS_2_Q","VOLTAGE_GAP_EXPLAIN_WHY1",
+			"VOLTAGE_GAP_EXPLAIN_WHY3","VOLTAGE_GAP_EXPLAIN_WHY4","VOLTAGE_GAP_EXPLAIN_WHY5","VOLTAGE_GAP_EXPLAIN_WHY6","VOLTAGE_INCOMPLETE_CIRCUIT_2_Q",
+			"BURNED_BULB_PARALLEL_EXPLAIN_Q1","BURNED_BULB_PARALLEL_EXPLAIN_Q2","BURNED_BULB_PARALLEL_EXPLAIN_Q3","BURNED_BULB_PARALLEL_WHY_Q",
+			"GIVE_CIRCUIT_TYPE_HYBRID_EXPLAIN_Q2","GIVE_CIRCUIT_TYPE_HYBRID_EXPLAIN_Q3","GIVE_CIRCUIT_TYPE_PARALLEL_EXPLAIN_Q2","HYBRID_BURNED_OUT_EXPLAIN_Q1",
+			"HYBRID_BURNED_OUT_EXPLAIN_Q3","HYBRID_BURNED_OUT_WHY_Q2","HYBRID_BURNED_OUT_WHY_Q3","OPT1_EXPLAIN_Q2","OPT2_EXPLAIN_Q",
+			"PARALLEL_SWITCH_EXPLAIN_Q1","PARALLEL_SWITCH_EXPLAIN_Q2","PARALLEL_SWITCH_EXPLAIN_Q3","SWITCH_TABLE_EXPLAIN_Q1","SWITCH_TABLE_EXPLAIN_Q2",
+			"SWITCH_TABLE_EXPLAIN_Q3","CONDITIONS_FOR_BULB_TO_LIGHT","DAMAGED_BUILD_EXPLAIN_Q","DAMAGED_BULB_EXPLAIN_2_Q","GIVE_CIRCUIT_TYPE_SERIES_EXPLAIN_Q",
+			"SHORT_CIRCUIT_EXPLAIN_Q_2","SHORT_CIRCUIT_EXPLAIN_Q_4","SHORT_CIRCUIT_EXPLAIN_Q_5","SHORT_CIRCUIT_X_Q","SWITCH_OPEN_EXPLAIN_Q",
+			"EM_45b","EM_45c","EM_16b","EM_21a","EM_21b","EM_43b","EM_46","EM_48b","EM_26","EM_27b","EM_35","EM_47","FN_20a","FN_20b","FN_19b","FN_24b","FN_24c","FN_17a",
+			"FN_17c","FN_27a","FN_27b","II_13a","II_26","II_13b","II_24b","II_20b","II_38","LF_39","LF_31b","LF_33b","LF_34b","LF_18a","LF_28a2","LF_26a2","LF_26b2",
+			"LF_13a","LF_27a","LF_6b","LP_15c","LP_16d","ME_27b","ME_28b","ME_30","ME_5b","ME_66a","ME_66b","ME_6b","ME_72","ME_7a","ME_7b","ME_17a","ME_17b","ME_17c",
+			"ME_17d","ME_17e","ME_38a","ME_10","ME_78b","ME_79","ME_65a","ME_65b","ME_69b","ME_73","MS_64a","MS_43a","MS_43b","MS_39","MS_50a","MS_14b","MS_30b","MX_1",
+			"MX_22a","MX_24","MX_52b","MX_42a","MX_16a","MX_46b","MX_47b","MX_10","MX_18","MX_19","MX_36a","MX_36b","MX_41","MX_11a","MX_11c","MX_11e","MX_11f","MX_49",
+			"MX_53","PS_2a","PS_45b","PS_44","PS_12","PS_51a","PS_51b","PS_15bp","PS_26p","PS_46b","PS_4ap","PS_4bp","SE_10","SE_24a","SE_3c","SE_4a","SE_16b2","SE_22a",
+			"SE_22b","SE_22c","SE_47b","SE_51b","SE_25a","SE_31b","SE_45","SE_46","SE_48","ST_54b2","ST_54b3","ST_58","ST_25b1","ST_25b2","ST_52a","ST_31b","ST_59",
+			"VB_1","VB_12d","VB_40a","VB_5a","VB_5b","VB_22c","VB_42","VB_15a","VB_15b","VB_15c","VB_29"
+	};
+
+	public static final String[] PromptSetIds_beetle = new String[] {"BULB_C_VOLTAGE_EXPLAIN_WHY1","BULB_C_VOLTAGE_EXPLAIN_WHY2","BULB_C_VOLTAGE_EXPLAIN_WHY6",
+			"BULB_ONLY_EXPLAIN_WHY2","BULB_ONLY_EXPLAIN_WHY4","BULB_ONLY_EXPLAIN_WHY6","BURNED_BULB_LOCATE_EXPLAIN_Q","OTHER_TERMINAL_STATE_EXPLAIN_Q",
+			"TERMINAL_STATE_EXPLAIN_Q","VOLTAGE_AND_GAP_DISCUSS_Q","VOLTAGE_DEFINE_Q","VOLTAGE_DIFF_DISCUSS_1_Q","VOLTAGE_DIFF_DISCUSS_2_Q","VOLTAGE_GAP_EXPLAIN_WHY1",
+			"VOLTAGE_GAP_EXPLAIN_WHY3","VOLTAGE_GAP_EXPLAIN_WHY4","VOLTAGE_GAP_EXPLAIN_WHY5","VOLTAGE_GAP_EXPLAIN_WHY6","VOLTAGE_INCOMPLETE_CIRCUIT_2_Q",
+			"BURNED_BULB_PARALLEL_EXPLAIN_Q1","BURNED_BULB_PARALLEL_EXPLAIN_Q2","BURNED_BULB_PARALLEL_EXPLAIN_Q3","BURNED_BULB_PARALLEL_WHY_Q",
+			"GIVE_CIRCUIT_TYPE_HYBRID_EXPLAIN_Q2","GIVE_CIRCUIT_TYPE_HYBRID_EXPLAIN_Q3","GIVE_CIRCUIT_TYPE_PARALLEL_EXPLAIN_Q2","HYBRID_BURNED_OUT_EXPLAIN_Q1",
+			"HYBRID_BURNED_OUT_EXPLAIN_Q3","HYBRID_BURNED_OUT_WHY_Q2","HYBRID_BURNED_OUT_WHY_Q3","OPT1_EXPLAIN_Q2","OPT2_EXPLAIN_Q",
+			"PARALLEL_SWITCH_EXPLAIN_Q1","PARALLEL_SWITCH_EXPLAIN_Q2","PARALLEL_SWITCH_EXPLAIN_Q3","SWITCH_TABLE_EXPLAIN_Q1","SWITCH_TABLE_EXPLAIN_Q2",
+			"SWITCH_TABLE_EXPLAIN_Q3","CONDITIONS_FOR_BULB_TO_LIGHT","DAMAGED_BUILD_EXPLAIN_Q","DAMAGED_BULB_EXPLAIN_2_Q","GIVE_CIRCUIT_TYPE_SERIES_EXPLAIN_Q",
+			"SHORT_CIRCUIT_EXPLAIN_Q_2","SHORT_CIRCUIT_EXPLAIN_Q_4","SHORT_CIRCUIT_EXPLAIN_Q_5","SHORT_CIRCUIT_X_Q","SWITCH_OPEN_EXPLAIN_Q"
+	};
+
+	public static final String[] PromptSetIds_SciEntsBank = new String[] {"EM_45b","EM_45c","EM_16b","EM_21a","EM_21b","EM_43b","EM_46","EM_48b","EM_26","EM_27b","EM_35","EM_47","FN_20a","FN_20b","FN_19b","FN_24b","FN_24c","FN_17a",
+			"FN_17c","FN_27a","FN_27b","II_13a","II_26","II_13b","II_24b","II_20b","II_38","LF_39","LF_31b","LF_33b","LF_34b","LF_18a","LF_28a2","LF_26a2","LF_26b2",
+			"LF_13a","LF_27a","LF_6b","LP_15c","LP_16d","ME_27b","ME_28b","ME_30","ME_5b","ME_66a","ME_66b","ME_6b","ME_72","ME_7a","ME_7b","ME_17a","ME_17b","ME_17c",
+			"ME_17d","ME_17e","ME_38a","ME_10","ME_78b","ME_79","ME_65a","ME_65b","ME_69b","ME_73","MS_64a","MS_43a","MS_43b","MS_39","MS_50a","MS_14b","MS_30b","MX_1",
+			"MX_22a","MX_24","MX_52b","MX_42a","MX_16a","MX_46b","MX_47b","MX_10","MX_18","MX_19","MX_36a","MX_36b","MX_41","MX_11a","MX_11c","MX_11e","MX_11f","MX_49",
+			"MX_53","PS_2a","PS_45b","PS_44","PS_12","PS_51a","PS_51b","PS_15bp","PS_26p","PS_46b","PS_4ap","PS_4bp","SE_10","SE_24a","SE_3c","SE_4a","SE_16b2","SE_22a",
+			"SE_22b","SE_22c","SE_47b","SE_51b","SE_25a","SE_31b","SE_45","SE_46","SE_48","ST_54b2","ST_54b3","ST_58","ST_25b1","ST_25b2","ST_52a","ST_31b","ST_59",
+			"VB_1","VB_12d","VB_40a","VB_5a","VB_5b","VB_22c","VB_42","VB_15a","VB_15b","VB_15c","VB_29"
+	};
 
 	public static final String PARAM_PROMPT_SET_ID = "PromptSetId";
 	@ConfigurationParameter(name = PARAM_PROMPT_SET_ID, mandatory = false)
@@ -71,6 +111,10 @@ public class SRAReader extends JCasCollectionReader_ImplBase{
 	public static final String PARAM_TARGET_ANSWER_PREFIX = "TargetAnswerPrefix";
 	@ConfigurationParameter(name = PARAM_TARGET_ANSWER_PREFIX, mandatory = true)
 	private String targetAnswerPrefix;
+
+	public static final String PARAM_PREPROCESSING_OF_CONNECTED_TEXTS = "preproTexts";
+	@ConfigurationParameter(name = PARAM_PREPROCESSING_OF_CONNECTED_TEXTS, mandatory = false, defaultValue="true")
+	protected boolean preproTexts;
 
 	protected Queue<SRAItem> items;
 	private List<String> answerIds;
@@ -104,9 +148,12 @@ public class SRAReader extends JCasCollectionReader_ImplBase{
 						}  
 					});                                                              
 			for(File f:fileArray){
-				System.out.println(f.getName());
+				if (f.getName().startsWith("._")){
+					continue;
+				}
+				//	System.out.println(f.getName());
 				SAXReader reader = new SAXReader();
-				Document document = reader.read( f);
+				Document document = reader.read(f);
 
 				Element root = document.getRootElement();
 
@@ -140,7 +187,7 @@ public class SRAReader extends JCasCollectionReader_ImplBase{
 						} 
 						//questions.put(String.valueOf(questionId), Utils.cleanString(questionText));
 						questions.put(String.valueOf(questionId), questionText);
-								} 
+					} 
 
 					ArrayList<String> targetAnswerIds = new ArrayList<String>();
 					//read target answers
@@ -154,15 +201,15 @@ public class SRAReader extends JCasCollectionReader_ImplBase{
 								if (targetAnswerName.equals("id")) {
 									targetAnswerIds.add(att.getValue());
 									targetAnswers.put(att.getValue(), targetAnswerNode.getText());
-						//			System.out.println(att.getValue()+"\t"+targetAnswerNode.getText());
+									//			System.out.println(att.getValue()+"\t"+targetAnswerNode.getText());
 								}
 							}
 						}
 					} 
-//					System.out.println("TAs:");
-//					for (String ta : targetAnswerIds){
-//						System.out.println(ta);
-//					}
+					//					System.out.println("TAs:");
+					//					for (String ta : targetAnswerIds){
+					//						System.out.println(ta);
+					//					}
 
 
 
@@ -229,8 +276,10 @@ public class SRAReader extends JCasCollectionReader_ImplBase{
 			throw new ResourceInitializationException(e);
 		}		
 		currentIndex = 0;
-		Utils.preprocessConnectedTexts(targetAnswers, corpusName, targetAnswerPrefix, "en");
-		Utils.preprocessConnectedTexts(questions, corpusName, questionPrefix, "en");
+		if (preproTexts){
+			Utils.preprocessConnectedTexts(targetAnswers, corpusName, targetAnswerPrefix, "en");
+			Utils.preprocessConnectedTexts(questions, corpusName, questionPrefix, "en");
+		}
 	}
 
 
@@ -277,7 +326,13 @@ public class SRAReader extends JCasCollectionReader_ImplBase{
 		unit.setSuffix(item.getAnswerId());
 		unit.addToIndexes();
 		TextClassificationOutcome outcome = new TextClassificationOutcome(jcas, 0, jcas.getDocumentText().length());
-		outcome.setOutcome(item.getnWayGrade());
+		if (item.getnWayGrade().equals("correct")){
+			outcome.setOutcome("1.0");
+		} else if (item.getnWayGrade().equals("incorrect")){
+			outcome.setOutcome("0.0");
+		} else {
+			outcome.setOutcome(item.getnWayGrade());
+		}
 		outcome.addToIndexes();
 		LearnerAnswerWithReferenceAnswer learnerAnswer = new LearnerAnswerWithReferenceAnswer(jcas, 0, jcas.getDocumentText().length());
 		learnerAnswer.setPromptId(item.getQuestionId());
