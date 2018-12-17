@@ -1,0 +1,24 @@
+//package de.unidue.ltl.escrito.core.tc.stacking;
+//
+//import org.dkpro.tc.api.features.Feature;
+//
+//public class StackingFeature extends Feature{
+//
+//	private int stackingGroupId;
+//	
+//	public int getStackingGroupId(){
+//		return stackingGroupId;
+//	}
+//	
+//	@Override
+//	public String getName(){
+//		return "stackingGroup:"+this.stackingGroupId+"_"+super.getName();
+//	}
+//	
+//	
+//	public StackingFeature(String name, Object value, int id) {
+//		super(name, value);
+//		this.stackingGroupId = id;
+//	}
+//
+//}
