@@ -7,9 +7,10 @@ import org.dkpro.tc.features.ngram.CharacterNGram;
 import org.dkpro.tc.features.ngram.WordNGram;
 import org.dkpro.tc.core.Constants;
 
-public class FeatureSettings implements Constants {
+public class FeatureSettings
+	implements Constants
+{
 
-	
 	/*
 	 * Standard Baseline feature set for prompt-specific scoring 
 	 */
@@ -35,12 +36,4 @@ public class FeatureSettings implements Constants {
 				);
 		return dimFeatureSets;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 }

@@ -1,4 +1,4 @@
-package de.unidue.ltl.escrito.core.vizualization;
+package de.unidue.ltl.escrito.core.visualization;
 
 public class Utils {
 	

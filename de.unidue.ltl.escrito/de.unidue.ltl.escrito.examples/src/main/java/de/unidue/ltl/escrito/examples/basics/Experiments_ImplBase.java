@@ -26,7 +26,6 @@ import de.tudarmstadt.ukp.dkpro.core.clearnlp.ClearNlpLemmatizer;
 import de.tudarmstadt.ukp.dkpro.core.clearnlp.ClearNlpParser;
 import de.tudarmstadt.ukp.dkpro.core.clearnlp.ClearNlpSegmenter;
 import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpPosTagger;
-import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordSegmenter;
 import de.unidue.ltl.escrito.core.clustering.BatchTaskClusterClassificationExemplar;
 import de.unidue.ltl.escrito.core.clustering.BatchTaskClusterLabelPropagation;
 import de.unidue.ltl.escrito.core.clustering.BatchTaskClustering;

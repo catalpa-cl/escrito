@@ -1,7 +1,6 @@
 package de.unidue.ltl.escrito.examples.shortanswer.classification;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.uima.collection.CollectionReaderDescription;

@@ -46,7 +46,7 @@ import org.dkpro.tc.ml.weka.core._eka;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
 
 import de.unidue.ltl.escrito.core.report.ReportUtils;
-import de.unidue.ltl.escrito.core.vizualization.XYChartPlotter;
+import de.unidue.ltl.escrito.core.visualization.XYChartPlotter;
 import de.unidue.ltl.evaluation.core.EvaluationData;
 import de.unidue.ltl.evaluation.measures.agreement.QuadraticallyWeightedKappa;
 import weka.core.Instance;

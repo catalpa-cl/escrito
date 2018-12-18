@@ -1,5 +1,6 @@
 package de.unidue.ltl.escrito.core.preprocessing;
 
+import org.apache.uima.UIMAException;
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
@@ -8,7 +9,9 @@ import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
 
+import java.io.IOException;
 import java.util.List;
+
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.unidue.ltl.escrito.core.IoUtils;
 import de.unidue.ltl.escrito.core.LRUCache;
@@ -47,15 +50,22 @@ public class LearnerTokenAnnotator extends JCasAnnotator_ImplBase{
 
 
 	@Override
-	public void process(JCas jcas) throws AnalysisEngineProcessException {
+	public void process(JCas jcas) 
+			throws AnalysisEngineProcessException
+	{
 		LearnerAnswerWithReferenceAnswer learnerAnswer = JCasUtil.selectSingle(jcas, LearnerAnswerWithReferenceAnswer.class);
 		List<Token> tokens =  JCasUtil.selectCovered(Token.class, learnerAnswer);
+		
 		String questionId = learnerAnswer.getPromptId();
 		JCas questionView = null;
 		if (questionViewCache.containsKey(questionId)){
 			questionView = questionViewCache.get(questionId); 
 		} else {
-			questionView = IoUtils.loadJCasFromFile(questionId, locationOfAdditionalTexts, "Q");
+			try {
+				questionView = IoUtils.loadJCasFromFile(questionId, locationOfAdditionalTexts, "Q");
+			} catch (UIMAException | IOException e) {
+				throw new AnalysisEngineProcessException(e);
+			}
 			questionViewCache.put(questionId, questionView);
 		}
 		// get the contained tokens
