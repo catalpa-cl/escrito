@@ -10,6 +10,7 @@ import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.apache.uima.fit.pipeline.SimplePipeline;
 
+import de.tudarmstadt.ukp.dkpro.core.api.resources.DkproContext;
 import de.tudarmstadt.ukp.dkpro.core.languagetool.LanguageToolChecker;
 import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpSegmenter;
 import de.unidue.ltl.escrito.io.shortanswer.PowerGradingReader;
@@ -17,7 +18,7 @@ import de.unidue.ltl.escrito.io.shortanswer.PowerGradingReader;
 /**
  * 
  * This class is used to preprocess learner answers via languagetool. 
- * (We nned to do so because the languagetool dependencies are incompatible with ngram feature extractors)
+ * (We need to do so because the languagetool dependencies are incompatible with ngram feature extractors)
  * 
  * @author andrea
  *
@@ -27,26 +28,40 @@ public class Preprocessor {
 
 
 	public static void main(String[] args) throws UIMAException, IOException{
-		preprocessPG(System.getenv("DKPRO_HOME")+"/datasets/powergrading//train_70.txt", "en");
-		preprocessPG(System.getenv("DKPRO_HOME")+"/datasets/powergrading//test_30.txt", "en");
-
+		String dkproHome = DkproContext.getContext().getWorkspace().getAbsolutePath();
+		
+		preprocessPG(dkproHome + "/datasets/powergrading/train_70.txt", "en");
+		preprocessPG(dkproHome + "/datasets/powergrading/test_30.txt", "en");
 	}
 
-	private static void preprocessPG(String data, String languageCode) throws UIMAException, IOException {
-		CollectionReaderDescription reader = CollectionReaderFactory.createReaderDescription(PowerGradingReader.class,
+	private static void preprocessPG(String data, String languageCode) 
+			throws UIMAException, IOException 
+	{
+		CollectionReaderDescription reader = CollectionReaderFactory.createReaderDescription(
+				PowerGradingReader.class,
 				PowerGradingReader.PARAM_INPUT_FILE, data,
-				PowerGradingReader.PARAM_CORPUSNAME, "PG");
+				PowerGradingReader.PARAM_CORPUSNAME, "PG"
+		);
+		
 		runLanguageTool("PG", reader, "en");
 	}
 
-	private static void runLanguageTool(String string, CollectionReaderDescription reader, String languageCode) throws UIMAException, IOException {
-		AnalysisEngineDescription seg = createEngineDescription(OpenNlpSegmenter.class,
-				OpenNlpSegmenter.PARAM_LANGUAGE, languageCode);
-		AnalysisEngineDescription grammarChecker = createEngineDescription(LanguageToolChecker.class,
-				LanguageToolChecker.PARAM_LANGUAGE, languageCode);
+	private static void runLanguageTool(String string, CollectionReaderDescription reader, String languageCode)
+			throws UIMAException, IOException
+	{
+		AnalysisEngineDescription seg = createEngineDescription(
+				OpenNlpSegmenter.class,
+				OpenNlpSegmenter.PARAM_LANGUAGE, languageCode
+		);
+		AnalysisEngineDescription grammarChecker = createEngineDescription(
+				LanguageToolChecker.class,
+				LanguageToolChecker.PARAM_LANGUAGE, languageCode
+		);
 
-		AnalysisEngineDescription grammarMistakesAnalyzer = createEngineDescription(GrammarMistakesAnalyzer.class,
-				GrammarMistakesAnalyzer.PARAM_OUTPUT_PATH,System.getenv("DKPRO_HOME")+"/datasets/");
+		AnalysisEngineDescription grammarMistakesAnalyzer = createEngineDescription(
+				GrammarMistakesAnalyzer.class,
+				GrammarMistakesAnalyzer.PARAM_OUTPUT_PATH, DkproContext.getContext().getWorkspace("datasets").getAbsolutePath()
+		);
 
 		SimplePipeline.runPipeline(reader, 
 				seg, 
@@ -54,12 +69,4 @@ public class Preprocessor {
 				grammarMistakesAnalyzer
 				);
 	}
-
-
-
-
-
-
-
-
 }
