@@ -20,6 +20,7 @@ import org.dkpro.tc.ml.report.BatchRuntimeReport;
 import org.dkpro.tc.ml.report.BatchTrainTestReport;
 import org.dkpro.tc.ml.weka.WekaAdapter;
 
+import weka.classifiers.functions.LinearRegression;
 import weka.classifiers.functions.SMO;
 import weka.classifiers.trees.J48;
 import de.tudarmstadt.ukp.dkpro.core.clearnlp.ClearNlpLemmatizer;
@@ -45,15 +46,25 @@ public abstract class Experiments_ImplBase
 	public static Dimension<Map<String, Object>> getStandardWekaClassificationArgsDim()
 	{	
 		Map<String, Object> config = new HashMap<>();
-		//config.put(DIM_CLASSIFICATION_ARGS, new Object[] { new WekaAdapter(), SMO.class.getName()});
+		config.put(DIM_CLASSIFICATION_ARGS, new Object[] { new WekaAdapter(), SMO.class.getName()});
 		// config.put(DIM_CLASSIFICATION_ARGS, new Object[] { new WekaAdapterConfidenceScores(), J48.class.getName()});
-		config.put(DIM_CLASSIFICATION_ARGS, new Object[] { new WekaAdapterConfidenceScores(), J48.class.getName()});
+		//config.put(DIM_CLASSIFICATION_ARGS, new Object[] { new WekaAdapterConfidenceScores(), J48.class.getName()});
 		config.put(DIM_DATA_WRITER, new WekaAdapter().getDataWriterClass());
 		config.put(DIM_FEATURE_USE_SPARSE, new WekaAdapter().useSparseFeatures());
 		Dimension<Map<String, Object>> mlas = Dimension.createBundle("config", config);					
 		return mlas;
 	}
 
+	public static Dimension<Map<String, Object>> getStandardWekaRegressionArgsDim()
+	{	
+		Map<String, Object> config = new HashMap<>();
+		config.put(DIM_CLASSIFICATION_ARGS, new Object[] { new WekaAdapter(), LinearRegression.class.getName()});
+		config.put(DIM_DATA_WRITER, new WekaAdapter().getDataWriterClass());
+		config.put(DIM_FEATURE_USE_SPARSE, new WekaAdapter().useSparseFeatures());
+		Dimension<Map<String, Object>> mlas = Dimension.createBundle("config", config);					
+		return mlas;
+	}
+	
 
 	public static Dimension<Map<String, Object>> getWekaLearningCurveClassificationArgsDim()
 	{	
