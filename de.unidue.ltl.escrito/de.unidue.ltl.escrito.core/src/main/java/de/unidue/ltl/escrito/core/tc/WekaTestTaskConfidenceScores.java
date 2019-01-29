@@ -11,6 +11,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import meka.classifiers.multilabel.MultiLabelClassifier;
+import meka.core.MLUtils;
+import meka.core.Result;
+import meka.core.ThresholdUtils;
+
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.io.FileUtils;
 import org.dkpro.lab.engine.TaskContext;
@@ -24,23 +29,18 @@ import org.dkpro.tc.ml.weka.task.WekaOutcomeHarmonizer;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
 import org.dkpro.tc.ml.weka.util.MultilabelResult;
 
-import de.unidue.ltl.escrito.core.Utils;
-import meka.classifiers.multilabel.MultiLabelClassifier;
-import meka.core.MLUtils;
-import meka.core.Result;
-import meka.core.ThresholdUtils;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.core.Attribute;
-import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.SelectedTag;
 import weka.core.converters.ConverterUtils.DataSink;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Add;
 
-public class WekaTestTaskConfidenceScores extends WekaTestTask{
-
+public class WekaTestTaskConfidenceScores
+	extends WekaTestTask
+{
 
 
 	@Override

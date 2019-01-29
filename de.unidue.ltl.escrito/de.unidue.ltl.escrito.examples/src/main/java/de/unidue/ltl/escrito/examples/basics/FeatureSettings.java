@@ -38,7 +38,9 @@ import de.unidue.ltl.escrito.features.similarity.WordOverlapFeatureExtractor;
 
 import org.dkpro.tc.core.Constants;
 
-public class FeatureSettings implements Constants {
+public class FeatureSettings
+	implements Constants
+{
 
 
 	/*
@@ -124,6 +126,7 @@ public class FeatureSettings implements Constants {
 				);
 		return dimFeatureSets;
 	}
+
 	
 
 	public static Dimension<TcFeatureSet> getFeatureSetsEssayFull()
@@ -224,7 +227,6 @@ public class FeatureSettings implements Constants {
 				);
 		return dimFeatureSets;
 	}
-
 
 
 

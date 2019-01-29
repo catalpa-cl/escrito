@@ -1,20 +1,20 @@
 package de.unidue.ltl.escrito.features.similarity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import java.util.Set;
 
+import org.apache.uima.UIMAException;
 import org.apache.uima.fit.descriptor.ConfigurationParameter;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.resource.ResourceSpecifier;
-
 import org.dkpro.tc.api.exception.TextClassificationException;
 import org.dkpro.tc.api.features.Feature;
 import org.dkpro.tc.api.features.FeatureExtractor;
@@ -30,8 +30,10 @@ import de.unidue.ltl.escrito.core.types.LearnerAnswerWithReferenceAnswer;
 
 
 
-public class PairwiseFeatureWrapper extends FeatureExtractorResource_ImplBase
-implements FeatureExtractor, MetaDependent{
+public class PairwiseFeatureWrapper 
+	extends FeatureExtractorResource_ImplBase
+	implements FeatureExtractor, MetaDependent
+{
 
 
 	// determines how we aggregate the final value of a feature if several target answers are available
@@ -93,13 +95,15 @@ implements FeatureExtractor, MetaDependent{
 	// multiple target answers are to be handled here
 	@Override
 	public Set<Feature> extract(JCas view, TextClassificationTarget target)
-			throws TextClassificationException {
+			throws TextClassificationException
+	{
 		Set<Feature> featuresForOneReferenceAnswer = null;
 		Set<Feature> featureForOnereferenceAnswerBest = null;
 		Set<Feature> featureForAllReferenceAnswers = new HashSet<Feature>();
 		LearnerAnswerWithReferenceAnswer learnerAnswer = JCasUtil.selectSingle(view, LearnerAnswerWithReferenceAnswer.class);
 		JCas comparisonView = null;
 		Map<String, List<Feature>> allValuesPerFeature = new HashMap<String, List<Feature>>();
+		
 		// System.out.println("Found "+learnerAnswer.getReferenceAnswerIds().size()+" reference answers");
 		for (int index = 0; index < learnerAnswer.getReferenceAnswerIds().size(); index++){
 			String refAnsId = learnerAnswer.getReferenceAnswerIds(index);
@@ -107,7 +111,11 @@ implements FeatureExtractor, MetaDependent{
 			if (comparisonViewCache.containsKey(refAnsId)){
 				comparisonView = comparisonViewCache.get(refAnsId); 
 			} else {
-				comparisonView = IoUtils.loadJCasFromFile(refAnsId, locationOfAdditionalTexts, targetAnswerPrefix);
+				try {
+					comparisonView = IoUtils.loadJCasFromFile(refAnsId, locationOfAdditionalTexts, targetAnswerPrefix);
+				} catch (UIMAException | IOException e) {
+					throw new TextClassificationException(e);
+				}
 				comparisonViewCache.put(refAnsId, comparisonView);
 			}
 			// System.out.println("COMPARING "+view.getDocumentText()+" WITH "+comparisonView.getDocumentText());
@@ -194,8 +202,6 @@ implements FeatureExtractor, MetaDependent{
 	}
 
 
-
-
 	private double getAverage(List<Feature> list) {
 		double sum = 0.0;
 		for (Feature feature : list){
@@ -204,36 +210,21 @@ implements FeatureExtractor, MetaDependent{
 		return sum/list.size();
 	}
 
-
-
-
-
-
 	@Override
-	public List<MetaCollectorConfiguration> getMetaCollectorClasses(
-			Map<String, Object> parameterSettings)
-					throws ResourceInitializationException {
+	public List<MetaCollectorConfiguration> getMetaCollectorClasses(Map<String, Object> parameterSettings)
+			throws ResourceInitializationException
+	{
+		PairFeatureExtractor pfe;
 		try {
-			PairFeatureExtractor pfe = (PairFeatureExtractor) Class.forName((String) parameterSettings.get(PARAM_PAIRWISE_FEATURE_EXTRACTOR)).newInstance();
-			if( pfe instanceof MetaDependent){
-				return ((MetaDependent) pfe).getMetaCollectorClasses(parameterSettings);
-			} else {
-				return new ArrayList<>();
-			}
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			pfe = (PairFeatureExtractor) Class.forName((String) parameterSettings.get(PARAM_PAIRWISE_FEATURE_EXTRACTOR)).newInstance();
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+			throw new ResourceInitializationException(e);
 		}
-		return new ArrayList<>();
+		
+		if( pfe instanceof MetaDependent){
+			return ((MetaDependent) pfe).getMetaCollectorClasses(parameterSettings);
+		} else {
+			return new ArrayList<>();
+		}
 	}
-
-
-
-
 }

@@ -1,20 +1,18 @@
 package de.unidue.ltl.escrito.examples.shortanswer.classification;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.lab.task.Dimension;
 import org.dkpro.lab.task.ParameterSpace;
+import org.dkpro.tc.core.Constants;
 
 import de.unidue.ltl.escrito.examples.basics.Experiments_ImplBase;
 import de.unidue.ltl.escrito.examples.basics.FeatureSettings;
 import de.unidue.ltl.escrito.io.shortanswer.Asap2Reader;
 import de.unidue.ltl.escrito.io.shortanswer.PowerGradingReader;
-
-import org.dkpro.tc.core.Constants;
 
 public class LearningCurveExample extends Experiments_ImplBase implements Constants {
 

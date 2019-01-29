@@ -24,31 +24,23 @@ import org.dkpro.tc.api.features.TcFeatureSet;
 import org.dkpro.tc.api.type.TextClassificationOutcome;
 import org.dkpro.tc.features.ngram.WordNGram;
 import org.dkpro.tc.ml.ExperimentSaveModel;
-import org.dkpro.tc.ml.builder.LearningMode;
 import org.dkpro.tc.ml.uima.TcAnnotator;
 import org.dkpro.tc.ml.weka.WekaAdapter;
-import org.junit.rules.TemporaryFolder;
 
+import weka.classifiers.functions.LinearRegression;
 import de.unidue.ltl.escrito.core.types.LearnerAnswer;
 import de.unidue.ltl.escrito.examples.basics.Experiments_ImplBase;
 import de.unidue.ltl.escrito.io.shortanswer.MohlerMihalceaReader;
-import de.unidue.ltl.escrito.io.shortanswer.PowerGradingReader;
-import weka.classifiers.bayes.NaiveBayes;
-import weka.classifiers.functions.LinearRegression;
 
-public class WriteAndReadModelApplicationExample extends Experiments_ImplBase{
-
-
+public class WriteAndReadModelApplicationExample 
+	extends Experiments_ImplBase
+{
 
 	public static void main(String[] args) throws Exception{
 		setDkproHome(WriteAndReadModelApplicationExample.class.getSimpleName());
 		String exampleAnswer = "This is an exampleAnswer";
 		documentRoundTripWekaSingleLabel(exampleAnswer);
 	}
-
-
-
-
 
 	public static ParameterSpace documentGetParameterSpaceSingleLabel()
 			throws ResourceInitializationException

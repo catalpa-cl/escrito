@@ -1,4 +1,4 @@
-package de.unidue.ltl.escrito.core.vizualization;
+package de.unidue.ltl.escrito.core.visualization;
 
 import java.awt.Color;
 import java.awt.Paint;

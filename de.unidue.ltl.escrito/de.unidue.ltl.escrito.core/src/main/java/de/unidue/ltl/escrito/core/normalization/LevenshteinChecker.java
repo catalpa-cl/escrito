@@ -2,12 +2,8 @@ package de.unidue.ltl.escrito.core.normalization;
 import static org.apache.commons.io.IOUtils.closeQuietly;
 import static org.apache.uima.fit.util.JCasUtil.select;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,7 +30,6 @@ import de.tudarmstadt.ukp.dkpro.core.api.anomaly.type.SpellingAnomaly;
 import de.tudarmstadt.ukp.dkpro.core.api.anomaly.type.SuggestedAction;
 import de.tudarmstadt.ukp.dkpro.core.api.parameter.AnnotationChecker;
 import de.tudarmstadt.ukp.dkpro.core.api.parameter.ComponentParameters;
-import de.tudarmstadt.ukp.dkpro.core.api.resources.ResourceUtils;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 
 
@@ -126,7 +121,6 @@ extends JCasAnnotator_ImplBase {
 		//System.err.println(scoreThreshold);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void process(final JCas jcas)
 			throws AnalysisEngineProcessException

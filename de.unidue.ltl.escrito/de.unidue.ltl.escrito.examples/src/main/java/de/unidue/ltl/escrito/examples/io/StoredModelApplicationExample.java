@@ -26,16 +26,14 @@ import org.dkpro.tc.features.ngram.WordNGram;
 import org.dkpro.tc.ml.ExperimentSaveModel;
 import org.dkpro.tc.ml.uima.TcAnnotator;
 import org.dkpro.tc.ml.weka.WekaAdapter;
-import org.junit.rules.TemporaryFolder;
 
+import weka.classifiers.bayes.NaiveBayes;
 import de.unidue.ltl.escrito.core.types.LearnerAnswer;
 import de.unidue.ltl.escrito.examples.basics.Experiments_ImplBase;
 import de.unidue.ltl.escrito.io.shortanswer.MohlerMihalceaReader;
-import weka.classifiers.bayes.NaiveBayes;
 
 public class StoredModelApplicationExample extends Experiments_ImplBase{
 
-	
 	
 	public static void main(String[] args) throws Exception{
 		setDkproHome(StoredModelApplicationExample.class.getSimpleName());
@@ -44,9 +42,6 @@ public class StoredModelApplicationExample extends Experiments_ImplBase{
 		documentLoadModelSingleLabel(modelFolder, exampleAnswer);
 	}
 
-   
-      
-	
 	
 	public static ParameterSpace documentGetParameterSpaceSingleLabel()
 			throws ResourceInitializationException
@@ -92,6 +87,7 @@ public class StoredModelApplicationExample extends Experiments_ImplBase{
 
 		// verify created files
 
+		// TODO why are verifications disabled?
 		File classifierFile = new File(modelFolder.getAbsolutePath() + "/" + MODEL_CLASSIFIER);
 		//assertTrue(classifierFile.exists());
 

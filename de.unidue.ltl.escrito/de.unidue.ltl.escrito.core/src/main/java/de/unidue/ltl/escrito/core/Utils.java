@@ -1,8 +1,6 @@
 package de.unidue.ltl.escrito.core;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,6 +11,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import meka.classifiers.multilabel.MultiLabelClassifier;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
@@ -20,17 +21,9 @@ import org.apache.uima.resource.ResourceInitializationException;
 import org.dkpro.lab.engine.TaskContext;
 import org.dkpro.lab.storage.StorageService;
 import org.dkpro.lab.storage.StorageService.AccessMode;
-import org.dkpro.tc.api.exception.TextClassificationException;
 import org.dkpro.tc.core.Constants;
-import org.dkpro.tc.core.task.InitTask;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
 
-import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
-import de.unidue.ltl.escrito.core.types.LearnerAnswerToken;
-import meka.classifiers.multilabel.MultiLabelClassifier;
-import mulan.dimensionalityReduction.BinaryRelevanceAttributeEvaluator;
-import mulan.dimensionalityReduction.LabelPowersetAttributeEvaluator;
-import mulan.dimensionalityReduction.Ranker;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
@@ -40,6 +33,8 @@ import weka.core.SelectedTag;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Add;
 import weka.filters.unsupervised.attribute.Remove;
+import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
+import de.unidue.ltl.escrito.core.types.LearnerAnswerToken;
 
 public class Utils {
 
@@ -56,24 +51,16 @@ public class Utils {
 	{	
 		Map<String, String> instanceId2TextMap = new HashMap<String,String>();
 		
-		BufferedReader br;
 		try {
-			br = new BufferedReader(new FileReader(path));
-			String line = br.readLine();
-			while (line != null){
-				if (line.startsWith("#")){
-					// skip
-				} else {
+			for (String line : FileUtils.readLines(new File(path))) {
+				if (!line.startsWith("#")){
 					String[] parts = line.split("\t");
 					instanceId2TextMap.put(parts[0], parts[1]);
 			//		System.out.println(parts[0]+"\t"+parts[1]);
 				}
-				line = br.readLine();
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.err.println(e.getMessage());
-			e.printStackTrace();
+			throw new ResourceInitializationException(e);
 		}
 		return instanceId2TextMap;
 	}
@@ -85,23 +72,15 @@ public class Utils {
 		File path = store.locateKey(subcontextId,
 				Constants.TEST_TASK_INPUT_KEY_TEST_DATA+"/documentMetaData.txt");
 		System.out.println(path);
-		BufferedReader br;
 		try {
-			br = new BufferedReader(new FileReader(path));
-			String line = br.readLine();
-			while (line != null){
-				if (line.startsWith("#")){
-					// skip
-				} else {
+			for (String line : FileUtils.readLines(path)) {
+				if (!line.startsWith("#")) {
 					String[] parts = line.split("\t");
 					instanceId2TextMap.put(parts[0], parts[1]);
 				}
-				line = br.readLine();
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.err.println(e.getMessage());
-			e.printStackTrace();
+			throw new ResourceInitializationException(e);
 		}
 	}
 
