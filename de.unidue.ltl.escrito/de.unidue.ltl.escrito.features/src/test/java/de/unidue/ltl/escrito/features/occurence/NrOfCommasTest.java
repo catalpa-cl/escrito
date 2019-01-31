@@ -1,4 +1,4 @@
-package de.unidue.ltl.escrito.features.occurance;
+package de.unidue.ltl.escrito.features.occurence;
 
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngine;
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDescription;
@@ -17,7 +17,7 @@ import org.dkpro.tc.api.type.TextClassificationTarget;
 import org.junit.Test;
 
 import de.tudarmstadt.ukp.dkpro.core.tokit.BreakIteratorSegmenter;
-import de.unidue.ltl.escrito.features.occurance.NrOfCommas;
+import de.unidue.ltl.escrito.features.occurence.NrOfCommas;
 
 public class NrOfCommasTest {
 	@Test
