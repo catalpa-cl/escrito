@@ -49,7 +49,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.frequency.util.FrequencyDistribution;
 import de.unidue.ltl.escrito.core.Utils;
 
 /**
- * Clusters the training data, the performs label propagation 
+ * Clusters the training data, then performs label propagation 
  * and takes the purest clusters as new training material.
  * Evaluates on the test data in the next task.
  */

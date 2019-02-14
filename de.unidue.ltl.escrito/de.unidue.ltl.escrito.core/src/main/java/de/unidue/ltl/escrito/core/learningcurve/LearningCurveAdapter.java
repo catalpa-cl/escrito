@@ -90,6 +90,12 @@ public class LearningCurveAdapter implements TcShallowLearningAdapter
 	{
 		return getClass().getSimpleName();
 	}
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return this.getName();
+	}
 }
 
 

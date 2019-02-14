@@ -23,14 +23,14 @@ import org.dkpro.tc.api.features.TcFeatureFactory;
 import org.dkpro.tc.api.features.TcFeatureSet;
 import org.dkpro.tc.api.type.TextClassificationOutcome;
 import org.dkpro.tc.features.ngram.WordNGram;
-import org.dkpro.tc.ml.ExperimentSaveModel;
-import org.dkpro.tc.ml.uima.TcAnnotator;
+import org.dkpro.tc.ml.experiment.ExperimentSaveModel;
+import org.dkpro.tc.ml.model.PreTrainedModelProviderUnitMode;
 import org.dkpro.tc.ml.weka.WekaAdapter;
 
-import weka.classifiers.bayes.NaiveBayes;
 import de.unidue.ltl.escrito.core.types.LearnerAnswer;
 import de.unidue.ltl.escrito.examples.basics.Experiments_ImplBase;
 import de.unidue.ltl.escrito.io.shortanswer.MohlerMihalceaReader;
+import weka.classifiers.bayes.NaiveBayes;
 
 public class StoredModelApplicationExample extends Experiments_ImplBase{
 
@@ -136,12 +136,12 @@ public class StoredModelApplicationExample extends Experiments_ImplBase{
 
 		System.out.println("Path to model: "+modelFile.getAbsolutePath());
 		AnalysisEngine preprocessing = AnalysisEngineFactory.createEngine(Experiments_ImplBase.getPreprocessing("en"));
-		AnalysisEngine tcAnno = AnalysisEngineFactory.createEngine(TcAnnotator.class,
-				TcAnnotator.PARAM_NAME_UNIT_ANNOTATION, LearnerAnswer.class,
+		AnalysisEngine tcAnno = AnalysisEngineFactory.createEngine(PreTrainedModelProviderUnitMode.class,
+				PreTrainedModelProviderUnitMode.PARAM_NAME_TARGET_ANNOTATION, LearnerAnswer.class,
 				// Achtung: It seems like you MAY NOT use the class TextClassificationTarget (as we do in the reader)
 				// to indicate the unit to be considered
 				// as far as I can see, a TextClassifcationTarget is produced by the classifier and we only want to have one in the end!
-					TcAnnotator.PARAM_TC_MODEL_LOCATION, modelFile.getAbsolutePath());
+				PreTrainedModelProviderUnitMode.PARAM_TC_MODEL_LOCATION, modelFile.getAbsolutePath());
 
 		JCas jcas = JCasFactory.createJCas();
 		jcas.setDocumentText(exampleAnswer);

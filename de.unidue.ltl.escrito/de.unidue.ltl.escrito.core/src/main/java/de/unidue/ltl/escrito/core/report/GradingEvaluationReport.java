@@ -12,14 +12,13 @@ import java.util.Set;
 
 import org.apache.commons.compress.utils.IOUtils;
 import org.dkpro.lab.storage.StorageService;
-import org.dkpro.lab.storage.StorageService.AccessMode;
-import org.dkpro.lab.task.TaskContextMetadata;
 import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.task.TcTaskTypeUtil;
-import org.dkpro.tc.ml.report.TcBatchReportBase;
+import org.dkpro.tc.ml.report.TcAbstractReport;
 
 import de.unidue.ltl.escrito.core.Utils;
 import de.unidue.ltl.evaluation.core.EvaluationData;
+import de.unidue.ltl.evaluation.measures.Accuracy;
 import de.unidue.ltl.evaluation.measures.agreement.CohenKappa;
 import de.unidue.ltl.evaluation.measures.agreement.LinearlyWeightedKappa;
 import de.unidue.ltl.evaluation.measures.agreement.QuadraticallyWeightedKappa;
@@ -28,9 +27,8 @@ import de.unidue.ltl.evaluation.measures.categorial.Precision;
 import de.unidue.ltl.evaluation.measures.categorial.Recall;
 import de.unidue.ltl.evaluation.measures.correlation.PearsonCorrelation;
 import de.unidue.ltl.evaluation.measures.correlation.SpearmanCorrelation;
-import de.unidue.ltl.evaluation.measures.Accuracy;
 
-public class GradingEvaluationReport extends TcBatchReportBase {
+public class GradingEvaluationReport extends TcAbstractReport {
 
 	public static final String RESULTS_FILENAME = "classification_results.txt";
 	public static final String LABELED_ITEMS_FILENAME = "labeledItems.txt";

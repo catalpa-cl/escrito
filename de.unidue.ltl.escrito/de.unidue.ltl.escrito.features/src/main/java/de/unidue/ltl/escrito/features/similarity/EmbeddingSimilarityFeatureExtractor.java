@@ -36,10 +36,15 @@ implements PairFeatureExtractor{
 
 
 	public static final String FEAT_EMBEDDING_SIM = "embeddingSimilarity";
-
+	public static final String FEAT_EMBEDDING_SIM_PAIRWISE = "pairwiseEmbeddingSimilarity";
+	
 	public static final String PARAM_IGNORE_UNKNOWN = "ignoreUnknownWords";
 	@ConfigurationParameter(name = PARAM_IGNORE_UNKNOWN, mandatory = false, defaultValue = "false")
 	public boolean ignoreUnknownWords;
+
+	public static final String PARAM_ONLY_CONTENT_WORDS = "onlyContentWords";
+	@ConfigurationParameter(name = PARAM_ONLY_CONTENT_WORDS, mandatory = false, defaultValue = "false")
+	public boolean onlyContentWords;
 
 
 	public static final String PARAM_RESOURCE_LOCATION = "resourceLocation";
@@ -99,8 +104,15 @@ implements PairFeatureExtractor{
 	public Set<Feature> extract(JCas view1, JCas view2)
 			throws TextClassificationException {
 		Set<Feature> features = new HashSet<Feature>();
-		List<String> wordsLA = Utils.extractAllWordsFromView(view1);
-		List<String> wordsTA = Utils.extractAllWordsFromView(view2);
+		List<String> wordsLA = null;
+		List<String> wordsTA = null;
+		if (onlyContentWords){
+			wordsLA = Utils.extractAllContentWordsFromView(view1);
+			wordsTA = Utils.extractAllContentWordsFromView(view2);
+		} else {
+			wordsLA = Utils.extractAllWordsFromView(view1);
+			wordsTA = Utils.extractAllWordsFromView(view2);
+		}
 
 		// sum up feature vectors LA, TA
 		// compute cosine similarity
@@ -110,13 +122,30 @@ implements PairFeatureExtractor{
 		System.out.println("TA: "+Arrays.toString(vectorTA));
 
 		features.add(new Feature(FEAT_EMBEDDING_SIM, Utils.computeCosineSimilarity(vectorLA, vectorTA), FeatureType.NUMERIC));
+		
+		
+		
+		//find for each word in LA, the best match in TA
+		double summedSimilarities = 0.0;
+		for (String wordLA : wordsLA){
+			double max = 0.0;
+			for (String wordTA : wordsTA){
+				double sim = Utils.computeCosineSimilarity(embeddingsMap.get(wordLA), embeddingsMap.get(wordTA));
+				if (sim > max){
+					max = sim;
+				}
+			}
+			summedSimilarities+= max;
+		}
+		features.add(new Feature(FEAT_EMBEDDING_SIM_PAIRWISE, summedSimilarities/wordsLA.size(), FeatureType.NUMERIC));
+		
 		return features;
 	}
 
 	private double[] produceAveragedVector(List<String> words) {
 		double[] resultVector = new double[64];
 		for (String word : words){
-		/*	if (word.equals("to") ||
+			/*	if (word.equals("to") ||
 					word.equals("a") ||
 					word.equals("from") ||
 					word.equals("the") ||

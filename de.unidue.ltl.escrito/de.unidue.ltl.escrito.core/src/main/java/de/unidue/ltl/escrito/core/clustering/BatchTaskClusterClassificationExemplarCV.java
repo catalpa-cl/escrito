@@ -18,14 +18,6 @@
  */
 package de.unidue.ltl.escrito.core.clustering;
 
-import static org.dkpro.tc.core.Constants.DIM_CROSS_VALIDATION_MANUAL_FOLDS;
-import static org.dkpro.tc.core.Constants.DIM_FEATURE_MODE;
-import static org.dkpro.tc.core.Constants.DIM_FILES_ROOT;
-import static org.dkpro.tc.core.Constants.FM_SEQUENCE;
-import static org.dkpro.tc.core.Constants.LEAVE_ONE_OUT;
-import static org.dkpro.tc.core.Constants.TEST_TASK_INPUT_KEY_TEST_DATA;
-import static org.dkpro.tc.core.Constants.TEST_TASK_INPUT_KEY_TRAINING_DATA;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,25 +33,19 @@ import org.dkpro.lab.storage.StorageService.AccessMode;
 import org.dkpro.lab.task.Dimension;
 import org.dkpro.lab.task.Discriminator;
 import org.dkpro.lab.task.ParameterSpace;
-import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
 import org.dkpro.lab.task.impl.DefaultBatchTask;
 import org.dkpro.lab.task.impl.FoldDimensionBundle;
 import org.dkpro.lab.task.impl.TaskBase;
-import org.dkpro.tc.core.ml.TcShallowLearningAdapter;
+import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.task.ExtractFeaturesTask;
 import org.dkpro.tc.core.task.InitTask;
 import org.dkpro.tc.core.task.MetaInfoTask;
 import org.dkpro.tc.core.task.TcTaskType;
-import org.dkpro.tc.ml.ExperimentCrossValidation;
-import org.dkpro.tc.ml.ExperimentTrainTest;
 import org.dkpro.tc.ml.FoldUtil;
 import org.dkpro.tc.ml.base.Experiment_ImplBase;
-import org.dkpro.tc.ml.weka.report.WekaOutcomeIDReport;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
-import org.dkpro.tc.core.Constants;
 
 import de.unidue.ltl.escrito.core.learningcurve.TrainingDataSelectionTestTask;
-import de.unidue.ltl.escrito.core.report.GradingEvaluationReport;
 
 /**
  * Clustering setup

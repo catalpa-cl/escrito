@@ -14,7 +14,30 @@ import de.unidue.ltl.escrito.core.types.LearnerAnswerToken;
 public class Utils {
 
 
-
+	public static boolean isContentWord(Token t, String language){
+		if (t.getPos() != null){
+			String pos = t.getPos().getPosValue();
+			if (language.equals("de")){
+				if (pos.startsWith("N") || pos.startsWith("ADJ") || pos.startsWith("V")){
+					return true;
+				} else {
+					return false;
+				}
+			} else if (language.equals("en")){
+				if (pos.startsWith("N") || pos.startsWith("J") || pos.startsWith("V") || pos.startsWith("M")){
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				System.err.println("Unsupported language "+language+".  We can only determine content words for German and English.");
+				System.exit(-1);
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
 
 
 
@@ -44,6 +67,18 @@ public class Utils {
 		return words;
 	}
 
+	public static List<String> extractAllContentWordsFromView(JCas view) {
+		Collection<Token> tokens = JCasUtil.select(view, Token.class);
+		List<String> words = new ArrayList<String>();
+		Iterator<Token> iter = tokens.iterator();
+		while (iter.hasNext()){
+			Token t = iter.next();
+			if (isContentWord(t, view.getDocumentLanguage())){
+				words.add(t.getCoveredText());
+			}
+		}
+		return words;
+	}
 
 
 
@@ -72,5 +107,8 @@ public class Utils {
 		}
 		return resultVector;
 	}
+
+
+
 
 }
