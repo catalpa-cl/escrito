@@ -13,12 +13,10 @@ public class WekaStackingAdapter extends WekaAdapter{
 		System.out.println("Create stacking task.");
 		return new WekaStackingTask();
 		}
-	
-	
-	
-//	@Override
-//	public Class<? extends ReportBase> getOutcomeIdReportClass() {
-//		return WekaStackingOutcomeIDReport.class;
-//	}
+		
+	@Override
+	public Class<? extends ReportBase> getOutcomeIdReportClass() {
+		return WekaStackingOutcomeIDReport.class;
+	}
 
 }

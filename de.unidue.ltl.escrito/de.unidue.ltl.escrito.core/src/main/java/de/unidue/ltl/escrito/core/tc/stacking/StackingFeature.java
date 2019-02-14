@@ -1,5 +1,6 @@
 package de.unidue.ltl.escrito.core.tc.stacking;
 
+import org.dkpro.tc.api.exception.TextClassificationException;
 import org.dkpro.tc.api.features.Feature;
 import org.dkpro.tc.api.features.FeatureType;
 
@@ -17,7 +18,7 @@ public class StackingFeature extends Feature{
 	}
 	
 	
-	public StackingFeature(String name, Object value, FeatureType type, int id) {
+	public StackingFeature(String name, Object value, FeatureType type, int id) throws TextClassificationException {
 		super(name, value, type);
 		this.stackingGroupId = id;
 	}
