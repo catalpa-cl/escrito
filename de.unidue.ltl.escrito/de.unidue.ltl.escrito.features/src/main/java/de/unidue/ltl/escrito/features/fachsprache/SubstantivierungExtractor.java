@@ -1,13 +1,14 @@
 package de.unidue.ltl.escrito.features.fachsprache;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.uima.fit.descriptor.ConfigurationParameter;
 import org.apache.uima.fit.descriptor.TypeCapability;
 import org.apache.uima.fit.util.JCasUtil;
@@ -20,13 +21,14 @@ import org.dkpro.tc.api.features.FeatureExtractor;
 import org.dkpro.tc.api.features.FeatureExtractorResource_ImplBase;
 import org.dkpro.tc.api.features.FeatureType;
 import org.dkpro.tc.api.type.TextClassificationTarget;
+
 import de.tudarmstadt.ukp.dkpro.core.api.frequency.util.FrequencyDistribution;
+import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.NN;
+import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 
 /**
  * Counts the appearance of the German noun-forming suffixes.
- * 
- * @author Yuning
  */
 
 @TypeCapability(inputs = { "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
@@ -50,48 +52,45 @@ public class SubstantivierungExtractor extends FeatureExtractorResource_ImplBase
 		return true;
 	}
 
-	private List<String> getSuffixes(String suffixesFile) {
+	private List<String> getSuffixes(String suffixesFile)
+			throws ResourceInitializationException
+	{
 		List<String> list = new ArrayList<String>();
-		Scanner s;
+		
 		try {
-			s = new Scanner(new File(suffixesFile));
-			while (s.hasNext()) {
-				list.add(s.next());
+			for (String suffix : FileUtils.readLines(new File(suffixesFile))) {
+				list.add(suffix);
 			}
-			s.close();
-			System.out.println("Read " + list.size() + " suffixes from " + suffixesFile);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			System.exit(-1);
+		} catch (IOException e) {
+			throw new ResourceInitializationException(e);
 		}
+		
 		return list;
 	}
 
 	@Override
 	public Set<Feature> extract(JCas view, TextClassificationTarget target) throws TextClassificationException {
 		Set<Feature> featureList = new HashSet<Feature>();
-		//sum of nouns
-		int countNouns = 0;
-		for (Token t : JCasUtil.select(view, Token.class)) {
-			if(t.getPos().getPosValue().startsWith("N")){
-				countNouns++;
-			}
-		}
-		//System.out.println("Total Number of Nouns: "+countNouns);
-		//frequency of nouns, which ends with suffixes
+
+		int countNouns = JCasUtil.select(view, NN.class).size();
+		
 		FrequencyDistribution<String> suffixFD = new FrequencyDistribution<String>();
+
 		for (String s : suffixes) {
-			//System.out.print("["+s+"] : ");
 			for (Token t : JCasUtil.select(view, Token.class)) {
-				if(t.getPos().getPosValue().startsWith("N")&&t.getLemma().getValue().endsWith(s)){
-					//System.out.println(t.getCoveredText());
-					suffixFD.inc(s);
-				}		
+				POS pos = t.getPos();
+				if (pos instanceof NN) {
+					if (t.getLemma().getValue().endsWith(s)){
+						suffixFD.inc(s);
+					}	
+				}
 			}
-			//System.out.println(suffixFD.getCount(s));
-			featureList.add(new Feature("frequencyOf"+s.toUpperCase(),(double)suffixFD.getCount(s)/countNouns, FeatureType.NUMERIC));
+			double suffixRatio = (double) suffixFD.getCount(s) / countNouns;
+			featureList.add(new Feature("frequencyOf" + s.toUpperCase(), suffixRatio, FeatureType.NUMERIC));
 		}
-		featureList.add(new Feature("frequencyOfAllSuffixes",(double)suffixFD.getN()/countNouns, FeatureType.NUMERIC));
+		
+		double nominalizations = (double)suffixFD.getN() / countNouns;
+		featureList.add(new Feature("frequencyOfAllSuffixes", nominalizations, FeatureType.NUMERIC));
 		return featureList;
 	}
 	
