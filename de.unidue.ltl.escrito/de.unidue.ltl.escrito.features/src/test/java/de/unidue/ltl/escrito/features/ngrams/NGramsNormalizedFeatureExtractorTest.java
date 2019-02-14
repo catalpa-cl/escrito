@@ -13,7 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
@@ -29,6 +28,7 @@ import org.dkpro.tc.core.util.TaskUtils;
 import org.dkpro.tc.features.ngram.meta.WordNGramMC;
 import org.junit.Before;
 import org.junit.Test;
+
 import de.tudarmstadt.ukp.dkpro.core.tokit.BreakIteratorSegmenter;
 import de.unidue.ltl.escrito.features.core.io.TestReaderSingleLabelDocumentReader;
 
@@ -140,7 +140,6 @@ extends LuceneMetaCollectionBasedFeatureTestBase
     		   NGramsNormalizedFeatureExtractor.PARAM_NGRAM_USE_TOP_K, "10",
     		   NGramsNormalizedFeatureExtractor.PARAM_UNIQUE_EXTRACTOR_NAME, "123", 
     		   NGramsNormalizedFeatureExtractor.PARAM_SOURCE_LOCATION, luceneFolder.toString(), 
-    		   NGramsNormalizedFeatureExtractor.PARAM_NGRAM_FREQ_THRESHOLD, "0.1f",
                WordNGramMC.PARAM_TARGET_LOCATION, luceneFolder.toString() };
 
        List<Object> parameterList = new ArrayList<Object>(Arrays.asList(parameters));
