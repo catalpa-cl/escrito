@@ -1,51 +1,51 @@
-//package de.unidue.ltl.escrito.core.tc.stacking;
-//
-//import java.io.File;
-//import java.io.FileNotFoundException;
-//import java.io.FileOutputStream;
-//import java.io.IOException;
-//import java.io.ObjectOutputStream;
-//import java.util.ArrayList;
-//import java.util.Arrays;
-//import java.util.HashMap;
-//import java.util.HashSet;
-//import java.util.List;
-//import java.util.Map;
-//import java.util.Set;
-//
-//import org.apache.commons.compress.utils.IOUtils;
-//import org.apache.commons.io.FileUtils;
-//import org.dkpro.lab.engine.TaskContext;
-//import org.dkpro.lab.storage.StorageService.AccessMode;
-//import org.dkpro.tc.core.Constants;
-//import org.dkpro.tc.ml.weka.core.MekaTrainer;
-//import org.dkpro.tc.ml.weka.core._eka;
-//import org.dkpro.tc.ml.weka.task.WekaFeatureSelector;
-//import org.dkpro.tc.ml.weka.task.WekaOutcomeHarmonizer;
-//import org.dkpro.tc.ml.weka.task.WekaTestTask;
-//import org.dkpro.tc.ml.weka.util.MultilabelResult;
-//
-//import meka.classifiers.multilabel.MultiLabelClassifier;
-//import meka.core.MLUtils;
-//import meka.core.Result;
-//import meka.core.ThresholdUtils;
-//import weka.classifiers.Classifier;
-//import weka.classifiers.Evaluation;
-//import weka.classifiers.meta.FilteredClassifier;
-//import weka.core.Attribute;
-//import weka.core.Instances;
-//import weka.core.SelectedTag;
-//import weka.core.converters.ConverterUtils.DataSink;
-//import weka.filters.Filter;
-//import weka.filters.unsupervised.attribute.Add;
-//import weka.filters.unsupervised.attribute.Remove;
-//
-///**
-// * Base class for test task and save model tasks
-// */
-//public class WekaStackingTask
-//extends WekaTestTask
-//{
+package de.unidue.ltl.escrito.core.tc.stacking;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.compress.utils.IOUtils;
+import org.apache.commons.io.FileUtils;
+import org.dkpro.lab.engine.TaskContext;
+import org.dkpro.lab.storage.StorageService.AccessMode;
+import org.dkpro.tc.core.Constants;
+import org.dkpro.tc.ml.weka.core.MekaTrainer;
+import org.dkpro.tc.ml.weka.core._eka;
+import org.dkpro.tc.ml.weka.task.WekaFeatureSelector;
+import org.dkpro.tc.ml.weka.task.WekaOutcomeHarmonizer;
+import org.dkpro.tc.ml.weka.task.WekaTestTask;
+import org.dkpro.tc.ml.weka.util.MultilabelResult;
+
+import meka.classifiers.multilabel.MultiLabelClassifier;
+import meka.core.MLUtils;
+import meka.core.Result;
+import meka.core.ThresholdUtils;
+import weka.classifiers.Classifier;
+import weka.classifiers.Evaluation;
+import weka.classifiers.meta.FilteredClassifier;
+import weka.core.Attribute;
+import weka.core.Instances;
+import weka.core.SelectedTag;
+import weka.core.converters.ConverterUtils.DataSink;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.Add;
+import weka.filters.unsupervised.attribute.Remove;
+
+/**
+ * Base class for test task and save model tasks
+ */
+public class WekaStackingTask
+extends WekaTestTask
+{
 //
 //
 //	@Override
@@ -350,6 +350,6 @@
 //	}
 //	
 //	
-//	
-//
-//}
+	
+
+}
