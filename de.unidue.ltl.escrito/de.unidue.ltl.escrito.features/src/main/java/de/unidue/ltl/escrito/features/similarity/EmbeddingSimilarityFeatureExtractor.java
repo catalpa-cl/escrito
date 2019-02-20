@@ -37,7 +37,7 @@ implements PairFeatureExtractor{
 
 	public static final String FEAT_EMBEDDING_SIM = "embeddingSimilarity";
 	public static final String FEAT_EMBEDDING_SIM_PAIRWISE = "pairwiseEmbeddingSimilarity";
-	
+
 	public static final String PARAM_IGNORE_UNKNOWN = "ignoreUnknownWords";
 	@ConfigurationParameter(name = PARAM_IGNORE_UNKNOWN, mandatory = false, defaultValue = "false")
 	public boolean ignoreUnknownWords;
@@ -118,19 +118,22 @@ implements PairFeatureExtractor{
 		// compute cosine similarity
 		double[] vectorLA = produceAveragedVector(wordsLA);
 		double[] vectorTA = produceAveragedVector(wordsTA);
-		System.out.println("LA: "+Arrays.toString(vectorLA));
-		System.out.println("TA: "+Arrays.toString(vectorTA));
+//		System.out.println("LA: "+Arrays.toString(vectorLA));
+//		System.out.println("TA: "+Arrays.toString(vectorTA));
 
 		features.add(new Feature(FEAT_EMBEDDING_SIM, Utils.computeCosineSimilarity(vectorLA, vectorTA), FeatureType.NUMERIC));
-		
-		
-		
+
+
+
 		//find for each word in LA, the best match in TA
 		double summedSimilarities = 0.0;
 		for (String wordLA : wordsLA){
 			double max = 0.0;
 			for (String wordTA : wordsTA){
-				double sim = Utils.computeCosineSimilarity(embeddingsMap.get(wordLA), embeddingsMap.get(wordTA));
+				double sim = 0.0;
+				if (embeddingsMap.get(wordLA) != null && embeddingsMap.get(wordTA) != null){
+					sim = Utils.computeCosineSimilarity(embeddingsMap.get(wordLA), embeddingsMap.get(wordTA));
+				}
 				if (sim > max){
 					max = sim;
 				}
@@ -138,7 +141,7 @@ implements PairFeatureExtractor{
 			summedSimilarities+= max;
 		}
 		features.add(new Feature(FEAT_EMBEDDING_SIM_PAIRWISE, summedSimilarities/wordsLA.size(), FeatureType.NUMERIC));
-		
+
 		return features;
 	}
 
@@ -158,15 +161,15 @@ implements PairFeatureExtractor{
 			}*/
 			if (embeddingsMap.containsKey(word)){
 				double[] wordVector = embeddingsMap.get(word);
-				System.out.println(word+": "+Arrays.toString(wordVector));
+		//		System.out.println(word+": "+Arrays.toString(wordVector));
 				resultVector = Utils.addVectors(resultVector, wordVector);
 			} else {
-				System.out.println("No embedding for "+word);
+//				System.out.println("No embedding for "+word);
 				if (ignoreUnknownWords){
 					// don't do anything
 				} else {
 					double[] wordVector = embeddingsMap.get("_UNK");
-					System.out.println(word+": "+Arrays.toString(wordVector));
+//					System.out.println(word+": "+Arrays.toString(wordVector));
 					resultVector = Utils.addVectors(resultVector, wordVector);
 				}
 			}

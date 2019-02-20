@@ -2,6 +2,7 @@ package de.unidue.ltl.escrito.features.similarity;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -24,6 +25,8 @@ import org.dkpro.tc.api.features.PairFeatureExtractor;
 import org.dkpro.tc.api.features.meta.MetaCollectorConfiguration;
 import org.dkpro.tc.api.features.meta.MetaDependent;
 import org.dkpro.tc.api.type.TextClassificationTarget;
+
+import com.google.protobuf.DescriptorProtos.GeneratedCodeInfo.Annotation;
 
 import de.unidue.ltl.escrito.core.IoUtils;
 import de.unidue.ltl.escrito.core.types.LearnerAnswerWithReferenceAnswer;
@@ -100,6 +103,9 @@ public class PairwiseFeatureWrapper
 		Set<Feature> featuresForOneReferenceAnswer = null;
 		Set<Feature> featureForOnereferenceAnswerBest = null;
 		Set<Feature> featureForAllReferenceAnswers = new HashSet<Feature>();
+		if (!(JCasUtil.exists(view, LearnerAnswerWithReferenceAnswer.class))){
+			return PFE.extract(view, view);
+		}
 		LearnerAnswerWithReferenceAnswer learnerAnswer = JCasUtil.selectSingle(view, LearnerAnswerWithReferenceAnswer.class);
 		JCas comparisonView = null;
 		Map<String, List<Feature>> allValuesPerFeature = new HashMap<String, List<Feature>>();
@@ -118,7 +124,7 @@ public class PairwiseFeatureWrapper
 				}
 				comparisonViewCache.put(refAnsId, comparisonView);
 			}
-			// System.out.println("COMPARING "+view.getDocumentText()+" WITH "+comparisonView.getDocumentText());
+//			System.out.println("COMPARING "+view.getDocumentText()+" WITH "+comparisonView.getDocumentText());
 			featuresForOneReferenceAnswer = PFE.extract(view, comparisonView);
 			for (Iterator<Feature> iter1 = featuresForOneReferenceAnswer.iterator(); iter1.hasNext();){
 				Feature feature = iter1.next();
