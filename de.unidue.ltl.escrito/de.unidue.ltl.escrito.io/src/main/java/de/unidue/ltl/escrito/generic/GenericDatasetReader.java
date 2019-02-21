@@ -79,11 +79,11 @@ public class GenericDatasetReader  extends JCasCollectionReader_ImplBase{
 	private Boolean ignoreFirstLine;
 
 	public static final String PARAM_QUESTION_PREFIX = "QuestionPrefix";
-	@ConfigurationParameter(name = PARAM_QUESTION_PREFIX, mandatory = true)
+	@ConfigurationParameter(name = PARAM_QUESTION_PREFIX, mandatory = false, defaultValue = "Q")
 	private String questionPrefix;
 
 	public static final String PARAM_TARGET_ANSWER_PREFIX = "TargetAnswerPrefix";
-	@ConfigurationParameter(name = PARAM_TARGET_ANSWER_PREFIX, mandatory = true)
+	@ConfigurationParameter(name = PARAM_TARGET_ANSWER_PREFIX, mandatory = false, defaultValue = "TA")
 	private String targetAnswerPrefix;
 
 	public static final String PARAM_CORPUSNAME = "corpusName";
@@ -122,20 +122,32 @@ public class GenericDatasetReader  extends JCasCollectionReader_ImplBase{
 				String promptId = null;
 				String answerId = null;
 				String text      = null;
-				int score    = -1;
+				String score    = "-1";
 
 				if (nextItem.length>=4) {
 					GenericDatasetItem newItem = null ;
 					promptId  = nextItem[0];
 					answerId = nextItem[1];
 					text       = nextItem[2];
-					double rawScore    = scoreMultiplicationFactor*Double.parseDouble(nextItem[3]);
-					if (rawScore % 1 == 0)	{
-						score = (int) rawScore;
+					if (scoreMultiplicationFactor != 1){
+						double scoreNumeric = 0.0;
+						try {
+							scoreNumeric = Double.parseDouble(nextItem[3]);
+						}						
+						catch (NumberFormatException e){
+							System.err.println("We cannot handle categorical values and scoremultiplication at the same time. please remove the score multiplication factor.");
+							System.exit(-1);
+						}
+						double rawScore    = scoreMultiplicationFactor*scoreNumeric;
+						if (rawScore % 1 == 0)	{
+							score = String.valueOf((int) rawScore);
+						} else {
+							System.err.println("Problem processing score "+rawScore+" with multiplication factor " + scoreMultiplicationFactor
+									+ "Your scores are not integers and you did not provide a suitable multiplication factor.");
+							System.exit(-1);
+						}
 					} else {
-						System.err.println("Problem processing score "+rawScore+" with multiplication factor " + scoreMultiplicationFactor
-								+ "Your scores are not integers and you did not provide a suitable multiplication factor.");
-						System.exit(-1);
+						score = nextItem[3];
 					}
 					text = Utils.cleanString(text);
 					if (nextItem.length >=5){
@@ -200,7 +212,7 @@ public class GenericDatasetReader  extends JCasCollectionReader_ImplBase{
 		unit.setSuffix(itemId);
 		unit.addToIndexes();      
 		TextClassificationOutcome outcome = new TextClassificationOutcome(jcas, 0, jcas.getDocumentText().length());
-		outcome.setOutcome(Integer.toString(item.getGrade()));
+		outcome.setOutcome(item.getGrade());
 		outcome.addToIndexes();
 		currentIndex++;
 	}

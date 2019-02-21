@@ -5,7 +5,7 @@ import java.util.List;
 
 public class GenericDatasetItem {
 
-	private int grade;
+	private String grade;
 	private String text;
 	private String promptId;
 	private String answerId;
@@ -31,7 +31,7 @@ public class GenericDatasetItem {
 		return sb.toString();        
 	}
 	
-	public GenericDatasetItem(String promptId, String answerId, String text, int grade, String targetAnswerId) {
+	public GenericDatasetItem(String promptId, String answerId, String text, String grade, String targetAnswerId) {
 		this.promptId = promptId;
 		this.answerId = answerId;
 		this.text = text;
@@ -39,7 +39,7 @@ public class GenericDatasetItem {
 		this.targetAnswerId = targetAnswerId;
 	}
 
-	public int getGrade() {
+	public String getGrade() {
 		return grade;
 	}
 
