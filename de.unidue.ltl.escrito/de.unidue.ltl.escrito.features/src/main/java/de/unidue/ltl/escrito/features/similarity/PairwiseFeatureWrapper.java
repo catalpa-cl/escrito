@@ -2,7 +2,6 @@ package de.unidue.ltl.escrito.features.similarity;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -25,8 +24,6 @@ import org.dkpro.tc.api.features.PairFeatureExtractor;
 import org.dkpro.tc.api.features.meta.MetaCollectorConfiguration;
 import org.dkpro.tc.api.features.meta.MetaDependent;
 import org.dkpro.tc.api.type.TextClassificationTarget;
-
-import com.google.protobuf.DescriptorProtos.GeneratedCodeInfo.Annotation;
 
 import de.unidue.ltl.escrito.core.IoUtils;
 import de.unidue.ltl.escrito.core.types.LearnerAnswerWithReferenceAnswer;
