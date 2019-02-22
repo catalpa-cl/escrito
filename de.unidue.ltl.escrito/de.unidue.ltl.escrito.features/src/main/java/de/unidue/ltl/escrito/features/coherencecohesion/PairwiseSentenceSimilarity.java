@@ -12,6 +12,8 @@ import org.apache.uima.fit.descriptor.ConfigurationParameter;
 import org.apache.uima.fit.descriptor.TypeCapability;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
+import org.dkpro.similarity.algorithms.api.SimilarityException;
+import org.dkpro.similarity.algorithms.lexical.string.GreedyStringTiling;
 import org.dkpro.tc.api.exception.TextClassificationException;
 import org.dkpro.tc.api.features.Feature;
 import org.dkpro.tc.api.features.FeatureExtractor;
@@ -21,8 +23,6 @@ import org.dkpro.tc.api.type.TextClassificationTarget;
 
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
-import dkpro.similarity.algorithms.api.SimilarityException;
-import dkpro.similarity.algorithms.lexical.string.GreedyStringTiling;
 
 /**
  * calculates an average similarity between all pairs of following sentences

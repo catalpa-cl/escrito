@@ -5,15 +5,14 @@ import java.util.Set;
 
 import org.apache.uima.fit.descriptor.ConfigurationParameter;
 import org.apache.uima.jcas.JCas;
+import org.dkpro.similarity.algorithms.api.SimilarityException;
+import org.dkpro.similarity.algorithms.lexical.string.GreedyStringTiling;
+import org.dkpro.similarity.algorithms.lexical.string.LevenshteinComparator;
 import org.dkpro.tc.api.exception.TextClassificationException;
 import org.dkpro.tc.api.features.Feature;
 import org.dkpro.tc.api.features.FeatureExtractorResource_ImplBase;
 import org.dkpro.tc.api.features.FeatureType;
 import org.dkpro.tc.api.features.PairFeatureExtractor;
-
-import dkpro.similarity.algorithms.api.SimilarityException;
-import dkpro.similarity.algorithms.lexical.string.LevenshteinComparator;
-import dkpro.similarity.algorithms.lexical.string.GreedyStringTiling;
 
 public class StringSimilarityFeatureExtractor 
 extends FeatureExtractorResource_ImplBase

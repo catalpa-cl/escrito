@@ -1,4 +1,4 @@
-package de.unidue.ltl.escrito.features.occurance;
+package de.unidue.ltl.escrito.features.occurence;
 
 import java.util.Collection;
 import java.util.HashSet;

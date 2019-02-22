@@ -1,4 +1,4 @@
-package de.unidue.ltl.escrito.features.occurance;
+package de.unidue.ltl.escrito.features.occurence;
 
 import static org.dkpro.tc.testing.FeatureTestUtil.assertFeatures;
 
@@ -10,7 +10,7 @@ import org.dkpro.tc.api.features.Feature;
 import org.dkpro.tc.api.type.TextClassificationTarget;
 import org.junit.Test;
 import de.unidue.ltl.escrito.features.core.EssayGradingTestBase;
-import de.unidue.ltl.escrito.features.occurance.NumberOfQuotations;
+import de.unidue.ltl.escrito.features.occurence.NumberOfQuotations;
 
 
 public class NumberOfQuotationsTest 

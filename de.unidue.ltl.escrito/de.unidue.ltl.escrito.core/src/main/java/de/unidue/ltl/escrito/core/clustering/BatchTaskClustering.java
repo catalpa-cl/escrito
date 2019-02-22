@@ -26,16 +26,13 @@ import java.util.List;
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
 import org.dkpro.lab.reporting.Report;
 import org.dkpro.lab.task.impl.TaskBase;
-import org.dkpro.tc.core.ml.TcShallowLearningAdapter;
+import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.task.ExtractFeaturesTask;
 import org.dkpro.tc.core.task.InitTask;
 import org.dkpro.tc.core.task.MetaInfoTask;
 import org.dkpro.tc.core.task.OutcomeCollectionTask;
 import org.dkpro.tc.core.task.TcTaskType;
-import org.dkpro.tc.ml.ExperimentTrainTest;
-import org.dkpro.tc.ml.base.ShallowLearningExperiment_ImplBase;
-import org.dkpro.tc.ml.weka.task.WekaTestTask;
-import org.dkpro.tc.core.Constants;
+import org.dkpro.tc.ml.base.Experiment_ImplBase;
 
 
 /**
@@ -43,7 +40,7 @@ import org.dkpro.tc.core.Constants;
  * 
  */
 public class BatchTaskClustering
-extends ShallowLearningExperiment_ImplBase
+extends Experiment_ImplBase
 {
 
 	protected InitTask initTaskTrain;

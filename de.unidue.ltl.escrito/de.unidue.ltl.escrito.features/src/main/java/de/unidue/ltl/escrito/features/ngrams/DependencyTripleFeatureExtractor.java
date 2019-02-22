@@ -1,3 +1,4 @@
+
 package de.unidue.ltl.escrito.features.ngrams;
 
 import java.util.Arrays;
@@ -14,9 +15,8 @@ import org.dkpro.tc.api.features.Feature;
 import org.dkpro.tc.api.features.FeatureExtractor;
 import org.dkpro.tc.api.features.FeatureType;
 import org.dkpro.tc.api.features.meta.MetaCollectorConfiguration;
-import org.dkpro.tc.api.features.meta.MetaDependent;
 import org.dkpro.tc.api.type.TextClassificationTarget;
-import org.dkpro.tc.features.ngram.base.LuceneFeatureExtractorBase;
+import org.dkpro.tc.features.ngram.meta.base.LuceneFeatureExtractorBase;
 
 import de.tudarmstadt.ukp.dkpro.core.api.frequency.util.FrequencyDistribution;
 

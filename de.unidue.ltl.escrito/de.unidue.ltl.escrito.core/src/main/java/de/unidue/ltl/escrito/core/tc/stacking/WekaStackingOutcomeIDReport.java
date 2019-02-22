@@ -1,24 +1,21 @@
-//package de.unidue.ltl.escrito.core.tc.stacking;
-//
-//import java.io.File;
-//import java.util.Collections;
-//import java.util.List;
-//import java.util.Properties;
-//
-//import org.dkpro.lab.storage.StorageService.AccessMode;
-//import org.dkpro.lab.storage.impl.PropertiesAdapter;
-//import org.dkpro.tc.core.Constants;
-//import org.dkpro.tc.ml.weka.report.WekaOutcomeIDReport;
-//import org.dkpro.tc.ml.weka.util.MultilabelResult;
-//
-//import weka.core.Instances;
-//
-//public class WekaStackingOutcomeIDReport extends WekaOutcomeIDReport{
-//
+package de.unidue.ltl.escrito.core.tc.stacking;
+
+import java.io.File;
+import java.util.Collections;
+import java.util.List;
+import java.util.Properties;
+
+import org.dkpro.lab.storage.StorageService.AccessMode;
+import org.dkpro.lab.storage.impl.PropertiesAdapter;
+import org.dkpro.tc.core.Constants;
+import org.dkpro.tc.ml.weka.report.WekaOutcomeIDReport;
+import org.dkpro.tc.ml.weka.util.MultilabelResult;
+
+import weka.core.Instances;
+
+public class WekaStackingOutcomeIDReport extends WekaOutcomeIDReport{
+
 //	
-// TODO: brauchen wir diesen report wirklich?
-
-
 //	 private File mlResults;
 //	
 //	  @Override
@@ -66,5 +63,5 @@
 //
 //	        return WekaUtils.getClassLabels(predictions, multiLabel);
 //	    }
-//	
-//}
+	
+}

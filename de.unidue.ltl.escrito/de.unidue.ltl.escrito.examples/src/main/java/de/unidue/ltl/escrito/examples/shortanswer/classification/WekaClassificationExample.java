@@ -73,19 +73,9 @@ public class WekaClassificationExample extends Experiments_ImplBase implements C
 		Dimension<Map<String, Object>> learningsArgsDims = getStandardWekaClassificationArgsDim();
 
 		ParameterSpace pSpace = null;
-//		if (useCV) {
-//			pSpace = new ParameterSpace(Dimension.createBundle("readers", dimReaders), learningDims,
-//					Dimension.create(DIM_FEATURE_MODE, FM_UNIT), Dimension.create("DIMENSION_ITERATIONS", 1000),
-//					Dimension.create("DIMENSION_NUMBER_OF_TRAINING_INSTANCES", 270),
-//					FeatureSettings.getFeatureSetsDimBaseline(),
-//					// FeatureSettings.getFeatureSetsDimBaselineStacking(),
-//					learningsArgsDims);
-//			this.runCrossValidation(pSpace, experimentName, getPreprocessing(languageCode), 10);
-//		} else {
 			pSpace = new ParameterSpace(Dimension.createBundle("readers", dimReaders), learningDims,
 					Dimension.create(DIM_FEATURE_MODE, FM_UNIT), FeatureSettings.getFeatureSetsDimBaseline(),
 					learningsArgsDims);
 			runTrainTest(pSpace, experimentName, getPreprocessing(languageCode));
-//		}
 	}
 }

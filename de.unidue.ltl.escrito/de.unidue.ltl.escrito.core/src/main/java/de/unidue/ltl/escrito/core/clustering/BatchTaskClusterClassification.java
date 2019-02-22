@@ -22,15 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
-import org.dkpro.lab.engine.TaskContext;
 import org.dkpro.lab.reporting.Report;
-import org.dkpro.lab.task.impl.TaskBase;
 import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.task.ExtractFeaturesTask;
 import org.dkpro.tc.core.task.InitTask;
 import org.dkpro.tc.core.task.MetaInfoTask;
 import org.dkpro.tc.core.task.TcTaskType;
-import org.dkpro.tc.ml.ExperimentTrainTest;
+import org.dkpro.tc.ml.experiment.ExperimentTrainTest;
 import org.dkpro.tc.ml.weka.report.WekaOutcomeIDReport;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
 
@@ -90,12 +88,9 @@ extends ExperimentTrainTest implements Constants
      */
     protected void init()
     {
-        if (experimentName == null || preprocessingPipeline == null)
-
-        {
-            throw new IllegalStateException(
-                    "You must set Experiment Name, DataWriter and Aggregate.");
-        }
+    	 if (experimentName == null) {
+             throw new IllegalStateException("You must set an experiment name");
+         }
 
         // init the train part of the experiment
         initTaskTrain = new InitTask();

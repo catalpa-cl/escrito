@@ -29,8 +29,7 @@ import org.dkpro.tc.core.task.InitTask;
 import org.dkpro.tc.core.task.MetaInfoTask;
 import org.dkpro.tc.core.task.OutcomeCollectionTask;
 import org.dkpro.tc.core.task.TcTaskType;
-import org.dkpro.tc.ml.ExperimentTrainTest;
-import org.dkpro.tc.ml.weka.report.WekaOutcomeIDReport;
+import org.dkpro.tc.ml.experiment.ExperimentTrainTest;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
 
 import de.unidue.ltl.escrito.core.learningcurve.TrainingDataSelectionTestTask;

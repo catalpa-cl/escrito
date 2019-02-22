@@ -58,9 +58,10 @@ public class SRAReader extends JCasCollectionReader_ImplBase{
 	@ConfigurationParameter(name = PARAM_CORPUSNAME, mandatory = false, defaultValue = "SRA")
 	protected String corpusName;
 
-	public static final String[] PromptSetIds = new String[] {"BULB_C_VOLTAGE_EXPLAIN_WHY1","BULB_C_VOLTAGE_EXPLAIN_WHY2","BULB_C_VOLTAGE_EXPLAIN_WHY6",
-			"BULB_ONLY_EXPLAIN_WHY2","BULB_ONLY_EXPLAIN_WHY4","BULB_ONLY_EXPLAIN_WHY6","BURNED_BULB_LOCATE_EXPLAIN_Q","OTHER_TERMINAL_STATE_EXPLAIN_Q",
-			"TERMINAL_STATE_EXPLAIN_Q","VOLTAGE_AND_GAP_DISCUSS_Q","VOLTAGE_DEFINE_Q","VOLTAGE_DIFF_DISCUSS_1_Q","VOLTAGE_DIFF_DISCUSS_2_Q","VOLTAGE_GAP_EXPLAIN_WHY1",
+	public static final String[] PromptSetIds = new String[] {//"BULB_C_VOLTAGE_EXPLAIN_WHY1","BULB_C_VOLTAGE_EXPLAIN_WHY2","BULB_C_VOLTAGE_EXPLAIN_WHY6",
+			//"BULB_ONLY_EXPLAIN_WHY2","BULB_ONLY_EXPLAIN_WHY4","BULB_ONLY_EXPLAIN_WHY6","BURNED_BULB_LOCATE_EXPLAIN_Q","OTHER_TERMINAL_STATE_EXPLAIN_Q",
+			//"TERMINAL_STATE_EXPLAIN_Q","VOLTAGE_AND_GAP_DISCUSS_Q","VOLTAGE_DEFINE_Q",
+			"VOLTAGE_DIFF_DISCUSS_1_Q","VOLTAGE_DIFF_DISCUSS_2_Q","VOLTAGE_GAP_EXPLAIN_WHY1",
 			"VOLTAGE_GAP_EXPLAIN_WHY3","VOLTAGE_GAP_EXPLAIN_WHY4","VOLTAGE_GAP_EXPLAIN_WHY5","VOLTAGE_GAP_EXPLAIN_WHY6","VOLTAGE_INCOMPLETE_CIRCUIT_2_Q",
 			"BURNED_BULB_PARALLEL_EXPLAIN_Q1","BURNED_BULB_PARALLEL_EXPLAIN_Q2","BURNED_BULB_PARALLEL_EXPLAIN_Q3","BURNED_BULB_PARALLEL_WHY_Q",
 			"GIVE_CIRCUIT_TYPE_HYBRID_EXPLAIN_Q2","GIVE_CIRCUIT_TYPE_HYBRID_EXPLAIN_Q3","GIVE_CIRCUIT_TYPE_PARALLEL_EXPLAIN_Q2","HYBRID_BURNED_OUT_EXPLAIN_Q1",
@@ -80,7 +81,9 @@ public class SRAReader extends JCasCollectionReader_ImplBase{
 
 	public static final String[] PromptSetIds_beetle = new String[] {"BULB_C_VOLTAGE_EXPLAIN_WHY1","BULB_C_VOLTAGE_EXPLAIN_WHY2","BULB_C_VOLTAGE_EXPLAIN_WHY6",
 			"BULB_ONLY_EXPLAIN_WHY2","BULB_ONLY_EXPLAIN_WHY4","BULB_ONLY_EXPLAIN_WHY6","BURNED_BULB_LOCATE_EXPLAIN_Q","OTHER_TERMINAL_STATE_EXPLAIN_Q",
-			"TERMINAL_STATE_EXPLAIN_Q","VOLTAGE_AND_GAP_DISCUSS_Q","VOLTAGE_DEFINE_Q","VOLTAGE_DIFF_DISCUSS_1_Q","VOLTAGE_DIFF_DISCUSS_2_Q","VOLTAGE_GAP_EXPLAIN_WHY1",
+			"TERMINAL_STATE_EXPLAIN_Q","VOLTAGE_AND_GAP_DISCUSS_Q",
+			"VOLTAGE_DEFINE_Q",
+			"VOLTAGE_DIFF_DISCUSS_1_Q","VOLTAGE_DIFF_DISCUSS_2_Q","VOLTAGE_GAP_EXPLAIN_WHY1",
 			"VOLTAGE_GAP_EXPLAIN_WHY3","VOLTAGE_GAP_EXPLAIN_WHY4","VOLTAGE_GAP_EXPLAIN_WHY5","VOLTAGE_GAP_EXPLAIN_WHY6","VOLTAGE_INCOMPLETE_CIRCUIT_2_Q",
 			"BURNED_BULB_PARALLEL_EXPLAIN_Q1","BURNED_BULB_PARALLEL_EXPLAIN_Q2","BURNED_BULB_PARALLEL_EXPLAIN_Q3","BURNED_BULB_PARALLEL_WHY_Q",
 			"GIVE_CIRCUIT_TYPE_HYBRID_EXPLAIN_Q2","GIVE_CIRCUIT_TYPE_HYBRID_EXPLAIN_Q3","GIVE_CIRCUIT_TYPE_PARALLEL_EXPLAIN_Q2","HYBRID_BURNED_OUT_EXPLAIN_Q1",
@@ -103,6 +106,10 @@ public class SRAReader extends JCasCollectionReader_ImplBase{
 	public static final String PARAM_PROMPT_SET_ID = "PromptSetId";
 	@ConfigurationParameter(name = PARAM_PROMPT_SET_ID, mandatory = false)
 	protected String requestedPromptSetId; 
+	
+	public static final String PARAM_EXCLUDE_PROMPT_SET_ID = "ExcludePromptSetId";
+	@ConfigurationParameter(name = PARAM_EXCLUDE_PROMPT_SET_ID, mandatory = false)
+	protected String excludedPromptSetId; 
 
 	public static final String PARAM_QUESTION_PREFIX = "QuestionPrefix";
 	@ConfigurationParameter(name = PARAM_QUESTION_PREFIX, mandatory = true)
@@ -148,7 +155,7 @@ public class SRAReader extends JCasCollectionReader_ImplBase{
 						}  
 					});                                                              
 			for(File f:fileArray){
-				if (f.getName().startsWith("._")){
+				if (f.getName().startsWith(".")){
 					continue;
 				}
 				//	System.out.println(f.getName());
@@ -215,6 +222,9 @@ public class SRAReader extends JCasCollectionReader_ImplBase{
 
 					// if valid PromptSetId is set, then skip if not equal with current 
 					if (requestedPromptSetId != null && !requestedPromptSetId.equals(questionId)) {
+						break;
+					}
+					if (excludedPromptSetId != null && excludedPromptSetId.equals(questionId)) {
 						break;
 					}
 					//read student answer

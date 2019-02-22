@@ -1,13 +1,5 @@
 package de.unidue.ltl.escrito.core.learningcurve;
 
-import static org.dkpro.tc.core.Constants.DIM_CROSS_VALIDATION_MANUAL_FOLDS;
-import static org.dkpro.tc.core.Constants.DIM_FEATURE_MODE;
-import static org.dkpro.tc.core.Constants.DIM_FILES_ROOT;
-import static org.dkpro.tc.core.Constants.FM_SEQUENCE;
-import static org.dkpro.tc.core.Constants.LEAVE_ONE_OUT;
-import static org.dkpro.tc.core.Constants.TEST_TASK_INPUT_KEY_TEST_DATA;
-import static org.dkpro.tc.core.Constants.TEST_TASK_INPUT_KEY_TRAINING_DATA;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,11 +8,12 @@ import org.apache.commons.io.FileUtils;
 import org.dkpro.lab.engine.TaskContext;
 import org.dkpro.lab.reporting.Report;
 import org.dkpro.lab.storage.StorageService.AccessMode;
+import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
 import org.dkpro.lab.task.Dimension;
 import org.dkpro.lab.task.Discriminator;
 import org.dkpro.lab.task.ParameterSpace;
-import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
 import org.dkpro.lab.task.impl.DefaultBatchTask;
+import org.dkpro.lab.task.impl.DimensionBundle;
 import org.dkpro.lab.task.impl.FoldDimensionBundle;
 import org.dkpro.tc.api.exception.TextClassificationException;
 import org.dkpro.tc.core.Constants;
@@ -29,8 +22,8 @@ import org.dkpro.tc.core.task.ExtractFeaturesTask;
 import org.dkpro.tc.core.task.InitTask;
 import org.dkpro.tc.core.task.MetaInfoTask;
 import org.dkpro.tc.core.task.TcTaskType;
-import org.dkpro.tc.ml.ExperimentCrossValidation;
 import org.dkpro.tc.ml.FoldUtil;
+import org.dkpro.tc.ml.experiment.ExperimentCrossValidation;
 
 public class BatchTaskCrossValidationLearningCurve extends ExperimentCrossValidation  implements Constants{
 
@@ -49,10 +42,10 @@ public class BatchTaskCrossValidationLearningCurve extends ExperimentCrossValida
             throw new IllegalStateException("You must set an experiment name");
         }
 
-        if (numFolds < 2) {
+        if (aNumFolds < 2) {
             throw new IllegalStateException(
                     "Number of folds is not configured correctly. Number of folds needs to be at "
-                            + "least 2 (but was " + numFolds + ")");
+                            + "least 2 (but was " + aNumFolds + ")");
         }
 
         // initialize the setup
@@ -89,12 +82,12 @@ public class BatchTaskCrossValidationLearningCurve extends ExperimentCrossValida
                     i++;
                 }
                 Arrays.sort(fileNames);
-                if (numFolds == LEAVE_ONE_OUT) {
-                    numFolds = fileNames.length;
+                if (aNumFolds == LEAVE_ONE_OUT) {
+                    aNumFolds = fileNames.length;
                 }
 
                 //is executed if we have less CAS than requested folds and manual mode is turned off
-                if (!useCrossValidationManualFolds && fileNames.length < numFolds) {
+                if (!useCrossValidationManualFolds && fileNames.length < aNumFolds) {
                     xmiPathRoot = createRequestedNumberOfCas(xmiPathRoot, fileNames.length, featureMode);
                     files = FileUtils.listFiles(xmiPathRoot, new String[] { "bin" }, true);
                     fileNames = new String[files.size()];
@@ -106,7 +99,7 @@ public class BatchTaskCrossValidationLearningCurve extends ExperimentCrossValida
                     }
                 }
                 // don't change any names!!
-                FoldDimensionBundle<String> foldDim = getFoldDim(fileNames);
+                DimensionBundle<Collection<String>> foldDim = getFoldDim(fileNames);
                 Dimension<File> filesRootDim = Dimension.create(DIM_FILES_ROOT, xmiPathRoot);
 
                 ParameterSpace pSpace = new ParameterSpace(foldDim, filesRootDim);
@@ -118,7 +111,7 @@ public class BatchTaskCrossValidationLearningCurve extends ExperimentCrossValida
 
                 try {
                     File outputFolder = FoldUtil.createMinimalSplit(xmiPathRoot.getAbsolutePath(),
-                            numFolds, numAvailableJCas, FM_SEQUENCE.equals(featureMode));
+                            aNumFolds, numAvailableJCas, FM_SEQUENCE.equals(featureMode));
 
                     verfiyThatNeededNumberOfCasWasCreated(outputFolder);
 
@@ -138,10 +131,10 @@ public class BatchTaskCrossValidationLearningCurve extends ExperimentCrossValida
                     }
                 }
 
-                if (numCas < numFolds) {
+                if (numCas < aNumFolds) {
                     throw new IllegalStateException(
                             "Not enough TextClassificationUnits found to create at least ["
-                                    + numFolds + "] folds");
+                                    + aNumFolds + "] folds");
                 }
             }
         };
@@ -180,7 +173,7 @@ public class BatchTaskCrossValidationLearningCurve extends ExperimentCrossValida
         testTask.setAttribute(TC_TASK_TYPE, TcTaskType.MACHINE_LEARNING_ADAPTER.toString());
 
         if (innerReports != null) {
-            for (Class<? extends Report> report : innerReports) {
+            for (Report report : innerReports) {
                 testTask.addReport(report);
             }
         }

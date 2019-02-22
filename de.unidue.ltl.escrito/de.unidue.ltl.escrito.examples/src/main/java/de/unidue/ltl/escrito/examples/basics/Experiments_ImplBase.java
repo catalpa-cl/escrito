@@ -13,15 +13,13 @@ import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
 import org.dkpro.lab.task.Dimension;
 import org.dkpro.lab.task.ParameterSpace;
 import org.dkpro.tc.core.Constants;
-import org.dkpro.tc.ml.ExperimentCrossValidation;
-import org.dkpro.tc.ml.ExperimentTrainTest;
-import org.dkpro.tc.ml.report.BatchCrossValidationReport;
-import org.dkpro.tc.ml.report.BatchRuntimeReport;
-import org.dkpro.tc.ml.report.BatchTrainTestReport;
+import org.dkpro.tc.ml.experiment.ExperimentCrossValidation;
+import org.dkpro.tc.ml.experiment.ExperimentTrainTest;
+import org.dkpro.tc.ml.report.CrossValidationReport;
+import org.dkpro.tc.ml.report.RuntimeReport;
+import org.dkpro.tc.ml.report.TrainTestReport;
 import org.dkpro.tc.ml.weka.WekaAdapter;
 
-import weka.classifiers.functions.SMO;
-import weka.classifiers.trees.J48;
 import de.tudarmstadt.ukp.dkpro.core.clearnlp.ClearNlpLemmatizer;
 import de.tudarmstadt.ukp.dkpro.core.clearnlp.ClearNlpParser;
 import de.tudarmstadt.ukp.dkpro.core.clearnlp.ClearNlpSegmenter;
@@ -34,7 +32,8 @@ import de.unidue.ltl.escrito.core.learningcurve.LearningCurveReport;
 import de.unidue.ltl.escrito.core.report.CvEvaluationReport;
 import de.unidue.ltl.escrito.core.report.GradingEvaluationReport;
 import de.unidue.ltl.escrito.core.report.GradingEvaluationReportClusteringCurve;
-import de.unidue.ltl.escrito.core.tc.WekaAdapterConfidenceScores;
+import weka.classifiers.functions.LinearRegression;
+import weka.classifiers.functions.SMO;
 
 public abstract class Experiments_ImplBase
 	implements Constants
@@ -44,15 +43,25 @@ public abstract class Experiments_ImplBase
 	public static Dimension<Map<String, Object>> getStandardWekaClassificationArgsDim()
 	{	
 		Map<String, Object> config = new HashMap<>();
-		//config.put(DIM_CLASSIFICATION_ARGS, new Object[] { new WekaAdapter(), SMO.class.getName()});
+		config.put(DIM_CLASSIFICATION_ARGS, new Object[] { new WekaAdapter(), SMO.class.getName()});
 		// config.put(DIM_CLASSIFICATION_ARGS, new Object[] { new WekaAdapterConfidenceScores(), J48.class.getName()});
-		config.put(DIM_CLASSIFICATION_ARGS, new Object[] { new WekaAdapterConfidenceScores(), J48.class.getName()});
+		//config.put(DIM_CLASSIFICATION_ARGS, new Object[] { new WekaAdapterConfidenceScores(), J48.class.getName()});
+		config.put(DIM_DATA_WRITER, new WekaAdapter().getDataWriterClass());
+		config.put(DIM_FEATURE_USE_SPARSE, new WekaAdapter().useSparseFeatures());
+		Dimension<Map<String, Object>> mlas = Dimension.createBundle("config", config);					
+		return mlas;
+	}	
+
+	public static Dimension<Map<String, Object>> getStandardWekaRegressionArgsDim()
+	{	
+		Map<String, Object> config = new HashMap<>();
+		config.put(DIM_CLASSIFICATION_ARGS, new Object[] { new WekaAdapter(), LinearRegression.class.getName()});
 		config.put(DIM_DATA_WRITER, new WekaAdapter().getDataWriterClass());
 		config.put(DIM_FEATURE_USE_SPARSE, new WekaAdapter().useSparseFeatures());
 		Dimension<Map<String, Object>> mlas = Dimension.createBundle("config", config);					
 		return mlas;
 	}
-
+	
 
 	public static Dimension<Map<String, Object>> getWekaLearningCurveClassificationArgsDim()
 	{	
@@ -122,7 +131,7 @@ public abstract class Experiments_ImplBase
 		batch.setParameterSpace(pSpace);
 		batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
 		batch.addReport(GradingEvaluationReport.class);
-		batch.addReport(BatchTrainTestReport.class);
+		batch.addReport(TrainTestReport.class);
 		// Run
 		Lab.getInstance().run(batch);
 	}
@@ -137,7 +146,7 @@ public abstract class Experiments_ImplBase
 		//	batch.addInnerReport(GradingEvaluationReport.class);
 		batch.setParameterSpace(pSpace);
 		batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
-		batch.addReport(BatchCrossValidationReport.class);
+		batch.addReport(CrossValidationReport.class);
 		batch.addReport(CvEvaluationReport.class);
 
 		// Run
@@ -153,11 +162,11 @@ public abstract class Experiments_ImplBase
 		System.out.println("Running experiment "+name);
 		ExperimentTrainTest batch = new ExperimentTrainTest(name + "-LearningCurve");
 		batch.setPreprocessing(getPreprocessing(languageCode));
-		batch.addInnerReport(LearningCurveReport.class);    
+		batch.addInnerReport(new LearningCurveReport());    
 		batch.setParameterSpace(pSpace);
 		batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
 		// TODO: wieso wird der nicht ausgeführt?
-		batch.addReport(BatchRuntimeReport.class);
+		batch.addReport(new RuntimeReport());
 		// Run
 		Lab.getInstance().run(batch);
 	}
@@ -171,9 +180,9 @@ public abstract class Experiments_ImplBase
 		//   System.out.println(batch.getPreprocessing());
 		batch.setParameterSpace(pSpace);
 		batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
-		batch.addReport(BatchTrainTestReport.class);
+		batch.addReport(TrainTestReport.class);
 		//   batch.addReport(BatchOutcomeIDReport.class);
-		batch.addReport(BatchRuntimeReport.class);
+		batch.addReport(RuntimeReport.class);
 
 		// Run
 		Lab.getInstance().run(batch);
@@ -188,9 +197,9 @@ public abstract class Experiments_ImplBase
 		batch.setPreprocessing(getPreprocessing(languageCode));
 		batch.setParameterSpace(pSpace);
 		batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
-		batch.addReport(BatchTrainTestReport.class);
+		batch.addReport(new TrainTestReport());
 		//   batch.addReport(BatchOutcomeIDReport.class);
-		batch.addReport(BatchRuntimeReport.class);
+		batch.addReport(new RuntimeReport());
 
 		// Run
 		Lab.getInstance().run(batch);
@@ -209,7 +218,7 @@ public abstract class Experiments_ImplBase
 		//   batch.addInnerReport(KappaReport.class);
 		//   batch.addReport(BatchTrainTestReport.class);
 		//    batch.addReport(BatchOutcomeIDReport.class);
-		batch.addReport(BatchRuntimeReport.class);
+		batch.addReport(new RuntimeReport());
 
 		// Run
 		Lab.getInstance().run(batch);

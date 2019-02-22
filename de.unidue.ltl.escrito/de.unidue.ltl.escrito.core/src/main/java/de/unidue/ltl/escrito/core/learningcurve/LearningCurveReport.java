@@ -34,22 +34,18 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.dkpro.lab.reporting.ReportBase;
 import org.dkpro.lab.storage.StorageService;
-import org.dkpro.lab.storage.StorageService.AccessMode;
 import org.dkpro.lab.storage.impl.PropertiesAdapter;
 import org.dkpro.lab.task.Discriminator;
 import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.task.TcTaskTypeUtil;
-import org.dkpro.tc.ml.report.TcBatchReportBase;
+import org.dkpro.tc.ml.report.TcAbstractReport;
 import org.dkpro.tc.ml.weka.core._eka;
-import org.dkpro.tc.ml.weka.task.WekaTestTask;
 
 import de.unidue.ltl.escrito.core.report.ReportUtils;
 import de.unidue.ltl.escrito.core.visualization.XYChartPlotter;
 import de.unidue.ltl.evaluation.core.EvaluationData;
 import de.unidue.ltl.evaluation.measures.agreement.QuadraticallyWeightedKappa;
-import weka.core.Instance;
 import weka.core.SerializationHelper;
 
 
@@ -58,7 +54,7 @@ import weka.core.SerializationHelper;
  * Collects results for each of the learning curve runs.
  */
 public class LearningCurveReport
-extends TcBatchReportBase
+extends TcAbstractReport
 implements Constants
 {
 

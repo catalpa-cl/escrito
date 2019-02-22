@@ -18,11 +18,12 @@
  */
 package de.unidue.ltl.escrito.core.clustering;
 
+import static org.dkpro.tc.core.Constants.TC_TASK_TYPE;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
-import org.dkpro.lab.engine.TaskContext;
 import org.dkpro.lab.reporting.Report;
 import org.dkpro.lab.task.impl.TaskBase;
 import org.dkpro.tc.core.task.ExtractFeaturesTask;
@@ -30,150 +31,144 @@ import org.dkpro.tc.core.task.InitTask;
 import org.dkpro.tc.core.task.MetaInfoTask;
 import org.dkpro.tc.core.task.OutcomeCollectionTask;
 import org.dkpro.tc.core.task.TcTaskType;
-import org.dkpro.tc.ml.ExperimentTrainTest;
-import org.dkpro.tc.ml.base.ShallowLearningExperiment_ImplBase;
-import org.dkpro.tc.ml.weka.report.WekaOutcomeIDReport;
+import org.dkpro.tc.ml.base.Experiment_ImplBase;
 import org.dkpro.tc.ml.weka.task.WekaTestTask;
-import org.dkpro.tc.core.Constants;
-
-import de.unidue.ltl.escrito.core.report.GradingEvaluationReport;
-import static org.dkpro.tc.core.Constants.TC_TASK_TYPE;
 
 /**
  * Clustering setup
  * 
  */
 public class BatchTaskClusterLabelPropagation
-extends ShallowLearningExperiment_ImplBase
+extends Experiment_ImplBase
 {
-	
+
 	protected InitTask initTaskTrain;
 	protected OutcomeCollectionTask collectionTask;
 	protected MetaInfoTask metaTask;
 	protected ExtractFeaturesTask featuresTrainTask;
 	protected TaskBase testTask;
-	
-    private String experimentName;
-    private AnalysisEngineDescription preprocessingPipeline;
-    private List<String> operativeViews;
-    private List<Class<? extends Report>> innerReports;
-    private ClusterLabelPropagationTask clusteringTask;
+
+	private String experimentName;
+	private AnalysisEngineDescription preprocessingPipeline;
+	private List<String> operativeViews;
+	private List<Class<? extends Report>> innerReports;
+	private ClusterLabelPropagationTask clusteringTask;
 
 
-    public BatchTaskClusterLabelPropagation()
-    {/* needed for Groovy */
-    }
+	public BatchTaskClusterLabelPropagation()
+	{/* needed for Groovy */
+	}
 
-    /*
-     * Preconfigured train-test setup.
-     * 
-     * @param aExperimentName
-     *            name of the experiment
-     * @param class1 
-     * @param preprocessingPipeline
-     *            preprocessing analysis engine aggregate
-     */
-    public BatchTaskClusterLabelPropagation(String aExperimentName)
-    {
-        setExperimentName(aExperimentName);
-        // set name of overall batch task
-        setType("Evaluation-" + experimentName);
-     }
+	/*
+	 * Preconfigured train-test setup.
+	 * 
+	 * @param aExperimentName
+	 *            name of the experiment
+	 * @param class1 
+	 * @param preprocessingPipeline
+	 *            preprocessing analysis engine aggregate
+	 */
+	public BatchTaskClusterLabelPropagation(String aExperimentName)
+	{
+		setExperimentName(aExperimentName);
+		// set name of overall batch task
+		setType("Evaluation-" + experimentName);
+	}
 
 
 
-    /*
-     * Initializes the experiment. This is called automatically before execution. It's not done
-     * directly in the constructor, because we want to be able to use setters instead of the
-     * three-argument constructor.
-     * 
-     * @throws IllegalStateException
-     *             if not all necessary arguments have been set.
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
-     */
-    protected void init()
-    {
-    	 if (experimentName == null) {
-             throw new IllegalStateException("You must set an experiment name");
-         }
+	/*
+	 * Initializes the experiment. This is called automatically before execution. It's not done
+	 * directly in the constructor, because we want to be able to use setters instead of the
+	 * three-argument constructor.
+	 * 
+	 * @throws IllegalStateException
+	 *             if not all necessary arguments have been set.
+	 * @throws ClassNotFoundException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 */
+	protected void init()
+	{
+		if (experimentName == null) {
+			throw new IllegalStateException("You must set an experiment name");
+		}
 
-        // init the train part of the experiment
-        initTaskTrain = new InitTask();
-   //     initTaskTrain.setMlAdapter(mlAdapter);
-        initTaskTrain.setPreprocessing(getPreprocessing());
-        initTaskTrain.setOperativeViews(operativeViews);
-        initTaskTrain.setTesting(false);
-        initTaskTrain.setType(initTaskTrain.getType() + "-Train-" + experimentName);
-        initTaskTrain.setAttribute(TC_TASK_TYPE, TcTaskType.INIT_TRAIN.toString());
-       
-        collectionTask = new OutcomeCollectionTask();
-        collectionTask.setType(collectionTask.getType() + "-" + experimentName);
-        collectionTask.setAttribute(TC_TASK_TYPE, TcTaskType.COLLECTION.toString());
-        collectionTask.addImport(initTaskTrain, InitTask.OUTPUT_KEY_TRAIN);
-        
-        // get some meta data depending on the whole document collection that we need for training
-        metaTask = new MetaInfoTask();
-        metaTask.setOperativeViews(operativeViews);
-        metaTask.setType(metaTask.getType() + "-" + experimentName);
+		// init the train part of the experiment
+		initTaskTrain = new InitTask();
+		//     initTaskTrain.setMlAdapter(mlAdapter);
+		initTaskTrain.setPreprocessing(getPreprocessing());
+		initTaskTrain.setOperativeViews(operativeViews);
+		initTaskTrain.setTesting(false);
+		initTaskTrain.setType(initTaskTrain.getType() + "-Train-" + experimentName);
+		initTaskTrain.setAttribute(TC_TASK_TYPE, TcTaskType.INIT_TRAIN.toString());
 
-        metaTask.addImport(initTaskTrain, InitTask.OUTPUT_KEY_TRAIN,
-                MetaInfoTask.INPUT_KEY);
-        metaTask.setAttribute(TC_TASK_TYPE, TcTaskType.META.toString());
+		collectionTask = new OutcomeCollectionTask();
+		collectionTask.setType(collectionTask.getType() + "-" + experimentName);
+		collectionTask.setAttribute(TC_TASK_TYPE, TcTaskType.COLLECTION.toString());
+		collectionTask.addImport(initTaskTrain, InitTask.OUTPUT_KEY_TRAIN);
 
-     // feature extraction on training data
-        featuresTrainTask = new ExtractFeaturesTask();
-        featuresTrainTask.setType(featuresTrainTask.getType() + "-Train-" + experimentName);
-        featuresTrainTask.setTesting(false);
-        featuresTrainTask.addImport(metaTask, MetaInfoTask.META_KEY);
-        featuresTrainTask.addImport(initTaskTrain, InitTask.OUTPUT_KEY_TRAIN,
-                ExtractFeaturesTask.INPUT_KEY);
-        featuresTrainTask.addImport(collectionTask, OutcomeCollectionTask.OUTPUT_KEY,
-                ExtractFeaturesTask.COLLECTION_INPUT_KEY);
-        featuresTrainTask.setAttribute(TC_TASK_TYPE,
-                TcTaskType.FEATURE_EXTRACTION_TRAIN.toString());
+		// get some meta data depending on the whole document collection that we need for training
+		metaTask = new MetaInfoTask();
+		metaTask.setOperativeViews(operativeViews);
+		metaTask.setType(metaTask.getType() + "-" + experimentName);
 
-        // test task operating on the models of the feature extraction train and test tasks
-        clusteringTask = new ClusterLabelPropagationTask();
-        clusteringTask.setType(clusteringTask.getType() + "-" + experimentName);
-        clusteringTask.addImport(initTaskTrain, InitTask.OUTPUT_KEY_TRAIN);
-        clusteringTask.addImport(featuresTrainTask, ExtractFeaturesTask.OUTPUT_KEY,
-        		WekaTestTask.TEST_TASK_INPUT_KEY_TRAINING_DATA);
-        
-        addTask(initTaskTrain);
-        addTask(collectionTask);
-         addTask(metaTask);
-        addTask(featuresTrainTask);
-        addTask(clusteringTask);
-    }
+		metaTask.addImport(initTaskTrain, InitTask.OUTPUT_KEY_TRAIN,
+				MetaInfoTask.INPUT_KEY);
+		metaTask.setAttribute(TC_TASK_TYPE, TcTaskType.META.toString());
 
-    public void setExperimentName(String experimentName)
-    {
-        this.experimentName = experimentName;
-    }
+		// feature extraction on training data
+		featuresTrainTask = new ExtractFeaturesTask();
+		featuresTrainTask.setType(featuresTrainTask.getType() + "-Train-" + experimentName);
+		featuresTrainTask.setTesting(false);
+		featuresTrainTask.addImport(metaTask, MetaInfoTask.META_KEY);
+		featuresTrainTask.addImport(initTaskTrain, InitTask.OUTPUT_KEY_TRAIN,
+				ExtractFeaturesTask.INPUT_KEY);
+		featuresTrainTask.addImport(collectionTask, OutcomeCollectionTask.OUTPUT_KEY,
+				ExtractFeaturesTask.COLLECTION_INPUT_KEY);
+		featuresTrainTask.setAttribute(TC_TASK_TYPE,
+				TcTaskType.FEATURE_EXTRACTION_TRAIN.toString());
 
-    public void setPreprocessingPipeline(AnalysisEngineDescription preprocessingPipeline)
-    {
-        this.preprocessingPipeline = preprocessingPipeline;
-    }
+		// test task operating on the models of the feature extraction train and test tasks
+		clusteringTask = new ClusterLabelPropagationTask();
+		clusteringTask.setType(clusteringTask.getType() + "-" + experimentName);
+		clusteringTask.addImport(initTaskTrain, InitTask.OUTPUT_KEY_TRAIN);
+		clusteringTask.addImport(featuresTrainTask, ExtractFeaturesTask.OUTPUT_KEY,
+				WekaTestTask.TEST_TASK_INPUT_KEY_TRAINING_DATA);
 
-    public void setOperativeViews(List<String> operativeViews)
-    {
-        this.operativeViews = operativeViews;
-    }
+		addTask(initTaskTrain);
+		addTask(collectionTask);
+		addTask(metaTask);
+		addTask(featuresTrainTask);
+		addTask(clusteringTask);
+	}
 
-    /**
-     * Sets the report for the test task
-     * 
-     * @param innerReport
-     *            classification report or regression report
-     */
-    public void addInnerReport(Class<? extends Report> innerReport)
-    {
-        if (innerReports == null) {
-            innerReports = new ArrayList<Class<? extends Report>>();
-        }
-        this.innerReports.add(innerReport);
-    }
+	public void setExperimentName(String experimentName)
+	{
+		this.experimentName = experimentName;
+	}
+
+	public void setPreprocessingPipeline(AnalysisEngineDescription preprocessingPipeline)
+	{
+		this.preprocessingPipeline = preprocessingPipeline;
+	}
+
+	public void setOperativeViews(List<String> operativeViews)
+	{
+		this.operativeViews = operativeViews;
+	}
+
+	/**
+	 * Sets the report for the test task
+	 * 
+	 * @param innerReport
+	 *            classification report or regression report
+	 */
+	public void addInnerReport(Class<? extends Report> innerReport)
+	{
+		if (innerReports == null) {
+			innerReports = new ArrayList<Class<? extends Report>>();
+		}
+		this.innerReports.add(innerReport);
+	}
 }

@@ -1,4 +1,4 @@
-package de.unidue.ltl.escrito.features.occurance;
+package de.unidue.ltl.escrito.features.occurence;
 
 import static org.dkpro.tc.testing.FeatureTestUtil.assertFeature;
 import static org.dkpro.tc.testing.FeatureTestUtil.assertFeatures;
@@ -14,6 +14,7 @@ import org.dkpro.tc.api.features.util.FeatureUtil;
 import org.dkpro.tc.api.type.TextClassificationTarget;
 import org.junit.Test;
 import de.unidue.ltl.escrito.features.core.EssayGradingTestBase;
+import de.unidue.ltl.escrito.features.occurence.SpeechThoughtWritingRepresentation;
 
 public class SpeechThoughtWritingRepresentationDFETest extends EssayGradingTestBase{
 	@Test @Ignore
