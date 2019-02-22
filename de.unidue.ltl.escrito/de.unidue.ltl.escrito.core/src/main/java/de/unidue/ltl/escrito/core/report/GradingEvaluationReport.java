@@ -68,11 +68,11 @@ public class GradingEvaluationReport extends TcAbstractReport {
 
 			if (TcTaskTypeUtil.isFeatureExtractionTestTask(storageService, id)) {
 				String path = storageService.locateKey(id, "output/documentMetaData.txt").getAbsolutePath();
-			//	System.out.println(path);
+				//	System.out.println(path);
 				instanceId2TextMap = Utils.getInstanceId2TextMap(path);
 				System.out.println("Read map with "+instanceId2TextMap.size()+" entries");
 			}
-		//	System.out.println(id);
+			//	System.out.println(id);
 			if (!TcTaskTypeUtil.isFacadeTask(storageService, id)) {
 				continue;
 			}
@@ -86,6 +86,7 @@ public class GradingEvaluationReport extends TcAbstractReport {
 				evaluationFile = storageService.locateKey(subId, Constants.ID_OUTCOME_KEY);
 				evaluationFileMajority = storageService.locateKey(subId, Constants.BASELINE_MAJORITIY_ID_OUTCOME_KEY);
 				id2ConfidenceScoreFile = storageService.locateKey(subId, "id2ConfScore.txt");
+				System.out.println(id2ConfidenceScoreFile);
 				System.out.println(evaluationFile);
 				System.out.println(evaluationFileMajority);
 			}
@@ -97,8 +98,10 @@ public class GradingEvaluationReport extends TcAbstractReport {
 		EvaluationData<String> evaluationString = ReportUtils.readId2OutcomeAsString(evaluationFile);
 		EvaluationData<String> evaluationStringMajority = ReportUtils.readId2OutcomeAsString(evaluationFileMajority);
 
-		Map<Integer, Double> confScoreMap = ReportUtils.readId2ConfidenceScore(id2ConfidenceScoreFile);
-
+		Map<Integer, Double> confScoreMap = new HashMap<Integer, Double>();
+		if (id2ConfidenceScoreFile.exists()){
+			confScoreMap = ReportUtils.readId2ConfidenceScore(id2ConfidenceScoreFile);
+		}
 
 
 		Accuracy<String> acc = new Accuracy<String>(evaluationString);

@@ -100,6 +100,9 @@ public class PairwiseFeatureWrapper
 		Set<Feature> featuresForOneReferenceAnswer = null;
 		Set<Feature> featureForOnereferenceAnswerBest = null;
 		Set<Feature> featureForAllReferenceAnswers = new HashSet<Feature>();
+		if (!(JCasUtil.exists(view, LearnerAnswerWithReferenceAnswer.class))){
+			return PFE.extract(view, view);
+		}
 		LearnerAnswerWithReferenceAnswer learnerAnswer = JCasUtil.selectSingle(view, LearnerAnswerWithReferenceAnswer.class);
 		JCas comparisonView = null;
 		Map<String, List<Feature>> allValuesPerFeature = new HashMap<String, List<Feature>>();
@@ -118,7 +121,7 @@ public class PairwiseFeatureWrapper
 				}
 				comparisonViewCache.put(refAnsId, comparisonView);
 			}
-			// System.out.println("COMPARING "+view.getDocumentText()+" WITH "+comparisonView.getDocumentText());
+//			System.out.println("COMPARING "+view.getDocumentText()+" WITH "+comparisonView.getDocumentText());
 			featuresForOneReferenceAnswer = PFE.extract(view, comparisonView);
 			for (Iterator<Feature> iter1 = featuresForOneReferenceAnswer.iterator(); iter1.hasNext();){
 				Feature feature = iter1.next();

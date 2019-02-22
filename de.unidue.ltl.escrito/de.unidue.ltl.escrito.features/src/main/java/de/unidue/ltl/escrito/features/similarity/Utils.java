@@ -91,8 +91,12 @@ public class Utils {
 			normA += Math.pow(vectorA[i], 2);
 			normB += Math.pow(vectorB[i], 2);
 		}   
-		return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
-	}
+		if (Math.sqrt(normA) * Math.sqrt(normB) == 0.0){
+			return 0.0;
+		} else {
+			return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+		}
+	}	
 
 
 

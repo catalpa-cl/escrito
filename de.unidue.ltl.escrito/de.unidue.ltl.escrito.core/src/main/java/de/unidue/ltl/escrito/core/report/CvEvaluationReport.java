@@ -63,15 +63,14 @@ implements Constants{
 			if (!TcTaskTypeUtil.isCrossValidationTask(store, subcontext.getId())) {
 				continue;
 			}
-			
+
 			if (TcTaskTypeUtil.isFeatureExtractionTestTask(store, subcontext.getId())){
-				// TODO: Das geht nicht, da komme ich nicht in den richtigen Task rein!
 				System.out.println("Found FETestTak");
 				Utils.extendInstanceId2TextMapCV(instanceId2TextMap, store, subcontext.getId());
 			}
-			
-			
-			
+
+
+
 			Properties props = new Properties();
 
 			File id2oFile = store.locateKey(subcontext.getId(),
@@ -81,7 +80,13 @@ implements Constants{
 
 			System.out.println(id2oFile);
 
-			EvaluationData<Double> evaluationDouble = ReportUtils.readId2OutcomeAsDouble(id2oFile);
+			boolean evalNumeric = false;
+			EvaluationData<Double> evaluationDouble = null;
+			try {
+				evaluationDouble = ReportUtils.readId2OutcomeAsDouble(id2oFile);
+			} catch (NumberFormatException nfe){
+				System.err.println("Warning: You use categorical data, therefore we cannot evaluate it numerically");
+			}
 			EvaluationData<String> evaluationString = ReportUtils.readId2OutcomeAsString(id2oFile);
 			EvaluationData<String> evaluationStringMajority = ReportUtils.readId2OutcomeAsString(id2oFileMaj);
 
@@ -99,11 +104,13 @@ implements Constants{
 			CohenKappa<String> kappa = new CohenKappa<String>(evaluationString);
 			results.put(COHENSKAPPA, kappa.getResult());
 
-			LinearlyWeightedKappa<Double> lwKappa = new LinearlyWeightedKappa<Double>(evaluationDouble);
-			results.put(LINEAR_KAPPA, lwKappa.getResult());
+			if (evalNumeric){
+				LinearlyWeightedKappa<Double> lwKappa = new LinearlyWeightedKappa<Double>(evaluationDouble);
+				results.put(LINEAR_KAPPA, lwKappa.getResult());
 
-			QuadraticallyWeightedKappa<Double> qwKappa = new QuadraticallyWeightedKappa<Double>(evaluationDouble);
-			results.put(QUADRATIC_WEIGHTED_KAPPA, qwKappa.getResult());
+				QuadraticallyWeightedKappa<Double> qwKappa = new QuadraticallyWeightedKappa<Double>(evaluationDouble);
+				results.put(QUADRATIC_WEIGHTED_KAPPA, qwKappa.getResult());
+			}
 
 			Precision<String> prec = new Precision<String>(evaluationString);
 			results.put(MACROPRECISION, prec.getMacroPrecision());
@@ -118,11 +125,13 @@ implements Constants{
 			results.put(MICROFMEASURE, f.getMicroFscore());
 			results.put(WEIGHTEDFMEASURE, f.getWeightedFscore());
 
-			PearsonCorrelation pearson = new PearsonCorrelation(evaluationDouble);
-			results.put(PEARSON, pearson.getResult());
+			if (evalNumeric){
+				PearsonCorrelation pearson = new PearsonCorrelation(evaluationDouble);
+				results.put(PEARSON, pearson.getResult());
 
-			SpearmanCorrelation spearman = new SpearmanCorrelation(evaluationDouble);
-			results.put(SPEARMAN, spearman.getResult());
+				SpearmanCorrelation spearman = new SpearmanCorrelation(evaluationDouble);
+				results.put(SPEARMAN, spearman.getResult());
+			}
 
 			for (String s : results.keySet()) {
 				System.out.printf(s+": %.2f"+System.getProperty("line.separator"), results.get(s));
