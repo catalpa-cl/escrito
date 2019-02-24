@@ -94,7 +94,7 @@ public class PT_AsagReader  extends JCasCollectionReader_ImplBase{
 
 			String promptId = null;
 			String text      = null;
-			int score    = -1;
+			String score    = "-1";
 
 
 			while ((nextLine = reader.readLine()) != null) {
@@ -111,7 +111,7 @@ public class PT_AsagReader  extends JCasCollectionReader_ImplBase{
 				if (m.find()){
 					promptId = m.group(1);
 					text = m.group(2);
-					score = Integer.parseInt(m.group(3));
+					score = m.group(3);
 					GenericDatasetItem newItem = new GenericDatasetItem(promptId, String.valueOf(items.size()), text, score, promptId);
 					if (requestedPromptSetId != null && !requestedPromptSetId.equals(promptId)) {
 
@@ -125,7 +125,7 @@ public class PT_AsagReader  extends JCasCollectionReader_ImplBase{
 						text += m_begin.group(2);
 					} else if (m_end.find()){
 						text += m_end.group(1);
-						score = Integer.parseInt(m_end.group(2));
+						score = m_end.group(2);
 						GenericDatasetItem newItem = new GenericDatasetItem(promptId, String.valueOf(items.size()), text, score, promptId);
 						if (requestedPromptSetId != null && !requestedPromptSetId.equals(promptId)) {
 
@@ -189,7 +189,7 @@ public class PT_AsagReader  extends JCasCollectionReader_ImplBase{
 		unit.setSuffix(itemId);
 		unit.addToIndexes();      
 		TextClassificationOutcome outcome = new TextClassificationOutcome(jcas, 0, jcas.getDocumentText().length());
-		outcome.setOutcome(Integer.toString(item.getGrade()));
+		outcome.setOutcome(item.getGrade());
 		outcome.addToIndexes();
 		currentIndex++;
 	}
