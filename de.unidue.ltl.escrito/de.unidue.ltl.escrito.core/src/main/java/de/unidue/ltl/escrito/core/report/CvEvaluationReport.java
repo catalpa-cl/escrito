@@ -80,11 +80,12 @@ implements Constants{
 
 			System.out.println(id2oFile);
 
-			boolean evalNumeric = false;
+			boolean evalNumeric = true;
 			EvaluationData<Double> evaluationDouble = null;
 			try {
 				evaluationDouble = ReportUtils.readId2OutcomeAsDouble(id2oFile);
 			} catch (NumberFormatException nfe){
+				evalNumeric = false;
 				System.err.println("Warning: You use categorical data, therefore we cannot evaluate it numerically");
 			}
 			EvaluationData<String> evaluationString = ReportUtils.readId2OutcomeAsString(id2oFile);
