@@ -3,13 +3,23 @@ package de.unidue.ltl.escrito.io.util;
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngine;
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDescription;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
@@ -22,6 +32,7 @@ import org.apache.uima.resource.ResourceInitializationException;
 import org.jfree.util.Log;
 
 import de.tudarmstadt.ukp.dkpro.core.api.metadata.type.DocumentMetaData;
+import de.tudarmstadt.ukp.dkpro.core.api.resources.ResourceUtils;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.berkeleyparser.BerkeleyParser;
 import de.tudarmstadt.ukp.dkpro.core.io.bincas.BinaryCasWriter;
@@ -30,6 +41,7 @@ import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpChunker;
 import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpPosTagger;
 import de.tudarmstadt.ukp.dkpro.core.tokit.BreakIteratorSegmenter;
 import de.unidue.ltl.escrito.core.types.LearnerAnswerToken;
+import de.unidue.ltl.escrito.generic.GenericDatasetItem;
 
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngine;
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDescription;
@@ -141,10 +153,32 @@ public class Utils {
 		array.set(0, s);
 		return array;
 	}
-	
-	
-	
 
-	
+	//requires the file to be in format for the GenericReader
+	public static Set<String> extractPromptIds(String inputFilePath, boolean ignoreFirstLine, String separator) throws IOException{
+		Set<String> promptIds;
+
+		promptIds = new HashSet<String>();
+		BufferedReader reader = new BufferedReader(
+				new FileReader(inputFilePath)
+				);
+		String nextLine;
+		if (ignoreFirstLine) {
+			nextLine = reader.readLine();
+		}			
+		while ((nextLine = reader.readLine()) != null) {
+			//System.out.println("line: "+nextLine);
+			String[] nextItem = nextLine.split(separator);
+			String promptId = null;
+
+			if (nextItem.length>=4) {
+				promptId  = nextItem[0];
+				promptIds.add(promptId);
+			}
+		}  
+		reader.close();
+	return promptIds;
+
+	}
 
 }
