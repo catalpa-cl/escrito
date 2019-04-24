@@ -6,9 +6,11 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 
 import org.apache.uima.UimaContext;
 import org.apache.uima.collection.CollectionException;
@@ -85,6 +87,10 @@ public class GenericDatasetReader  extends JCasCollectionReader_ImplBase{
 	public static final String PARAM_TARGET_ANSWER_PREFIX = "TargetAnswerPrefix";
 	@ConfigurationParameter(name = PARAM_TARGET_ANSWER_PREFIX, mandatory = false, defaultValue = "TA")
 	private String targetAnswerPrefix;
+	
+	public static final String PARAM_PROMPT_ID = "PromptID";
+	@ConfigurationParameter(name = PARAM_PROMPT_ID, mandatory = false, defaultValue = "-1")
+	protected String requestedPromptId;
 
 	public static final String PARAM_CORPUSNAME = "corpusName";
 	@ConfigurationParameter(name = PARAM_CORPUSNAME, mandatory = true)
@@ -97,6 +103,7 @@ public class GenericDatasetReader  extends JCasCollectionReader_ImplBase{
 	private Map<String, String> questions;
 	private Map<String, String> targetAnswers;
 
+	private Set<String> promptAnswerIds;
 	@Override
 	public void initialize(UimaContext aContext)
 			throws ResourceInitializationException
@@ -104,6 +111,7 @@ public class GenericDatasetReader  extends JCasCollectionReader_ImplBase{
 		items = new LinkedList<GenericDatasetItem>();
 		questions = new HashMap<String, String>();
 		targetAnswers = new HashMap<String, String>();
+		promptAnswerIds = new HashSet<String>();
 		try {
 			inputFileURL = ResourceUtils.resolveLocation(inputFileString, this, aContext);
 			BufferedReader reader = new BufferedReader(
@@ -115,9 +123,9 @@ public class GenericDatasetReader  extends JCasCollectionReader_ImplBase{
 			String nextLine;
 			if (ignoreFirstLine) {
 				nextLine = reader.readLine();
-			}
+			}			
 			while ((nextLine = reader.readLine()) != null) {
-				System.out.println("line: "+nextLine);
+				//System.out.println("line: "+nextLine);
 				String[] nextItem = nextLine.split(separator);
 				String promptId = null;
 				String answerId = null;
@@ -156,9 +164,21 @@ public class GenericDatasetReader  extends JCasCollectionReader_ImplBase{
 					if (nextItem.length >=6){
 						questions.put(promptId, Utils.cleanString(nextItem[5]));
 					} 
+					if (!requestedPromptId.equals("-1") && !requestedPromptId.equals(promptId)) {
+						//System.out.println("There are " + countEmptyAnswers + " empty answers in " + requestedQuestionId);
+						continue;
+					}
 					newItem = new GenericDatasetItem(promptId, answerId, text, score, promptId);
 					//		System.out.println(newItem.toString());
-					items.add(newItem);   
+					
+					String promptAnswerId = promptId+"_"+answerId;
+					if (promptAnswerIds.contains(promptAnswerId)){
+						System.err.println("You cannot have two answers with the same id. Please check answer "+promptAnswerId);
+						System.exit(-1);
+					} else {
+						promptAnswerIds.add(promptAnswerId);
+						items.add(newItem); 
+					}
 				}
 			}   
 		}
