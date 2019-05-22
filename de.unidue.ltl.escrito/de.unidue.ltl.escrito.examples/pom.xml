@@ -6,7 +6,6 @@
 		<artifactId>de.unidue.ltl.escrito</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>de.unidue.ltl.escrito</groupId>
 	<artifactId>de.unidue.ltl.escrito.examples</artifactId>
 
 
@@ -158,7 +157,7 @@
 		<dependency>
 			<groupId>nz.ac.waikato.cms.weka</groupId>
 			<artifactId>weka-dev</artifactId>
-			<version>3.9.1</version>
+<!-- 			<version>3.9.1</version> -->
 		</dependency>
 	</dependencies>
 

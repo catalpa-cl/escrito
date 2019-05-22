@@ -63,7 +63,7 @@ public class NumberOfSpellingErrors
 		this.dict = new CaseSensitiveSpellDictionary(f);
 		
 		splitter = new JWordSplitterAlgorithm();
-		Dictionary dict = new SimpleDictionary(f);
+		Dictionary dict = new SimpleDictionary(f, "UTF-8");
 		splitter.setDictionary(dict);
 	}
 
