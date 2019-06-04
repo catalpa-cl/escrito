@@ -141,11 +141,9 @@ public class Utils {
 	// HOTFIX for Issue 445 in DKPro Core
 	public static String cleanString(String textForCas){
 		textForCas = textForCas.replace("…", "...");
+		textForCas = textForCas.replace("´", "'");
 		return textForCas.replace("’", "'");
 	}
-
-
-
 
 
 	public static StringArray toStringArray(JCas jcas, String s){
