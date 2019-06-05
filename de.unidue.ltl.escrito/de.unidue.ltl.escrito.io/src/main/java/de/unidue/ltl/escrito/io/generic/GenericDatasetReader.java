@@ -1,4 +1,4 @@
-package de.unidue.ltl.escrito.generic;
+package de.unidue.ltl.escrito.io.generic;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package de.unidue.ltl.escrito.generic;
+package de.unidue.ltl.escrito.io.generic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ public class GenericDatasetItem {
 	private String text;
 	private String promptId;
 	private String answerId;
-	private String  targetAnswerId;
+	private String targetAnswerId;
 	
 
 	@Override
