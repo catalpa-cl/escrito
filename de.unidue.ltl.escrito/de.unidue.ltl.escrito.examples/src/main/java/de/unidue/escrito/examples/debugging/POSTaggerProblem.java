@@ -25,7 +25,7 @@ import de.unidue.ltl.escrito.io.generic.GenericDatasetReader;
 public class POSTaggerProblem extends Experiments_ImplBase implements Constants{
 
 	public static void main(String[] args) throws Exception {
-		AnalysisEngine engine = AnalysisEngineFactory.createEngine(OpenNlpPosTagger.class, OpenNlpPosTagger.PARAM_LANGUAGE, "de");
+		AnalysisEngine engine = AnalysisEngineFactory.createEngine(OpenNlpPosTagger.class, OpenNlpPosTagger.PARAM_LANGUAGE, "en");
 
 		JCas jcas = engine.newJCas();
 		jcas.setDocumentLanguage("de");
@@ -37,7 +37,7 @@ public class POSTaggerProblem extends Experiments_ImplBase implements Constants{
 		engine.process(jcas);
 		System.out.println("Schritt 1 - fertig");
 
-		AnalysisEngine engine2 = createEngine(Experiments_ImplBase.getPreprocessing("de"));		
+		AnalysisEngine engine2 = createEngine(Experiments_ImplBase.getPreprocessing("en"));		
 		JCas jcas2 = engine2.newJCas();
 		jcas2.setDocumentLanguage("de");
 		jcas2.setDocumentText(
