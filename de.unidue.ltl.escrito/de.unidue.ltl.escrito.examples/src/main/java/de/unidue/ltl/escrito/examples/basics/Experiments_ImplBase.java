@@ -223,9 +223,4 @@ public abstract class Experiments_ImplBase
 		// Run
 		Lab.getInstance().run(batch);
 	}
-
-
-
-
-
 }

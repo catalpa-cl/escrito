@@ -28,7 +28,7 @@ import de.tudarmstadt.ukp.dkpro.core.api.metadata.type.DocumentMetaData;
 import de.tudarmstadt.ukp.dkpro.core.api.resources.ResourceUtils;
 import de.unidue.ltl.escrito.core.types.LearnerAnswer;
 import de.unidue.ltl.escrito.core.types.LearnerAnswerWithReferenceAnswer;
-import de.unidue.ltl.escrito.generic.GenericDatasetItem;
+import de.unidue.ltl.escrito.io.generic.GenericDatasetItem;
 import de.unidue.ltl.escrito.io.util.Utils;
 
 
