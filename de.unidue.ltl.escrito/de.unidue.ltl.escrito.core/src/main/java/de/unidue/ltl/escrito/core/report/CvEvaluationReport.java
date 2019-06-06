@@ -68,9 +68,7 @@ implements Constants{
 				System.out.println("Found FETestTak");
 				Utils.extendInstanceId2TextMapCV(instanceId2TextMap, store, subcontext.getId());
 			}
-
-
-
+			
 			Properties props = new Properties();
 
 			File id2oFile = store.locateKey(subcontext.getId(),
@@ -92,7 +90,6 @@ implements Constants{
 			EvaluationData<String> evaluationStringMajority = ReportUtils.readId2OutcomeAsString(id2oFileMaj);
 
 			System.out.println("Read map with "+instanceId2TextMap.size()+" entries");
-
 
 			Map<String, Double> results = new HashMap<String, Double>();
 
@@ -142,7 +139,6 @@ implements Constants{
 			File itemsFile = new File(id2oFile.getParentFile(), LABELED_ITEMS_FILENAME);
 			ReportUtils.writeLabeledOutput(instanceId2TextMap, evaluationString, itemsFile, null);
 
-
 			// Write out properties
 			//getContext().storeBinary(RESULTS_FILENAME, new PropertiesAdapter(props));
 			// Write results
@@ -155,19 +151,6 @@ implements Constants{
 			finally {
 				IOUtils.closeQuietly(fos);
 			}
-
 		}
-
-
 	}
-
-
-
-
-
-
-
-
-
-
 }

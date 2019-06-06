@@ -121,9 +121,11 @@ public class GenericDatasetReader  extends JCasCollectionReader_ImplBase{
 							)
 					);
 			String nextLine;
+			int lineCounter = 1;
 			if (ignoreFirstLine) {
+				lineCounter++;
 				nextLine = reader.readLine();
-			}			
+			}	
 			while ((nextLine = reader.readLine()) != null) {
 				//System.out.println("line: "+nextLine);
 				String[] nextItem = nextLine.split(separator);
@@ -131,6 +133,7 @@ public class GenericDatasetReader  extends JCasCollectionReader_ImplBase{
 				String answerId = null;
 				String text      = null;
 				String score    = "-1";
+				
 
 				if (nextItem.length>=4) {
 					GenericDatasetItem newItem = null ;
@@ -180,6 +183,10 @@ public class GenericDatasetReader  extends JCasCollectionReader_ImplBase{
 						items.add(newItem); 
 					}
 				}
+				else {
+					System.out.println("Could not read lineNumber: " + lineCounter + ", " + nextItem +" item length is: " +nextItem.length);
+				}
+				lineCounter++;
 			}   
 		}
 		catch (Exception e) {
@@ -187,6 +194,7 @@ public class GenericDatasetReader  extends JCasCollectionReader_ImplBase{
 			throw new ResourceInitializationException(e);
 		}
 		currentIndex = 0;
+		//System.out.println("read "+items.size()+" items.");
 	}
 
 	@Override
@@ -212,7 +220,6 @@ public class GenericDatasetReader  extends JCasCollectionReader_ImplBase{
 			dmd.setDocumentTitle(item.getText());
 			dmd.setDocumentUri(inputFileURL.toURI().toString());
 			dmd.setCollectionId(itemId);
-
 		} 
 
 		catch (URISyntaxException e) {
@@ -237,13 +244,9 @@ public class GenericDatasetReader  extends JCasCollectionReader_ImplBase{
 		currentIndex++;
 	}
 
-
-
 	@Override
 	public Progress[] getProgress()
 	{
 		return new Progress[] { new ProgressImpl(currentIndex, currentIndex, Progress.ENTITIES) };
 	}
-
-
 }
