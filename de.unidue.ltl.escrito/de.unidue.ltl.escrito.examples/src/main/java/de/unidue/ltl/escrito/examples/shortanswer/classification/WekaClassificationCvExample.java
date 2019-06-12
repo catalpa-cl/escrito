@@ -1,4 +1,4 @@
-package de.unidue.ltl.escrito.examples.shortanswer.classification;
+package de.unidue.ltl.escrito.examples.basicexamples.shortanswer;
 
 import java.util.HashMap;
 import java.util.Map;

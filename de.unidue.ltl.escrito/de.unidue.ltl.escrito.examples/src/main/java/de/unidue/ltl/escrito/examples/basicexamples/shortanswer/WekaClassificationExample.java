@@ -19,16 +19,16 @@ import de.unidue.ltl.escrito.io.shortanswer.PowerGradingReader;
 public class WekaClassificationExample extends Experiments_ImplBase implements Constants {
 
 	public static void main(String[] args) throws Exception{
-//		runAsapBaselineExperiment("ASAP_Train_Test_Example", 
-//				System.getenv("DKPRO_HOME")+"/datasets/asap/originalData/train_repaired.txt", 
-//				System.getenv("DKPRO_HOME")+"/datasets/asap/originalData/test_public.txt", 
-//				"en", 
-//				1);
 		runPowergradingBaselineExperiment("PG_Train_Test_Example", 
 					System.getenv("DKPRO_HOME")+"/datasets/powergrading//train_70.txt", 
 					System.getenv("DKPRO_HOME")+"/datasets/powergrading//test_30.txt", 
 					"en", 
 					2);
+		runAsapBaselineExperiment("ASAP_Train_Test_Example", 
+				System.getenv("DKPRO_HOME")+"/datasets/asap/originalData/train_repaired.txt", 
+				System.getenv("DKPRO_HOME")+"/datasets/asap/originalData/test_public.txt", 
+				"en", 
+				1);
 	}
 
 
