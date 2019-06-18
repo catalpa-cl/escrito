@@ -24,6 +24,7 @@ import de.tudarmstadt.ukp.dkpro.core.clearnlp.ClearNlpLemmatizer;
 import de.tudarmstadt.ukp.dkpro.core.clearnlp.ClearNlpParser;
 import de.tudarmstadt.ukp.dkpro.core.clearnlp.ClearNlpSegmenter;
 import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpPosTagger;
+import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpSegmenter;
 import de.unidue.ltl.escrito.core.clustering.BatchTaskClusterClassificationExemplar;
 import de.unidue.ltl.escrito.core.clustering.BatchTaskClusterLabelPropagation;
 import de.unidue.ltl.escrito.core.clustering.BatchTaskClustering;
@@ -56,6 +57,7 @@ public abstract class Experiments_ImplBase
 	{	
 		Map<String, Object> config = new HashMap<>();
 		config.put(DIM_CLASSIFICATION_ARGS, new Object[] { new WekaAdapter(), LinearRegression.class.getName()});
+		//config.put(DIM_CLASSIFICATION_ARGS, new Object[] { new WekaAdapter(), weka.classifiers.functions.Logistic.class.getName()});
 		config.put(DIM_DATA_WRITER, new WekaAdapter().getDataWriterClass());
 		config.put(DIM_FEATURE_USE_SPARSE, new WekaAdapter().useSparseFeatures());
 		Dimension<Map<String, Object>> mlas = Dimension.createBundle("config", config);					
@@ -102,8 +104,7 @@ public abstract class Experiments_ImplBase
 		} else if (languageCode.equals("de")){
 			return createEngineDescription(
 					createEngineDescription(
-							ClearNlpSegmenter.class
-							//StanfordSegmenter.class
+							OpenNlpSegmenter.class
 							),
 					tagger,
 					lemmatizer,
