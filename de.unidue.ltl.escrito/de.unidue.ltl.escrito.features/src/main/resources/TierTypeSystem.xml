@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<typeSystemDescription xmlns="http://uima.apache.org/resourceSpecifier">
+    <name>TierTypeSystem</name>
+    <imports>
+        <import location="BasicTypeSystem.xml"/>
+    </imports>
+    <types>
+        <typeDescription>
+            <name>Tier.Tierart</name>
+            <description>Type defined in Tier</description>
+            <supertypeName>uima.tcas.Annotation</supertypeName>
+        </typeDescription>
+    </types>
+</typeSystemDescription>
