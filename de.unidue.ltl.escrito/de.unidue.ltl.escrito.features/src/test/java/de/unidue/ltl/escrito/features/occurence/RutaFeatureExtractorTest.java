@@ -1,68 +1,107 @@
 package de.unidue.ltl.escrito.features.occurence;
 
-import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngine;
-import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDescription;
-import static org.dkpro.tc.testing.FeatureTestUtil.assertFeature;
+import static org.junit.Assert.assertEquals;
 
-import java.util.Iterator;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Set;
 
-import org.junit.Assert;
-
 import org.apache.uima.analysis_engine.AnalysisEngine;
-import org.apache.uima.analysis_engine.AnalysisEngineDescription;
+import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
+import org.apache.uima.cas.CAS;
+import org.apache.uima.cas.text.AnnotationFS;
+import org.apache.uima.fit.factory.AnalysisEngineFactory;
+import org.apache.uima.fit.util.CasUtil;
 import org.apache.uima.jcas.JCas;
+import org.apache.uima.resource.ResourceInitializationException;
+import org.apache.uima.util.InvalidXMLException;
 import org.dkpro.tc.api.features.Feature;
 import org.dkpro.tc.api.type.TextClassificationTarget;
 import org.junit.Test;
 
-import de.tudarmstadt.ukp.dkpro.core.tokit.BreakIteratorSegmenter;
-import de.unidue.ltl.escrito.features.occurence.NrOfCommas;
+import de.unidue.ltl.escrito.features.occurence.NrOfRutaPatternMatches;
+
+
+
+
 
 public class RutaFeatureExtractorTest {
+	//der klaptt nicht wegen dem TextClassificationTarget
 	@Test
-    public void nrOfCommasFeatureExtractorTest_de()
+    public void rutaFeatureExtractorTest_de()
         throws Exception
     {
-		AnalysisEngineDescription description= createEngineDescription(createEngineDescription(BreakIteratorSegmenter.class));
-        AnalysisEngine engine=createEngine(description);
-        		
-        JCas jcas = engine.newJCas();
-        jcas.setDocumentLanguage("de");
-        jcas.setDocumentText("Ich wohne, esse und lebe in einem Haus, das klein, neu, schön und rund ist.");
-        engine.process(jcas);
-
-        NrOfCommas extractor = new NrOfCommas();
-        Set<Feature> features = extractor.extract(jcas, TextClassificationTarget.get(jcas));
-
-        Assert.assertEquals(1, features.size());
-
-        Iterator<Feature> iter = features.iterator();
-        //4 commas/ 20 tokens= 0.2
-        assertFeature(NrOfCommas.NR_OF_COMMAS, 0.2, iter.next());
+//		File specFile =new File("src/test/resources/uimaRutaScripts/TierEngine.xml");
+//		XMLInputSource in = new XMLInputSource(specFile);
+//		ResourceSpecifier spec = UIMAFramework.getXMLParser().parseResourceSpecifier(in);
+//		AnalysisEngine engine = UIMAFramework.produceAnalysisEngine(spec);
+		
+		
+		
+		AnalysisEngine engine = AnalysisEngineFactory.createEngine("TierEngine");
+		
+		JCas jcas = engine.newJCas();
+		jcas.setDocumentLanguage("de");
+		jcas.setDocumentText("Ich habe zwei Kater, ich hatte einmal ein Kaninchen.");
+		engine.process(jcas);
+//		CAS cas = engine.newCAS();
+//		cas.setDocumentText(jcas.getDocumentText());
+		ArrayList<String> list = new ArrayList<String>();
+		
+		
+//		for (AnnotationFS tier : CasUtil.select(cas, cas.getTypeSystem().getType("Tier.Tierart"))) {
+//			list.add(tier.getCoveredText());
+//			System.out.println("Found: " + tier.getCoveredText());
+//			}
+		
+		NrOfRutaPatternMatches extractor = new NrOfRutaPatternMatches();
+		Set<Feature> features = extractor.extract(jcas, TextClassificationTarget.get(jcas));
+		assertEquals(2, features.size());
+		
     }
 	
+	//der klappt
+	@Test
+	public void tierTest() throws InvalidXMLException,
+			ResourceInitializationException, IOException,
+			AnalysisEngineProcessException {
+		AnalysisEngine engine = AnalysisEngineFactory
+				.createEngine("TierEngine");
+		CAS cas = engine.newCAS();
+
+		cas.setDocumentText("Ich mag Katzen und Kater");
+		engine.process(cas);
+
+		AnnotationFS[] satz = CasUtil.select(cas,
+				cas.getTypeSystem().getType(NrOfRutaPatternMatches.TIER_TYPE)).toArray(
+				new AnnotationFS[0]);
+		assertEquals(2, satz.length);
+
+		assertEquals("Katzen", satz[0].getCoveredText());
+		assertEquals("Kater", satz[1].getCoveredText());
+	}
+	
 	
 	@Test
-    public void nrOfCommasFeatureExtractorTest_en()
+    public void rutaFeatureExtractorTest_en()
         throws Exception
     {
-		AnalysisEngineDescription description= createEngineDescription(createEngineDescription(BreakIteratorSegmenter.class));
-        AnalysisEngine engine=createEngine(description);
+		//AnalysisEngineDescription description= createEngineDescription(createEngineDescription(BreakIteratorSegmenter.class));
+		//AnalysisEngine engine=createEngine(description);
         		
-        JCas jcas = engine.newJCas();
-        jcas.setDocumentLanguage("en");
-        jcas.setDocumentText("To improve her English, she practised every day.");
-        engine.process(jcas);
+		//JCas jcas = engine.newJCas();
+		//jcas.setDocumentLanguage("en");
+		//jcas.setDocumentText("To improve her English, she practised every day.");
+		//engine.process(jcas);
 
-        NrOfCommas extractor = new NrOfCommas();
-        Set<Feature> features = extractor.extract(jcas, TextClassificationTarget.get(jcas));
+		//NrOfCommas extractor = new NrOfCommas();
+		//Set<Feature> features = extractor.extract(jcas, TextClassificationTarget.get(jcas));
 
-        Assert.assertEquals(1, features.size());
+		//Assert.assertEquals(1, features.size());
 
-        Iterator<Feature> iter = features.iterator();
+		//Iterator<Feature> iter = features.iterator();
         //1 comma/ 10 tokens= 0.2
-        assertFeature(NrOfCommas.NR_OF_COMMAS, 0.1, iter.next());
+		//assertFeature(NrOfCommas.NR_OF_COMMAS, 0.1, iter.next());
     }
 	
 	
