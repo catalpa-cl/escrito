@@ -25,6 +25,7 @@ import org.dkpro.tc.api.features.FeatureExtractorResource_ImplBase;
 import org.dkpro.tc.api.features.FeatureType;
 import org.dkpro.tc.api.type.TextClassificationTarget;
 
+import Tier.Tierart;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 
 import org.apache.uima.analysis_engine.AnalysisEngine;
@@ -90,9 +91,9 @@ public class NrOfRutaPatternMatches extends FeatureExtractorResource_ImplBase
 			e1.printStackTrace();
 		}
 	
-		CAS cas = null;
+		JCas cas = null;
 		try {
-			cas = engine.newCAS();
+			cas = engine.newJCas();
 		} catch (ResourceInitializationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -108,8 +109,8 @@ public class NrOfRutaPatternMatches extends FeatureExtractorResource_ImplBase
 			e.printStackTrace();
 		}
 		
-		
-		for (AnnotationFS tier : CasUtil.select(cas, cas.getTypeSystem().getType("Tier.Tierart"))) {
+		//for (AnnotationFS tier : JCasUtil.select(cas, cas.getTypeSystem().getType("Tier.Tierart"))) {
+		for (AnnotationFS tier : JCasUtil.select(cas, Tierart.class)) {
 			list.add(tier.getCoveredText());
 			System.out.println("Found: " + tier.getCoveredText());
 		}

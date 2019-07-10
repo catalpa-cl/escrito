@@ -2,10 +2,12 @@ package de.unidue.ltl.escrito.features.occurence;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
+import org.apache.uima.UIMAFramework;
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.cas.CAS;
@@ -14,7 +16,9 @@ import org.apache.uima.fit.factory.AnalysisEngineFactory;
 import org.apache.uima.fit.util.CasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
+import org.apache.uima.resource.ResourceSpecifier;
 import org.apache.uima.util.InvalidXMLException;
+import org.apache.uima.util.XMLInputSource;
 import org.dkpro.tc.api.features.Feature;
 import org.dkpro.tc.api.type.TextClassificationTarget;
 import org.junit.Test;
@@ -55,9 +59,10 @@ public class RutaFeatureExtractorTest {
 //			}
 		
 		NrOfRutaPatternMatches extractor = new NrOfRutaPatternMatches();
-		Set<Feature> features = extractor.extract(jcas, TextClassificationTarget.get(jcas));
-		assertEquals(2, features.size());
-		
+		Set<Feature> features = extractor.extract(jcas, null);
+		assertEquals(1, features.size());
+		Feature f = features.iterator().next();
+		assertEquals(2, f.getValue());	
     }
 	
 	//der klappt
