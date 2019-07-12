@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -18,6 +19,7 @@ import org.dkpro.tc.ml.report.TcAbstractReport;
 
 import de.unidue.ltl.escrito.core.Utils;
 import de.unidue.ltl.evaluation.core.EvaluationData;
+import de.unidue.ltl.evaluation.core.EvaluationEntry;
 import de.unidue.ltl.evaluation.measures.Accuracy;
 import de.unidue.ltl.evaluation.measures.agreement.CohenKappa;
 import de.unidue.ltl.evaluation.measures.agreement.LinearlyWeightedKappa;
@@ -96,19 +98,23 @@ public class GradingEvaluationReport extends TcAbstractReport {
 
 		EvaluationData<Double> evaluationDouble = ReportUtils.readId2OutcomeAsDouble(evaluationFile);
 		EvaluationData<String> evaluationString = ReportUtils.readId2OutcomeAsString(evaluationFile);
-		EvaluationData<String> evaluationStringMajority = ReportUtils.readId2OutcomeAsString(evaluationFileMajority);
+		EvaluationData<String> evaluationStringMajority = null;
+		if (evaluationFileMajority.exists()){
+			evaluationStringMajority = ReportUtils.readId2OutcomeAsString(evaluationFileMajority);
+		}
 
 		Map<Integer, Double> confScoreMap = new HashMap<Integer, Double>();
 		if (id2ConfidenceScoreFile.exists()){
 			confScoreMap = ReportUtils.readId2ConfidenceScore(id2ConfidenceScoreFile);
 		}
 
-
 		Accuracy<String> acc = new Accuracy<String>(evaluationString);
 		results.put(ACCURACY, acc.getResult());
 
-		Accuracy<String> accMaj = new Accuracy<String>(evaluationStringMajority);
-		results.put(ACCURACYOFMAJORCLASS, accMaj.getResult());
+		if (evaluationStringMajority != null){
+			Accuracy<String> accMaj = new Accuracy<String>(evaluationStringMajority);
+			results.put(ACCURACYOFMAJORCLASS, accMaj.getResult());
+		}
 
 		CohenKappa<String> kappa = new CohenKappa<String>(evaluationString);
 		results.put(COHENSKAPPA, kappa.getResult());

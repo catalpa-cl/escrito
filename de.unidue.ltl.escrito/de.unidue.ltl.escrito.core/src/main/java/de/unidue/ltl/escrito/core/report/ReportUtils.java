@@ -30,7 +30,9 @@ public class ReportUtils {
 			Map<String, String> labelMappings = null;
 			while ((line = br.readLine())!= null){
 				if (line.startsWith("#labels")) {
+//					System.out.println(line);
 					labelMappings = computeLabelMapping(line);	
+//					System.out.println(labelMappings.size());				
 				} else if (line.startsWith("#")){
 					// do not do anything
 				} else {
@@ -39,7 +41,20 @@ public class ReportUtils {
 					String everythingElse = line.split("=")[1];
 					String prediction = everythingElse.split(";")[0];
 					String gold = everythingElse.split(";")[1];
-					evaluationDouble.register(Double.parseDouble(labelMappings.get(String.valueOf(gold))), Double.parseDouble(labelMappings.get(String.valueOf(prediction))), id);
+//					System.out.println(line);
+//					System.out.println(prediction);
+//					System.out.println(gold);
+					if (labelMappings.size()>0){
+					evaluationDouble.register(
+							Double.parseDouble(labelMappings.get(String.valueOf(gold))), 
+							Double.parseDouble(labelMappings.get(String.valueOf(prediction))), id);
+					} else {
+						evaluationDouble.register(
+								Double.parseDouble(gold), 
+								Double.parseDouble(prediction), id);
+					
+					}
+					
 					//			System.out.println(line+"\t"+prediction+"\t"+gold);
 				}
 			}
@@ -62,15 +77,27 @@ public class ReportUtils {
 			while ((line = br.readLine())!= null){
 				if (line.startsWith("#labels")) {
 					labelMappings = computeLabelMapping(line);	
+					System.out.println(labelMappings.size());
 				} else if (line.startsWith("#")){
 					// do not do anything
 				} else {
 					// example line: 623_0=1;1;-1.0
 					String id = line.split("=")[0];
 					String everythingElse = line.split("=")[1];
-					String prediction = everythingElse.split(";")[0];
+					String prediction = String.valueOf(Math.round(Double.parseDouble(everythingElse.split(";")[0]))*1.0);
 					String gold = everythingElse.split(";")[1];
-					evaluationString.register(labelMappings.get(String.valueOf(gold)), labelMappings.get(String.valueOf(prediction)), id);
+//					System.out.println(prediction);
+//					System.out.println(gold);
+					if (labelMappings.size()>0){
+						evaluationString.register(
+								labelMappings.get(String.valueOf(gold)), 
+								labelMappings.get(String.valueOf(prediction)), id);
+						} else {
+							evaluationString.register(
+									gold, 
+									prediction, id);
+						}
+					
 					//			System.out.println(line+"\t"+prediction+"\t"+gold);
 				}
 			}
@@ -193,6 +220,16 @@ public class ReportUtils {
 			e.printStackTrace();
 		}
 		return id2Conf;
+	}
+
+
+
+	public static double getMean(List<Double> list) {
+		double sum = 0.0;
+		for (double el:list){
+			sum+=el;
+		}
+		return sum/(1.0*list.size());
 	}
 
 }
