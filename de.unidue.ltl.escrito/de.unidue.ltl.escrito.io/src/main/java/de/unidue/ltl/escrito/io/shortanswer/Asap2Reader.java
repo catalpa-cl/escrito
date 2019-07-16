@@ -82,6 +82,7 @@ public class Asap2Reader extends JCasCollectionReader_ImplBase {
 
 
 		try {
+			System.out.println("Opening file: "+inputFileString);
 			inputFileURL = ResourceUtils.resolveLocation(inputFileString, this, aContext);
 			BufferedReader reader = new BufferedReader(
 					new InputStreamReader(
@@ -113,6 +114,11 @@ public class Asap2Reader extends JCasCollectionReader_ImplBase {
 					goldClass  = nextItem[2];
 					valClass   = nextItem[3];
 					text       = Utils.cleanString(nextItem[4]);
+				} else if (nextItem.length == 4) {
+					answerId     = Integer.parseInt(nextItem[0]);
+					promptId = Integer.parseInt(nextItem[1]);
+					goldClass  = nextItem[2];
+					text       = Utils.cleanString(nextItem[3]);
 				}
 				else if (nextItem.length == 3) {
 					answerId     = Integer.parseInt(nextItem[0]);
@@ -128,8 +134,9 @@ public class Asap2Reader extends JCasCollectionReader_ImplBase {
 				if (requestedPromptIds != null && (!Arrays.asList(requestedPromptIds).contains(promptId))) {
 					continue;
 				}
-				evalData.register(Integer.parseInt(goldClass), Integer.parseInt(valClass));
-				
+				if (valClass != null && goldClass != null){
+					evalData.register(Integer.parseInt(goldClass), Integer.parseInt(valClass));
+				}
 				List<Asap2Item> itemList;
 				if (itemMap.containsKey(goldClass)) {
 					itemList = itemMap.get(goldClass);
@@ -141,7 +148,7 @@ public class Asap2Reader extends JCasCollectionReader_ImplBase {
 				itemMap.put(goldClass, itemList);
 
 				asap2Items.add(newItem);
-				//	System.out.println("Added item");
+				//		System.out.println("Added item: "+newItem.toString());
 			}
 			// compute IAA
 			QuadraticallyWeightedKappa qwk = new QuadraticallyWeightedKappa(evalData);

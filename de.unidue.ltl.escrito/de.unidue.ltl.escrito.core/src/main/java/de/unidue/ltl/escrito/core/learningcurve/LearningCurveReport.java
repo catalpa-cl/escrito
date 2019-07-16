@@ -45,6 +45,7 @@ import org.dkpro.tc.ml.weka.core._eka;
 import de.unidue.ltl.escrito.core.report.ReportUtils;
 import de.unidue.ltl.escrito.core.visualization.XYChartPlotter;
 import de.unidue.ltl.evaluation.core.EvaluationData;
+import de.unidue.ltl.evaluation.measures.Accuracy;
 import de.unidue.ltl.evaluation.measures.agreement.QuadraticallyWeightedKappa;
 import weka.core.SerializationHelper;
 
@@ -62,6 +63,9 @@ implements Constants
 	public static final String QUADRATIC_WEIGHTED_KAPPA_MEAN = "quadraticWeightedKappa_mean";
 	public static final String QUADRATIC_WEIGHTED_KAPPA_MIN = "quadraticWeightedKappa_min";
 	public static final String QUADRATIC_WEIGHTED_KAPPA_MAX = "quadraticWeightedKappa_max";
+	public static final String ACCURACY_MEAN = "accuracy_mean";
+	public static final String ACCURACY_MIN = "accuracy_min";
+	public static final String ACCURACY_MAX = "accuracy_max";
 
 
 	List<String> actualLabelsList = new ArrayList<String>();
@@ -88,11 +92,15 @@ implements Constants
 		List<Double> minValues = new ArrayList<Double>();
 		List<Double> maxValues = new ArrayList<Double>();
 		List<Double> avgValues = new ArrayList<Double>();
+		List<Double> minValues_acc = new ArrayList<Double>();
+		List<Double> maxValues_acc = new ArrayList<Double>();
+		List<Double> avgValues_acc = new ArrayList<Double>();
 		for (Integer numberOfInstances : LearningCurveTask.NUMBER_OF_TRAINING_INSTANCES) {
 			numInstances.add(numberOfInstances*1.0);
 			List<Configuration> selectedItemsOverall = new ArrayList<Configuration>();
 			Properties props = new Properties();
 			List<Double> kappas = new ArrayList<Double>();
+			List<Double> accs = new ArrayList<Double>();
 			for (int iteration=0; iteration<LearningCurveTask.ITERATIONS; iteration++) {
 				//	System.out.println("Iteration: "+iteration);
 				File evaluationFile = null;
@@ -162,24 +170,41 @@ implements Constants
 
 				kappas.add(kappa);
 				selectedItemsOverall.add(new Configuration(kappa, selectedItems));
+				
+				Accuracy<Integer> accuracy = new Accuracy<Integer>(evalData);
+				double acc = accuracy.getResult();
+				accs.add(acc);
 			}
 
-			double min = -1.0;
-			double max = -1.0;
+			double min_qwk = -1.0;
+			double max_qwk = -1.0;
+			double min_acc = -1.0;
+			double max_acc = -1.0;
 			if (kappas.size() > 0) {
-				min = Collections.min(kappas);
-				max = Collections.max(kappas);
+				min_qwk = Collections.min(kappas);
+				max_qwk = Collections.max(kappas);
+			}
+			if (accs.size() > 0) {
+				min_acc = Collections.min(accs);
+				max_acc = Collections.max(accs);
 			}
 			double meanKappa = ReportUtils.getMeanKappa(kappas);
+			double meanAcc = ReportUtils.getMean(accs);
 			results.put(QUADRATIC_WEIGHTED_KAPPA_MEAN, meanKappa);
-			results.put(QUADRATIC_WEIGHTED_KAPPA_MIN, min);
-			results.put(QUADRATIC_WEIGHTED_KAPPA_MAX, max);
-			System.out.println(numberOfInstances + "\t" + meanKappa + "\t" + min + "\t" + max);
-			report += (numberOfInstances + "\t" + meanKappa + "\t" + min + "\t" + max + "\n");
-			minValues.add(min);
-			maxValues.add(max);
+			results.put(QUADRATIC_WEIGHTED_KAPPA_MIN, min_qwk);
+			results.put(QUADRATIC_WEIGHTED_KAPPA_MAX, max_qwk);
+			results.put(ACCURACY_MEAN, meanAcc);
+			results.put(ACCURACY_MIN, min_acc);
+			results.put(ACCURACY_MAX, max_acc);
+			System.out.println(numberOfInstances + "\t" + meanKappa + "\t" + min_qwk + "\t" + max_qwk + "\t" + meanAcc + "\t" + min_acc + "\t" + max_acc);
+			report += (numberOfInstances + "\t" + meanKappa + "\t" + min_qwk + "\t" + max_qwk + "\n");
+			minValues.add(min_qwk);
+			maxValues.add(max_qwk);
 			avgValues.add(meanKappa);
-
+			minValues_acc.add(min_acc);
+			maxValues_acc.add(max_acc);
+			avgValues_acc.add(meanAcc);
+			
 			for (String s : results.keySet()) {
 				props.setProperty(s, results.get(s).toString());
 			}
@@ -206,18 +231,25 @@ implements Constants
 		plotter.addSeries(numInstances, minValues, "min", Color.red);
 		plotter.addSeries(numInstances, maxValues, "max", Color.GREEN);
 		plotter.addSeries(numInstances, avgValues, "mean", Color.BLACK);
-		plotter.plot(getContext().getStorageService().locateKey(LearningCurveTaskId, "learningCurve.jpeg"));
-		writeLatex(numInstances, minValues, maxValues, avgValues, LearningCurveTaskId);
+		plotter.plot(getContext().getStorageService().locateKey(LearningCurveTaskId, "learningCurve_QWK.jpeg"));
+		plotter = new XYChartPlotter("# training data", "Accuracy", "LearningCurve");
+		plotter.addSeries(numInstances, minValues_acc, "min", Color.red);
+		plotter.addSeries(numInstances, maxValues_acc, "max", Color.GREEN);
+		plotter.addSeries(numInstances, avgValues_acc, "mean", Color.BLACK);
+		plotter.plot(getContext().getStorageService().locateKey(LearningCurveTaskId, "learningCurve_accuracy.jpeg"));
+		
+		writeLatex(numInstances, minValues, maxValues, avgValues, LearningCurveTaskId, "QWK");
+		writeLatex(numInstances, minValues_acc, maxValues_acc, avgValues_acc, LearningCurveTaskId, "accuracy");
 	}
 
 	private void writeLatex(List<Double> numInstances, List<Double> minValues, List<Double> maxValues,
-			List<Double> avgValues, String taskId) {
+			List<Double> avgValues, String taskId, String ylabel) {
 		try {
-			BufferedWriter bw = new BufferedWriter(new FileWriter(getContext().getStorageService().locateKey(taskId, "learningCurveResult.tex")));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(getContext().getStorageService().locateKey(taskId, "learningCurveResult_"+ylabel+".tex")));
 			bw.write("\\begin{tikzpicture}\n"
-				//	+ "		\\node [draw=none] at (1,3) {2.3};\n"
+					//	+ "		\\node [draw=none] at (1,3) {2.3};\n"
 					+ "\\begin{semilogxaxis}[\n"
-					+ "ylabel = {QWK},\n"
+					+ "ylabel = {"+ylabel+"},\n"
 					+ "xlabel={\\# Trainingsdaten},\n"
 					+ "height=5cm,\n"
 					+ "width=6cm,\n"
