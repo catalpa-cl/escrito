@@ -28,6 +28,7 @@ import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpSegmenter;
 import de.unidue.ltl.escrito.core.clustering.BatchTaskClusterClassificationExemplar;
 import de.unidue.ltl.escrito.core.clustering.BatchTaskClusterLabelPropagation;
 import de.unidue.ltl.escrito.core.clustering.BatchTaskClustering;
+import de.unidue.ltl.escrito.core.learningcurve.CvLearningCurveReport;
 import de.unidue.ltl.escrito.core.learningcurve.LearningCurveAdapter;
 import de.unidue.ltl.escrito.core.learningcurve.LearningCurveReport;
 import de.unidue.ltl.escrito.core.report.CvEvaluationReport;
@@ -143,7 +144,7 @@ public abstract class Experiments_ImplBase
 	{
 		ExperimentCrossValidation batch = new ExperimentCrossValidation(name + "-CV", numFolds);
 		batch.setPreprocessing(aed);
-		// TODO: adapt o that it also works from this slightly different context
+		// TODO: adapt so that it also works from this slightly different context
 		//	batch.addInnerReport(GradingEvaluationReport.class);
 		batch.setParameterSpace(pSpace);
 		batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
@@ -171,6 +172,27 @@ public abstract class Experiments_ImplBase
 		// Run
 		Lab.getInstance().run(batch);
 	}
+	
+	
+	public static void runLearningCurveCV(ParameterSpace pSpace, String name, String languageCode, int numFolds)
+			throws Exception
+	{
+		System.out.println("Running experiment "+name);
+		ExperimentCrossValidation batch = new ExperimentCrossValidation(name + "-LearningCurve", numFolds);
+		batch.setPreprocessing(getPreprocessing(languageCode));
+		batch.addInnerReport(new LearningCurveReport());    
+		batch.setParameterSpace(pSpace);
+		batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
+		// TODO: wieso wird der nicht ausgeführt?
+		batch.addReport(new RuntimeReport());
+		batch.addReport(CvLearningCurveReport.class);
+		//batch.addReport(CrossValidationReport.class); // generischer Report, bringt hier vermutlich nix
+		//batch.addReport(CvEvaluationReport.class); // unser CV report, bringt wohl auch nix
+		// Run
+		Lab.getInstance().run(batch);
+	}
+	
+	
 
 	// ##### CLUSTERING #####
 	protected static void runClustering(ParameterSpace pSpace, String name, String languageCode)
