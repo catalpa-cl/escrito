@@ -1,0 +1,4 @@
+DECLARE ConditionalAdverbialSubordinator;
+
+(W{REGEXP("if")}) {->MARK(ConditionalAdverbialSubordinator)};
+(W{REGEXP("unless")}) {->MARK(ConditionalAdverbialSubordinator)};

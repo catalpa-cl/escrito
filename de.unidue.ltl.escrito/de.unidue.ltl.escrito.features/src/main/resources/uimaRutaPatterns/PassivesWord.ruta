@@ -1,0 +1,34 @@
+DECLARE AgentlessPassive;
+DECLARE ByPassive;
+DECLARE RB;
+//DECLARE POSSPRO;
+DECLARE RPR;
+DECLARE VBN;
+DECLARE NN;
+//DECLARE BY;
+
+
+//(W{REGEXP("adv")}) {-> MARK(ADV)};
+//(W{REGEXP("posspro")}) {-> MARK(POSSPRO)};
+//(W{REGEXP("pro")}) {-> MARK(PRO)};
+//(W{REGEXP("vbn")}) {-> MARK(VBN)};
+//(W{REGEXP("n")}) {-> MARK(N)};
+
+//(W{REGEXP("by")}) {-> MARK(BY)};
+
+//Definition richtig?
+(W{OR(REGEXP("be"),REGEXP("was"),REGEXP("were"),REGEXP("am"),REGEXP("are"),REGEXP("is"),REGEXP("being"))}) (W{PARTOF(RB)}) (W{PARTOF(RB)}) (W{PARTOF(VBN)}) (W{-REGEXP("by")}){-> MARK(AgentlessPassive,1,5)};
+(W{OR(REGEXP("be"),REGEXP("was"),REGEXP("were"),REGEXP("am"),REGEXP("are"),REGEXP("is"),REGEXP("being"))}) (W{PARTOF(RB)}) (W{PARTOF(VBN)}) (W{-REGEXP("by")}){-> MARK(AgentlessPassive,1,4)};
+(W{OR(REGEXP("be"),REGEXP("was"),REGEXP("were"),REGEXP("am"),REGEXP("are"),REGEXP("is"),REGEXP("being"))}) (W{PARTOF(VBN)}) (W{-REGEXP("by")}){-> MARK(AgentlessPassive,1,3)};
+
+(W{OR(REGEXP("be"),REGEXP("was"),REGEXP("were"),REGEXP("am"),REGEXP("are"),REGEXP("is"),REGEXP("being"))}) (W{OR(PARTOF(NN),PARTOF(RPR))}) (W{PARTOF(VBN)}) (W{-REGEXP("by")}){-> MARK(AgentlessPassive,1,4)};
+
+
+
+
+(W{OR(REGEXP("be"),REGEXP("was"),REGEXP("were"),REGEXP("am"),REGEXP("are"),REGEXP("is"),REGEXP("being"))}) (W{PARTOF(RB)}) (W{PARTOF(RB)}) (W{PARTOF(VBN)}) (W{REGEXP("by")}){-> MARK(ByPassive,1,5)};
+(W{OR(REGEXP("be"),REGEXP("was"),REGEXP("were"),REGEXP("am"),REGEXP("are"),REGEXP("is"),REGEXP("being"))}) (W{PARTOF(RB)}) (W{PARTOF(VBN)}) (W{REGEXP("by")}){-> MARK(ByPassive,1,4)};
+(W{OR(REGEXP("be"),REGEXP("was"),REGEXP("were"),REGEXP("am"),REGEXP("are"),REGEXP("is"),REGEXP("being"))}) (W{PARTOF(VBN)}) (W{REGEXP("by")}){-> MARK(ByPassive,1,3)};
+
+(W{OR(REGEXP("be"),REGEXP("was"),REGEXP("were"),REGEXP("am"),REGEXP("are"),REGEXP("is"),REGEXP("being"))}) (W{OR(PARTOF(NN),PARTOF(RPR))}) (W{PARTOF(VBN)}) (W{REGEXP("by")}){-> MARK(ByPassive,1,4)};
+

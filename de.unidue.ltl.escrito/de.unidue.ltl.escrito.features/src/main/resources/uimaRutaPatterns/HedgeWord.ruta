@@ -1,0 +1,64 @@
+DECLARE Hedge;
+DECLARE DT;
+DECLARE JJ;
+//DECLARE POSSPRO;
+//DECLARE WHO;
+
+
+W{REGEXP("(?i)(maybe|almost)") -> MARK(Hedge)};
+(W{REGEXP("more")}) (W{REGEXP("or")}) (W{REGEXP("less")}){-> MARK(Hedge,1,3)};
+(W{REGEXP("something")}) (W{REGEXP("like")}){-> MARK(Hedge,1,2)};
+(W{REGEXP("at")}) (W{REGEXP("about")}){-> MARK(Hedge,1,2)};
+
+
+(SW{AND(-PARTOF(JJ),-PARTOF(DT),-REGEXP("mine"),-REGEXP("yours"),-REGEXP("his"),-REGEXP("hers"),-REGEXP("its"),-REGEXP("ours"),-REGEXP("theirs"),-REGEXP("one's"),
+-REGEXP("what"),-REGEXP("who"),-REGEXP("whom"),-REGEXP("which"),-REGEXP("where"),-REGEXP("why"),-REGEXP("when"))}) (W{REGEXP("sort")}) (W{REGEXP("of")}){-> MARK(Hedge,2,3)};
+
+
+(SW{AND(-PARTOF(JJ),-PARTOF(DT),-REGEXP("mine"),-REGEXP("yours"),-REGEXP("his"),-REGEXP("hers"),-REGEXP("its"),-REGEXP("ours"),-REGEXP("theirs"),-REGEXP("one's"),
+-REGEXP("what"),-REGEXP("who"),-REGEXP("whom"),-REGEXP("which"),-REGEXP("where"),-REGEXP("why"),-REGEXP("when"))}) (W{REGEXP("kind")}) (W{REGEXP("of")}){-> MARK(Hedge,2,3)};
+
+
+//(W{OR(-REGEXP("what"),-REGEXP("who"),-REGEXP("whom"),-REGEXP("which"),-REGEXP("where"),-REGEXP("why"),-REGEXP("when"))})
+//-REGEXP("mine"),-REGEXP("yours"),-REGEXP("his"),-REGEXP("hers"),-REGEXP("its"),-REGEXP("ours"),-REGEXP("theirs"),-REGEXP("one's")
+
+//W{REGEXP("(?i)(sort)") -> MARK(SORT)};
+
+
+//W{REGEXP("(?i)(kind)") -> MARK(KIND)};
+//W{REGEXP("(?i)(of)") -> MARK(OF)};
+
+
+
+//(KIND) + {->MARK(MaybeHedge,1,2)} OF;
+//(SORT) + {->MARK(MaybeHedge,1,2)} OF;
+
+//(SW{-PARTOF(DET)}) (MaybeHedge) {->MARK(Hedge,1,2)};
+
+
+
+//W{REGEXP("(?i)(atabout)") -> MARK(HEDGE)};
+
+//OF{AFTER(KIND) -> MARK(MaybeHedge,1,2)};
+
+//OF{AFTER(SORT) -> MARK(MaybeHedge,1,2)};
+//xxx sort of
+//xxx kind of
+//DET{BEFORE(REGEXP("(?i)(sort of|kind of)"))}{->MARK(Hedge)};
+
+//(DET) + {->MARK(Hedge,1,3)} WHO;
+//MaybeHedge{-AFTER(DET) -> MARK(Hedge)};
+//(-(DET) + {->MARK(MaybeHedge,1,2)} MaybeHedge;
+//MaybeHedge{IF(isDet)};
+
+//MaybeHedge{BEFORE((SW{-PARTOF(DET)})) -> MARK(Hedge)};
+
+
+
+
+//(SW[1,2]{-PARTOF(DET)})  {BEFORE(MaybeHedge)         ->MARK(Hedge,1,2)};
+//(MaybeHedge)        {AFTER(SW{-PARTOF(DET)})   ->MARK(Hedge,1,2)};
+
+
+//(SW{-PARTOF(DET)}) + {->MARK(Hedge,1,3)} MaybeHedge;
+//(NUM{-PARTOF(nummm)} (PM{PARTOF({COMMA,PERIOD})} NUM)? W{REGEXP("mm")}){-> nummm};

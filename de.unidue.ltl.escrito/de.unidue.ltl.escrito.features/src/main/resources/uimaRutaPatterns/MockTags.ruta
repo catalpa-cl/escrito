@@ -1,0 +1,41 @@
+DECLARE JJ;    // JJ ADJ
+DECLARE RB;    // RB adv
+DECLARE DT;    // DT det
+DECLARE NN;      // NN
+//DECLARE POSSPRO;// PRP$
+DECLARE RPR;    // RPR PRO
+DECLARE IN;   // IN prep
+//DECLARE TITLE;  // NN
+DECLARE VB;      // VB v
+DECLARE VBN;    // vbn
+    //
+     //
+
+
+
+DECLARE NNS;    // NNS
+DECLARE NNP;    // NNP
+
+DECLARE MD;    // MD aux
+
+
+
+
+W{REGEXP("adj") -> MARK(JJ)};
+W{REGEXP("adv") -> MARK(RB)};
+W{REGEXP("det") -> MARK(DT)};
+W{REGEXP("n") -> MARK(NN)};
+//W{REGEXP("posspro") -> MARK(POSSPRO)};
+W{REGEXP("pro") -> MARK(RPR)};
+W{REGEXP("prep") -> MARK(IN)};
+W{REGEXP("title") -> MARK(NN)};
+W{REGEXP("v") -> MARK(VB)};
+W{REGEXP("vbn") -> MARK(VBN)};
+//W{REGEXP("who") -> MARK(WHO)};
+W{REGEXP("pln") -> MARK(NNS)};
+W{REGEXP("prn") -> MARK(NNP)};
+W{REGEXP("aux") -> MARK(MD)};
+
+
+
+

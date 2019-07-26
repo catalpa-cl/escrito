@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<typeSystemDescription xmlns="http://uima.apache.org/resourceSpecifier">
+        
+    <name>ConcessiveAdverbialSubordinatorWordTypeSystem</name>
+        
+    <imports>
+                
+        <import location="BasicTypeSystem.xml"/>
+            
+    </imports>
+        
+    <types>
+                
+        <typeDescription>
+                        
+            <name>ConcessiveAdverbialSubordinatorWord.ConcessiveAdverbialSubordinator</name>
+                        
+            <description>Type defined in ConcessiveAdverbialSubordinatorWord</description>
+                        
+            <supertypeName>uima.tcas.Annotation</supertypeName>
+                    
+        </typeDescription>
+            
+    </types>
+    
+</typeSystemDescription>
