@@ -41,7 +41,7 @@ import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpChunker;
 import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpPosTagger;
 import de.tudarmstadt.ukp.dkpro.core.tokit.BreakIteratorSegmenter;
 import de.unidue.ltl.escrito.core.types.LearnerAnswerToken;
-import de.unidue.ltl.escrito.generic.GenericDatasetItem;
+import de.unidue.ltl.escrito.io.generic.GenericDatasetItem;
 
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngine;
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDescription;
