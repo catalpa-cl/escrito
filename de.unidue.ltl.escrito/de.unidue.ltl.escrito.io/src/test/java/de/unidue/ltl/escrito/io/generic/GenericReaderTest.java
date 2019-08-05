@@ -10,7 +10,7 @@ import org.apache.uima.jcas.JCas;
 import org.dkpro.tc.api.type.TextClassificationOutcome;
 import org.junit.Test;
 
-import de.unidue.ltl.escrito.generic.GenericDatasetReader;
+import de.unidue.ltl.escrito.io.generic.GenericDatasetReader;
 
 
 public class GenericReaderTest {
