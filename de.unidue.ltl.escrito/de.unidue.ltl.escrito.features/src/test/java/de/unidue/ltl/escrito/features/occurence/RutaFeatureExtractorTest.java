@@ -30,9 +30,9 @@ import de.unidue.ltl.escrito.features.occurence.NrOfRutaPatternMatches;
 
 
 public class RutaFeatureExtractorTest {
-	//der klaptt nicht wegen dem TextClassificationTarget
+	//der klappt nicht wegen dem TextClassificationTarget
 	@Test
-    public void rutaFeatureExtractorTest_de()
+    public void rutaFeatureExtractorTest_en()
         throws Exception
     {
 //		File specFile =new File("src/test/resources/uimaRutaScripts/TierEngine.xml");
@@ -42,11 +42,11 @@ public class RutaFeatureExtractorTest {
 		
 		
 		
-		AnalysisEngine engine = AnalysisEngineFactory.createEngine("TierEngine");
+		AnalysisEngine engine = AnalysisEngineFactory.createEngine("MainEngine");
 		
 		JCas jcas = engine.newJCas();
-		jcas.setDocumentLanguage("de");
-		jcas.setDocumentText("Ich habe zwei Kater, ich hatte einmal ein Kaninchen.");
+		jcas.setDocumentLanguage("en");
+		jcas.setDocumentText("I am very utterly happy with the outcome.");
 		engine.process(jcas);
 //		CAS cas = engine.newCAS();
 //		cas.setDocumentText(jcas.getDocumentText());
@@ -66,31 +66,31 @@ public class RutaFeatureExtractorTest {
     }
 	
 	//der klappt
-	@Test
-	public void tierTest() throws InvalidXMLException,
-			ResourceInitializationException, IOException,
-			AnalysisEngineProcessException {
-		AnalysisEngine engine = AnalysisEngineFactory
-				.createEngine("TierEngine");
-		CAS cas = engine.newCAS();
-
-		cas.setDocumentText("Ich mag Katzen und Kater");
-		engine.process(cas);
-
-		AnnotationFS[] satz = CasUtil.select(cas,
-				cas.getTypeSystem().getType(NrOfRutaPatternMatches.TIER_TYPE)).toArray(
-				new AnnotationFS[0]);
-		assertEquals(2, satz.length);
-
-		assertEquals("Katzen", satz[0].getCoveredText());
-		assertEquals("Kater", satz[1].getCoveredText());
-	}
+//	@Test
+//	public void tierTest() throws InvalidXMLException,
+//			ResourceInitializationException, IOException,
+//			AnalysisEngineProcessException {
+//		AnalysisEngine engine = AnalysisEngineFactory
+//				.createEngine("TierEngine");
+//		CAS cas = engine.newCAS();
+//
+//		cas.setDocumentText("Ich mag Katzen und Kater");
+//		engine.process(cas);
+//
+//		AnnotationFS[] satz = CasUtil.select(cas,
+//				cas.getTypeSystem().getType(NrOfRutaPatternMatches.TIER_TYPE)).toArray(
+//				new AnnotationFS[0]);
+//		assertEquals(2, satz.length);
+//
+//		assertEquals("Katzen", satz[0].getCoveredText());
+//		assertEquals("Kater", satz[1].getCoveredText());
+//	}
 	
 	
-	@Test
-    public void rutaFeatureExtractorTest_en()
-        throws Exception
-    {
+//	@Test
+//    public void rutaFeatureExtractorTest_en()
+//        throws Exception
+//    {
 		//AnalysisEngineDescription description= createEngineDescription(createEngineDescription(BreakIteratorSegmenter.class));
 		//AnalysisEngine engine=createEngine(description);
         		
