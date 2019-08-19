@@ -119,7 +119,7 @@ public class NrOfRutaPatternMatches extends FeatureExtractorResource_ImplBase
 		
 		AnalysisEngine engine = null;
 		try {
-			engine = AnalysisEngineFactory.createEngine("uimaRutaScripts.TierEngine");
+			engine = AnalysisEngineFactory.createEngine("uimaRutaScripts.MainEngine");
 		} catch (InvalidXMLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
