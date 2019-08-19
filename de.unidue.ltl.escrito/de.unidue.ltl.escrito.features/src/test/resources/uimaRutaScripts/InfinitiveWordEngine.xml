@@ -568,6 +568,132 @@
                 </value>
                             
             </nameValuePair>
+                        
+            <nameValuePair>
+                                
+                <name>mainScript</name>
+                                
+                <value>
+                                        
+                    <string>InfinitiveWord</string>
+                                    
+                </value>
+                            
+            </nameValuePair>
+                        
+            <nameValuePair>
+                                
+                <name>scriptPaths</name>
+                                
+                <value>
+                                        
+                    <array>
+                                                
+                        <string>D:/WorkspaceNeuNeuNeu/twentyOnePatterns/script</string>
+                                            
+                    </array>
+                                    
+                </value>
+                            
+            </nameValuePair>
+                        
+            <nameValuePair>
+                                
+                <name>descriptorPaths</name>
+                                
+                <value>
+                                        
+                    <array>
+                                                
+                        <string>D:/WorkspaceNeuNeuNeu/twentyOnePatterns/descriptor</string>
+                                            
+                    </array>
+                                    
+                </value>
+                            
+            </nameValuePair>
+                        
+            <nameValuePair>
+                                
+                <name>resourcePaths</name>
+                                
+                <value>
+                                        
+                    <array>
+                                                
+                        <string>D:/WorkspaceNeuNeuNeu/twentyOnePatterns/resources</string>
+                                            
+                    </array>
+                                    
+                </value>
+                            
+            </nameValuePair>
+                        
+            <nameValuePair>
+                                
+                <name>additionalScripts</name>
+                                
+                <value>
+                                        
+                    <array/>
+                                    
+                </value>
+                            
+            </nameValuePair>
+                        
+            <nameValuePair>
+                                
+                <name>additionalEngines</name>
+                                
+                <value>
+                                        
+                    <array/>
+                                    
+                </value>
+                            
+            </nameValuePair>
+                        
+            <nameValuePair>
+                                
+                <name>additionalUimafitEngines</name>
+                                
+                <value>
+                                        
+                    <array/>
+                                    
+                </value>
+                            
+            </nameValuePair>
+                        
+            <nameValuePair>
+                                
+                <name>additionalExtensions</name>
+                                
+                <value>
+                                        
+                    <array>
+                                                
+                        <string>org.apache.uima.ruta.action.MarkReloadExtension</string>
+                                                
+                        <string>org.apache.uima.ruta.string.bool.BooleanOperationsExtension</string>
+                                                
+                        <string>org.apache.uima.ruta.string.StringOperationsExtension</string>
+                                                
+                        <string>org.apache.uima.ruta.type.TypeFromStringFunctionExtension</string>
+                                                
+                        <string>org.apache.uima.ruta.block.DocumentBlockExtension</string>
+                                                
+                        <string>org.apache.uima.ruta.block.OnlyFirstBlockExtension</string>
+                                                
+                        <string>org.apache.uima.ruta.block.OnlyOnceBlockExtension</string>
+                                                
+                        <string>org.apache.uima.ruta.block.fst.FSTBlockExtension</string>
+                                            
+                    </array>
+                                    
+                </value>
+                            
+            </nameValuePair>
                     
         </configurationParameterSettings>
                 
@@ -575,7 +701,7 @@
                         
             <imports>
                                 
-                <import location="BasicTypeSystem.xml"/>
+                <import location="InfinitiveWordTypeSystem.xml"/>
                             
             </imports>
                     
@@ -604,6 +730,32 @@
                 <inputs/>
                                 
                 <outputs/>
+                                
+                <languagesSupported/>
+                            
+            </capability>
+                        
+            <capability>
+                                
+                <inputs>
+                                        
+                    <type>InfinitiveWord.Infinitive</type>
+                                        
+                    <type>InfinitiveWord.RB</type>
+                                        
+                    <type>InfinitiveWord.VB</type>
+                                    
+                </inputs>
+                                
+                <outputs>
+                                        
+                    <type>InfinitiveWord.Infinitive</type>
+                                        
+                    <type>InfinitiveWord.RB</type>
+                                        
+                    <type>InfinitiveWord.VB</type>
+                                    
+                </outputs>
                                 
                 <languagesSupported/>
                             

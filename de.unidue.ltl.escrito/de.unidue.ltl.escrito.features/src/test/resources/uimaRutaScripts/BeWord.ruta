@@ -1,0 +1,14 @@
+DECLARE BeAsMainVerb;
+DECLARE DT;
+//DECLARE PRP$;
+DECLARE NN; //TITLE
+DECLARE IN;
+DECLARE JJ;
+
+//TITLE no POS tag found
+
+(W{OR(REGEXP("be"),REGEXP("was"),REGEXP("were"),REGEXP("am"),REGEXP("are"),REGEXP("is"),REGEXP("being"))}) (W{OR(PARTOF(DT),PARTOF(NN),PARTOF(IN),PARTOF(JJ),REGEXP("mine"),REGEXP("yours"),REGEXP("his"),REGEXP("hers"),REGEXP("ours"),REGEXP("theirs"),REGEXP("one's"))}){-> MARK(BeAsMainVerb,1,2)};
+
+
+
+//(W{OR(REGEXP("mine"),REGEXP("yours"),REGEXP("his"),REGEXP("hers"),REGEXP("its"),REGEXP("ours"),REGEXP("theirs"),REGEXP("one's"))});

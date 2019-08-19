@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<typeSystemDescription xmlns="http://uima.apache.org/resourceSpecifier">
+        
+    <name>BeWordTypeSystem</name>
+        
+    <imports>
+                
+        <import location="BasicTypeSystem.xml"/>
+            
+    </imports>
+        
+    <types>
+                
+        <typeDescription>
+                        
+            <name>BeWord.DT</name>
+                        
+            <description>Type defined in BeWord</description>
+                        
+            <supertypeName>uima.tcas.Annotation</supertypeName>
+                    
+        </typeDescription>
+                
+        <typeDescription>
+                        
+            <name>BeWord.NN</name>
+                        
+            <description>Type defined in BeWord</description>
+                        
+            <supertypeName>uima.tcas.Annotation</supertypeName>
+                    
+        </typeDescription>
+                
+        <typeDescription>
+                        
+            <name>BeWord.JJ</name>
+                        
+            <description>Type defined in BeWord</description>
+                        
+            <supertypeName>uima.tcas.Annotation</supertypeName>
+                    
+        </typeDescription>
+                
+        <typeDescription>
+                        
+            <name>BeWord.BeAsMainVerb</name>
+                        
+            <description>Type defined in BeWord</description>
+                        
+            <supertypeName>uima.tcas.Annotation</supertypeName>
+                    
+        </typeDescription>
+                
+        <typeDescription>
+                        
+            <name>BeWord.IN</name>
+                        
+            <description>Type defined in BeWord</description>
+                        
+            <supertypeName>uima.tcas.Annotation</supertypeName>
+                    
+        </typeDescription>
+            
+    </types>
+    
+</typeSystemDescription>

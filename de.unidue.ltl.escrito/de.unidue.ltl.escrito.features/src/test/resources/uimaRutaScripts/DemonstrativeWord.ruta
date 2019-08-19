@@ -1,0 +1,7 @@
+DECLARE Demonstrative;
+DECLARE OtherAdverbialSubordinator;
+
+//that : not as subordinatoer?
+W{REGEXP("(?i)(this|these|those)") -> MARK(Demonstrative)};
+(W{AND(REGEXP("that"), -PARTOF(OtherAdverbialSubordinator))}) {-> MARK(Demonstrative)};
+

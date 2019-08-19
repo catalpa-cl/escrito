@@ -1,0 +1,35 @@
+TYPESYSTEM MainTypeSystem;
+
+SCRIPT MockTags;
+SCRIPT AmplifierWord;
+SCRIPT DowntonerWord;
+SCRIPT PronounWord;
+SCRIPT BeWord;
+SCRIPT HedgeWord;
+SCRIPT EmphaticWord;
+SCRIPT DemonstrativeWord;
+SCRIPT PassivesWord;
+SCRIPT CausativeAdverbialSubordinatorWord;
+SCRIPT ConcessiveAdverbialSubordinatorWord;
+SCRIPT ConditionalAdverbialSubordinatorWord;
+SCRIPT OtherAdverbialSubordinatorWord;
+SCRIPT ThatComplementWord;
+SCRIPT InfinitiveWord;
+SCRIPT WHClauseWord;
+
+Document{-> CALL(MockTags)};
+Document{-> CALL(AmplifierWord)};
+Document{-> CALL(DowntonerWord)};
+Document{-> CALL(PronounWord)};
+Document{-> CALL(BeWord)};
+Document{-> CALL(HedgeWord)};
+Document{-> CALL(EmphaticWord)};
+Document{-> CALL(DemonstrativeWord)};
+Document{-> CALL(PassivesWord)};
+Document{-> CALL(CausativeAdverbialSubordinatorWord)};
+Document{-> CALL(ConcessiveAdverbialSubordinatorWord)};
+Document{-> CALL(ConditionalAdverbialSubordinatorWord)};
+Document{-> CALL(OtherAdverbialSubordinatorWord)};
+Document{-> CALL(ThatComplementWord)};
+Document{-> CALL(InfinitiveWord)};
+Document{-> CALL(WHClauseWord)};
