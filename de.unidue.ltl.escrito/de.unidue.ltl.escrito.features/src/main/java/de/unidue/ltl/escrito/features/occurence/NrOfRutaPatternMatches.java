@@ -25,7 +25,7 @@ import org.dkpro.tc.api.features.FeatureExtractorResource_ImplBase;
 import org.dkpro.tc.api.features.FeatureType;
 import org.dkpro.tc.api.type.TextClassificationTarget;
 
-import Tier.Tierart;
+//import Tier.Tierart;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 
 import org.apache.uima.analysis_engine.AnalysisEngine;
@@ -55,8 +55,30 @@ public class NrOfRutaPatternMatches extends FeatureExtractorResource_ImplBase
     private String featureName;
 	
     ArrayList<String> list = new ArrayList<String>();
+	ArrayList<String> annos = new ArrayList<String>();
+	
     public static String TIER_TYPE = "Tier.Tierart";
+	public static String ANNO_TYPE1 = "AmplifierWord.Amplifier";
+	public static String ANNO_TYPE2 = "DowntonerWord.Downtoner";
+	public static String ANNO_TYPE3 = "PronounWord.ItPronoun";
+	public static String ANNO_TYPE4 = "BeWord.BeAsMainVerb";
+	public static String ANNO_TYPE9 = "HedgeWord.Hedge";
+	public static String ANNO_TYPE10 = "EmphaticWord.Emphatic";
+	public static String ANNO_TYPE11 = "DemonstrativeWord.Demonstrative";
+	public static String ANNO_TYPE12 = "PassivesWord.AgentlessPassive";
+	public static String ANNO_TYPE13 = "PassivesWord.ByPassive";
+	public static String ANNO_TYPE14 = "CausativeAdverbialSubordinatorWord.CausativeAdverbialSubordinator";
+	public static String ANNO_TYPE15 = "ConcessiveAdverbialSubordinatorWord.ConcessiveAdverbialSubordinator";
+	public static String ANNO_TYPE16 = "ConditionalAdverbialSubordinatorWord.ConditionalAdverbialSubordinator";
+	public static String ANNO_TYPE17 = "OtherAdverbialSubordinatorWord.OtherAdverbialSubordinator";
+	public static String ANNO_TYPE18 = "ThatComplementWord.ThatAdjectiveComplement";
+	public static String ANNO_TYPE19 = "ThatComplementWord.ThatVerbComplement";
+	public static String ANNO_TYPE20 = "InfinitiveWord.Infinitive";
+	public static String ANNO_TYPE21 = "WHClauseWord.WH_Clause";
+	
+
 	@Override
+	
 	public boolean initialize(ResourceSpecifier aSpecifier,
 			Map<String,Object> aAdditionalParams) throws ResourceInitializationException {
 		if (!super.initialize(aSpecifier, aAdditionalParams)) {
@@ -76,6 +98,24 @@ public class NrOfRutaPatternMatches extends FeatureExtractorResource_ImplBase
 			throws TextClassificationException
 	{
 		// TODO
+		//Annotationen laden
+		annos.add(ANNO_TYPE1);
+		annos.add(ANNO_TYPE2);
+		annos.add(ANNO_TYPE3);
+		annos.add(ANNO_TYPE4);
+		annos.add(ANNO_TYPE9);
+		annos.add(ANNO_TYPE10);
+		annos.add(ANNO_TYPE11);
+		annos.add(ANNO_TYPE12);
+		annos.add(ANNO_TYPE13);
+		annos.add(ANNO_TYPE14);
+		annos.add(ANNO_TYPE15);
+		annos.add(ANNO_TYPE16);
+		annos.add(ANNO_TYPE17);
+		annos.add(ANNO_TYPE18);
+		annos.add(ANNO_TYPE19);
+		annos.add(ANNO_TYPE20);
+		annos.add(ANNO_TYPE21);
 		
 		AnalysisEngine engine = null;
 		try {
@@ -109,10 +149,14 @@ public class NrOfRutaPatternMatches extends FeatureExtractorResource_ImplBase
 			e.printStackTrace();
 		}
 		
+		
+		//for (AnnotationFS found : JCasUtil.select(cas, Tierart.class)) {
 		//for (AnnotationFS tier : JCasUtil.select(cas, cas.getTypeSystem().getType("Tier.Tierart"))) {
-		for (AnnotationFS tier : JCasUtil.select(cas, Tierart.class)) {
-			list.add(tier.getCoveredText());
-			System.out.println("Found: " + tier.getCoveredText());
+		for (String annotation : annos) {
+			for (AnnotationFS found : JCasUtil.select(cas, annotation)) {
+				list.add(found.getCoveredText());
+				System.out.println("Found: " + found.getCoveredText());
+			}
 		}
 		System.out.println("Anzahl: " + list.size());
 		
