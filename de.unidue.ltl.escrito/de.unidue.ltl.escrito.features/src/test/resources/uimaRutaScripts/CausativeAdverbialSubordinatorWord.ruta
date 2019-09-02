@@ -1,3 +1,0 @@
-DECLARE CausativeAdverbialSubordinator;
-
-(W{REGEXP("because")}) {->MARK(CausativeAdverbialSubordinator)};

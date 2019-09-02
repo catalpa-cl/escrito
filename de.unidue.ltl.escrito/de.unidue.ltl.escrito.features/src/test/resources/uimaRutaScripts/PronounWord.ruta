@@ -1,3 +1,0 @@
-DECLARE ItPronoun;
-
-W{REGEXP("(?i)(it)") -> MARK(ItPronoun)};

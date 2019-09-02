@@ -1,6 +1,0 @@
-DECLARE Infinitive;
-DECLARE RB;
-DECLARE VB;
-
-(W{REGEXP("to")}) (W{PARTOF(RB)}) (W{PARTOF(VB)}) {-> MARK(Infinitive,1,3)};
-(W{REGEXP("to")}) (W{PARTOF(VB)}) {-> MARK(Infinitive,1,2)};

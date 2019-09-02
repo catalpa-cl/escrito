@@ -1,3 +1,0 @@
-DECLARE Downtoner;
-
-W{REGEXP("(?i)(almost|barely|hardly|merely|mildly|nearly|only|partially|partly|practically|scarcely|slightly|somewhat)") -> MARK(Downtoner)};

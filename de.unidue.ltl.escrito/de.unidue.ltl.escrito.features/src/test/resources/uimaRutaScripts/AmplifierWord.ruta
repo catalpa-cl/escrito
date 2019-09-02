@@ -1,3 +1,0 @@
-DECLARE Amplifier;
-
-W{REGEXP("(?i)(absolutely|altogether|completely|enormously|entirely|extremely|fully|greatly|highly|intensely|perfectly|strongly|thoroughly|totally|utterly|very)") -> MARK(Amplifier)};

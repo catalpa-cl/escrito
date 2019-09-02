@@ -1,4 +1,0 @@
-DECLARE ConcessiveAdverbialSubordinator;
-
-(W{REGEXP("although")}) {->MARK(ConcessiveAdverbialSubordinator)};
-(W{REGEXP("though")}) {->MARK(ConcessiveAdverbialSubordinator)};
