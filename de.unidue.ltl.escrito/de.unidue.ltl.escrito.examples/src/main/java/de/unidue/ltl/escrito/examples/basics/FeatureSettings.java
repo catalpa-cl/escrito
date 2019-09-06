@@ -3,6 +3,7 @@ package de.unidue.ltl.escrito.examples.basics;
 import org.dkpro.lab.task.Dimension;
 import org.dkpro.tc.api.features.TcFeatureFactory;
 import org.dkpro.tc.api.features.TcFeatureSet;
+import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.features.maxnormalization.TokenLengthRatio;
 import org.dkpro.tc.features.ngram.CharacterNGram;
 import org.dkpro.tc.features.ngram.PosNGram;
@@ -20,7 +21,6 @@ import de.unidue.ltl.escrito.features.complexity.SyntaxTreeDepth;
 import de.unidue.ltl.escrito.features.complexity.TraditionalReadabilityMeasures;
 import de.unidue.ltl.escrito.features.complexity.TypeTokenRatioFeatureExtractor;
 import de.unidue.ltl.escrito.features.errors.NumberOfGrammarMistakes;
-import de.unidue.ltl.escrito.features.errors.NumberOfSpellingErrors;
 import de.unidue.ltl.escrito.features.length.AvgNrOfCharsPerSentence;
 import de.unidue.ltl.escrito.features.length.AvgNrOfCharsPerToken;
 import de.unidue.ltl.escrito.features.length.AvgNrOfTokensPerSentence;
@@ -28,15 +28,11 @@ import de.unidue.ltl.escrito.features.length.NrOfChars;
 import de.unidue.ltl.escrito.features.length.NrOfSentences;
 import de.unidue.ltl.escrito.features.length.NrOfTokens;
 import de.unidue.ltl.escrito.features.occurence.NrOfCommas;
-import de.unidue.ltl.escrito.features.occurence.NumberOfQuotations;
 import de.unidue.ltl.escrito.features.occurence.NumberOfSubordinateClauses;
-import de.unidue.ltl.escrito.features.occurence.SpeechThoughtWritingRepresentation;
 import de.unidue.ltl.escrito.features.similarity.EmbeddingSimilarityFeatureExtractor;
 import de.unidue.ltl.escrito.features.similarity.PairwiseFeatureWrapper;
 import de.unidue.ltl.escrito.features.similarity.StringSimilarityFeatureExtractor;
 import de.unidue.ltl.escrito.features.similarity.WordOverlapFeatureExtractor;
-
-import org.dkpro.tc.core.Constants;
 
 public class FeatureSettings
 	implements Constants
@@ -170,29 +166,30 @@ public class FeatureSettings
 						TcFeatureFactory.create(NrOfCommas.class),
 						TcFeatureFactory.create(
 								NrOfConnectives.class,
-								NrOfConnectives.PARAM_CONNECTIVES_FILE_PATH, "src/main/resources/lists/en/connectives_en.txt"
+								NrOfConnectives.PARAM_CONNECTIVES_FILE_PATH, "src/main/resources/lists/de/connectives_de.txt"
 								),
-						TcFeatureFactory.create(NumberOfQuotations.class),
-						TcFeatureFactory.create(
-								SpeechThoughtWritingRepresentation.class,
-								SpeechThoughtWritingRepresentation.PARAM_REPORTING_VERBS_FILE_PATH, "src/main/resources/lists/en/reporting_verbs_krestel_en.txt"
-								),
+//						TcFeatureFactory.create(NumberOfQuotations.class),
+//						TcFeatureFactory.create(
+//								SpeechThoughtWritingRepresentation.class,
+//								SpeechThoughtWritingRepresentation.PARAM_REPORTING_VERBS_FILE_PATH, "src/main/resources/lists/de/reporting_verbs_krestel_en.txt"
+//								),
 
 						TcFeatureFactory.create(TypeTokenRatioFeatureExtractor.class),
 						TcFeatureFactory.create(
 								PairwiseSentenceSimilarity.class,
 								PairwiseSentenceSimilarity.PARAM_NR_OF_SAMPLES, 5
 								),
-						TcFeatureFactory.create(SyntaxTreeDepth.class),
+						TcFeatureFactory.create(SyntaxTreeDepth.class, SyntaxTreeDepth.LANGUAGE, "de"),
 						TcFeatureFactory.create(
 								NumberOfSubordinateClauses.class,
-								NumberOfSubordinateClauses.PARAM_CAUSAL_INDICATORS_FILE_PATH, "src/main/resources/lists/en/causalIndicators_en.txt",
-								NumberOfSubordinateClauses.PARAM_TEMPORAL_INDICATORS_FILE_PATH, "src/main/resources/lists/en/temporalIndicators_en.txt"
+								NumberOfSubordinateClauses.PARAM_LANGUAGE, "de",
+								NumberOfSubordinateClauses.PARAM_CAUSAL_INDICATORS_FILE_PATH, "src/main/resources/lists/de/causalIndicators_de.txt",
+								NumberOfSubordinateClauses.PARAM_TEMPORAL_INDICATORS_FILE_PATH, "src/main/resources/lists/de/temporalIndicators_de.txt"
 								),
 						TcFeatureFactory.create(SyntacticVariability.class),
 						TcFeatureFactory.create(TraditionalReadabilityMeasures.class),
-						TcFeatureFactory.create(NumberOfGrammarMistakes.class),
-						TcFeatureFactory.create(NumberOfSpellingErrors.class)
+						TcFeatureFactory.create(NumberOfGrammarMistakes.class,
+								NumberOfGrammarMistakes.PARAM_INPUT_LOCATION, "src/main/resources/lists/de/grammarMistakes.txt")
 						)
 				);
 		return dimFeatureSets;
