@@ -43,7 +43,6 @@ public class AdditionalLexiconEntryExtractionExample extends Experiments_ImplBas
 		CollectionReaderDescription readerSource = CollectionReaderFactory.createReaderDescription(
 				TextReader.class,
 				TextReader.PARAM_LANGUAGE,LANGUAGE_CODE,
-				TextReader.PARAM_ENCODING,"UTF-8",
 				TextReader.PARAM_SOURCE_LOCATION, sourceText);		
 		AnalysisEngineDescription segmenter =createEngineDescription(
 					ClearNlpSegmenter.class,
