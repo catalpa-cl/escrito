@@ -14,7 +14,7 @@ import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpSegmenter;
 import de.unidue.ltl.escrito.core.normalization.LevenshteinChecker;
 import de.unidue.ltl.escrito.core.normalization.SpellingErrorAnalyzer;
 import de.unidue.ltl.escrito.core.normalization.SpellingErrorCorrector;
-import de.unidue.ltl.escrito.generic.GenericDatasetReader;
+import de.unidue.ltl.escrito.io.generic.GenericDatasetReader;
 import de.unidue.ltl.escrito.io.shortanswer.PowerGradingReader;
 
 
