@@ -97,5 +97,10 @@
 			<artifactId>string-metric</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.dkpro.tc</groupId>
+			<artifactId>dkpro-tc-examples</artifactId>
+			<version>1.1.0</version>
+		</dependency>
 	</dependencies>
 </project>
