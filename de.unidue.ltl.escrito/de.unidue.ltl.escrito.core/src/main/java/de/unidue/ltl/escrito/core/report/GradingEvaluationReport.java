@@ -96,7 +96,14 @@ public class GradingEvaluationReport extends TcAbstractReport {
 
 		Properties props = new Properties();
 
-		EvaluationData<Double> evaluationDouble = ReportUtils.readId2OutcomeAsDouble(evaluationFile);
+		boolean evaluateAsDouble = true;	
+
+		EvaluationData<Double> evaluationDouble = null;
+		try {
+			evaluationDouble = ReportUtils.readId2OutcomeAsDouble(evaluationFile);
+		} catch (NumberFormatException e){
+			evaluateAsDouble = false;
+		}
 		EvaluationData<String> evaluationString = ReportUtils.readId2OutcomeAsString(evaluationFile);
 		EvaluationData<String> evaluationStringMajority = null;
 		if (evaluationFileMajority.exists()){
@@ -119,11 +126,20 @@ public class GradingEvaluationReport extends TcAbstractReport {
 		CohenKappa<String> kappa = new CohenKappa<String>(evaluationString);
 		results.put(COHENSKAPPA, kappa.getResult());
 
-		LinearlyWeightedKappa<Double> lwKappa = new LinearlyWeightedKappa<Double>(evaluationDouble);
-		results.put(LINEAR_KAPPA, lwKappa.getResult());
 
-		QuadraticallyWeightedKappa<Double> qwKappa = new QuadraticallyWeightedKappa<Double>(evaluationDouble);
-		results.put(QUADRATIC_WEIGHTED_KAPPA, qwKappa.getResult());
+		if (evaluateAsDouble){
+			LinearlyWeightedKappa<Double> lwKappa = new LinearlyWeightedKappa<Double>(evaluationDouble);
+			results.put(LINEAR_KAPPA, lwKappa.getResult());
+
+			QuadraticallyWeightedKappa<Double> qwKappa = new QuadraticallyWeightedKappa<Double>(evaluationDouble);
+			results.put(QUADRATIC_WEIGHTED_KAPPA, qwKappa.getResult());
+
+			PearsonCorrelation pearson = new PearsonCorrelation(evaluationDouble);
+			results.put(PEARSON, pearson.getResult());
+
+			SpearmanCorrelation spearman = new SpearmanCorrelation(evaluationDouble);
+			results.put(SPEARMAN, spearman.getResult());
+		}
 
 		Precision<String> prec = new Precision<String>(evaluationString);
 		results.put(MACROPRECISION, prec.getMacroPrecision());
@@ -138,11 +154,7 @@ public class GradingEvaluationReport extends TcAbstractReport {
 		results.put(MICROFMEASURE, f.getMicroFscore());
 		results.put(WEIGHTEDFMEASURE, f.getWeightedFscore());
 
-		PearsonCorrelation pearson = new PearsonCorrelation(evaluationDouble);
-		results.put(PEARSON, pearson.getResult());
 
-		SpearmanCorrelation spearman = new SpearmanCorrelation(evaluationDouble);
-		results.put(SPEARMAN, spearman.getResult());
 
 		for (String s : results.keySet()) {
 			System.out.printf(s+": %.2f"+System.getProperty("line.separator"), results.get(s));
