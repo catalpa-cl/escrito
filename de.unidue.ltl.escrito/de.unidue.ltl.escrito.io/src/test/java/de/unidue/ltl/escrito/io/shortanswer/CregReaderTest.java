@@ -29,6 +29,7 @@ public class CregReaderTest
 		CollectionReaderDescription reader = CollectionReaderFactory.createReaderDescription(
 				CregReader.class,
 				CregReader.PARAM_INPUT_FILE, inputDataFile,
+				CregReader.PARAM_PREPROCESSING_OF_CONNECTED_TEXTS, false,
 				CregReader.PARAM_CORPUSNAME, "CREG",
 				CregReader.PARAM_QUESTION_PREFIX, "Q",
 				CregReader.PARAM_TARGET_ANSWER_PREFIX, "TA"
@@ -53,6 +54,7 @@ public class CregReaderTest
 		CollectionReaderDescription reader = CollectionReaderFactory.createReaderDescription(
 				CregReader.class,
 				CregReader.PARAM_INPUT_FILE, inputDataFile,
+				CregReader.PARAM_PREPROCESSING_OF_CONNECTED_TEXTS, false,
 				CregReader.PARAM_CORPUSNAME, "CREG",
 				CregReader.PARAM_QUESTION_PREFIX, "Q",
 				CregReader.PARAM_TARGET_ANSWER_PREFIX, "TA"
@@ -78,6 +80,7 @@ public class CregReaderTest
 		CollectionReaderDescription reader = CollectionReaderFactory.createReaderDescription(
 				CregReader.class,
 				CregReader.PARAM_INPUT_FILE, inputDataFile,
+				CregReader.PARAM_PREPROCESSING_OF_CONNECTED_TEXTS, false,
 				CregReader.PARAM_CORPUSNAME, "CREG",
 				CregReader.PARAM_QUESTION_PREFIX, "Q",
 				CregReader.PARAM_TARGET_ANSWER_PREFIX, "TA"

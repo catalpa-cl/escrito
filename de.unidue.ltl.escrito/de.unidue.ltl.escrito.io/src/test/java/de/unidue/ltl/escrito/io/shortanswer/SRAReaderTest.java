@@ -20,7 +20,8 @@ public class SRAReaderTest {
 		CollectionReaderDescription reader = CollectionReaderFactory.createReaderDescription(
 				SRAReader.class,
 				SRAReader.PARAM_INPUT_FILE, inputDataFile,
-				SRAReader.PARAM_CORPUSNAME,"SRA",
+				SRAReader.PARAM_PREPROCESSING_OF_CONNECTED_TEXTS, false,
+                SRAReader.PARAM_CORPUSNAME,"SRA",
 				SRAReader.PARAM_QUESTION_PREFIX, "Q",
 				SRAReader.PARAM_TARGET_ANSWER_PREFIX, "TA"
 				);
@@ -42,6 +43,7 @@ public class SRAReaderTest {
         CollectionReaderDescription reader = CollectionReaderFactory.createReaderDescription(
                 SRAReader.class,
                 SRAReader.PARAM_INPUT_FILE, inputDataFile,
+                SRAReader.PARAM_PREPROCESSING_OF_CONNECTED_TEXTS, false,
                 SRAReader.PARAM_CORPUSNAME,"SRA",
                 SRAReader.PARAM_PROMPT_SET_ID, "MX_1",
 				SRAReader.PARAM_QUESTION_PREFIX, "Q",
