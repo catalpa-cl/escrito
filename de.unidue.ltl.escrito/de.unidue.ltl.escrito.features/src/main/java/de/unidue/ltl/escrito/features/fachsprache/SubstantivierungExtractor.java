@@ -23,7 +23,7 @@ import org.dkpro.tc.api.features.FeatureType;
 import org.dkpro.tc.api.type.TextClassificationTarget;
 
 import de.tudarmstadt.ukp.dkpro.core.api.frequency.util.FrequencyDistribution;
-import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.NN;
+import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_NOUN;
 import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 
@@ -72,14 +72,14 @@ public class SubstantivierungExtractor extends FeatureExtractorResource_ImplBase
 	public Set<Feature> extract(JCas view, TextClassificationTarget target) throws TextClassificationException {
 		Set<Feature> featureList = new HashSet<Feature>();
 
-		int countNouns = JCasUtil.select(view, NN.class).size();
+		int countNouns = JCasUtil.select(view, POS_NOUN.class).size();
 		
 		FrequencyDistribution<String> suffixFD = new FrequencyDistribution<String>();
 
 		for (String s : suffixes) {
 			for (Token t : JCasUtil.select(view, Token.class)) {
 				POS pos = t.getPos();
-				if (pos instanceof NN) {
+				if (pos instanceof POS_NOUN) {
 					if (t.getLemma().getValue().endsWith(s)){
 						suffixFD.inc(s);
 					}	
