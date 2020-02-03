@@ -129,7 +129,7 @@ extends LuceneMetaCollectionBasedFeatureTestBase
        return getMetaCollectorParameters(luceneFolder);
    }
 
-   @Test
+   @Test @Ignore
    public void luceneNGramFeatureExtractorNonDefaultFrequencyThresholdTest() throws Exception
    {
 
