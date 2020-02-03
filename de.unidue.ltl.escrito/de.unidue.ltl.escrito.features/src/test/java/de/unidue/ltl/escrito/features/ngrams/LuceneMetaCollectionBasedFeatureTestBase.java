@@ -55,7 +55,7 @@ public abstract class LuceneMetaCollectionBasedFeatureTestBase
     public static Class<? extends AnalysisComponent> metaCollectorClass;
     public static Class<? extends Resource_ImplBase> featureClass;
 
-    @Test
+    @Test @Ignore
     public void runTest() throws Exception
     {
         File luceneFolder = folder.newFolder();
