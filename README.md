@@ -27,19 +27,19 @@ If you use ESCRITO, please cite:
   author={Zesch, Torsten and Horbach, Andrea},
   booktitle={Proceedings of the Eleventh International Conference on Language Resources and Evaluation (LREC-2018)},
   year={2018},
-url= {https://www.aclweb.org/anthology/L18-1365}
+  url= {https://www.aclweb.org/anthology/L18-1365}
 }
 ```
 
 ## Usage
 
-# Prerequisites
+### Prerequisites
 
 The project uses Java 1.8.
 You need to set a DKPRO_HOME variable as described in the [DKPro documentation](https://zoidberg.ukp.informatik.tu-darmstadt.de/jenkins/job/DKPro%20TC%20Documentation%20(GitHub)/org.dkpro.tc%24dkpro-tc-doc/doclinks/1/#QuickStart)
 
 
-# First Steps
+### First Steps
 - Import ESCRITO as a maven project in eclipse
 - Try out the examples in the examples module
 
