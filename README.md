@@ -16,7 +16,7 @@ In this way, the toolkit provides a ready-made testbed for applying the latest d
 * shallow and deep learning setups
 * evaluation reports and visualization
 
-## Puclications
+## Publications
 
 > Torsten Zesch and Andrea Horbach. ESCRITO-An NLP-Enhanced Educational Scoring Toolkit. In Proceedings of the Eleventh International Conference on Language Resources and Evaluation (LREC-2018), 2018. [pdf](https://www.aclweb.org/anthology/L18-1365.pdf)
 
