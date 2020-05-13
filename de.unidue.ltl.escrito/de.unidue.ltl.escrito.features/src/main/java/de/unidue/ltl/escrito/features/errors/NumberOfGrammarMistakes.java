@@ -85,9 +85,14 @@ public class NumberOfGrammarMistakes extends FeatureExtractorResource_ImplBase i
 		DocumentMetaData dmd = JCasUtil.selectSingle(aJCas, DocumentMetaData.class);
 		String id = dmd.getDocumentId();
 		Set<Feature> features = new HashSet<Feature>();
-		features.add(new Feature("NrOfGrammarMistakes", errorMap.get(id)[0], FeatureType.NUMERIC));
+		//adjustment so that "dummy key" will not lead to NullPointerException
+		if (errorMap.containsKey(id)) {
+			features.add(new Feature("NrOfGrammarMistakes", errorMap.get(id)[0], FeatureType.NUMERIC));
 //		features.add(new Feature("grammarError", errorMap.get(id)[1]));
 //		features.add(new Feature("spellingError", errorMap.get(id)[2]));
+		} else {
+			System.out.println("The key " + id + " is not included in the map!");
+		}
 		return features;
 	}
 }
