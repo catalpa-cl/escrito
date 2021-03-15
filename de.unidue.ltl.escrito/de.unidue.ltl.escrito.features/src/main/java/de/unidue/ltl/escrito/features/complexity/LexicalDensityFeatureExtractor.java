@@ -51,6 +51,7 @@ implements FeatureExtractor
 	}
 
 	// TODO: Are those all content words? What about adverbs?
+	// TODO: make parametrizable
 	private boolean isContentWord(String coarseValue) {
 		if (coarseValue.equals("ADJ") || coarseValue.equals("VERB") || coarseValue.startsWith("N")){
 			return true;
