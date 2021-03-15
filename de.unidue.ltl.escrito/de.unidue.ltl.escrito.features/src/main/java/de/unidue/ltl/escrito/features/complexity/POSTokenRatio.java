@@ -20,61 +20,50 @@ import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 
 /*
- * Lexical Variation: Type-Token-Ratio only for content words (NOUN, VERB, ADJ)
- * Verb Variation: Type-Token-Ratio only for verbs
+ * Ratio of a particular POS to total number of tokens
+ * Currently implemented: Noun ratio, verb ratio
  */
 
 @TypeCapability(inputs = { "de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS" })
-public class LexicalVariation
+public class POSTokenRatio
 extends FeatureExtractorResource_ImplBase
 implements FeatureExtractor
 {
-	public static final String FN_LexicalVariation = "LexicalVariation";
-	public static final String FN_VerbVariation = "VerbVariation";
+	public static final String FN_NounRatio = "NounRatio";
+	public static final String FN_VerbRatio = "VerbRatio";
 
 
 	@Override
 	public Set<Feature> extract(JCas jcas, TextClassificationTarget aTarget)
 			throws TextClassificationException
 	{
-		//Lexical Variation
-		int numberOfContentWords = 0;
-		Set<String> contentWordTypes = new HashSet<String>();
-
-		//Verb Variation
+		
+		int numberOfTokens = JCasUtil.select(jcas, POS.class).size();
+		
+		//Nouns, Verbs
+		int numberOfNouns = 0;
 		int numberOfVerbs = 0;
-		Set<String> verbTypes = new HashSet<String>();
-
 
 		for (POS pos : JCasUtil.select(jcas, POS.class)) {
 					
-			if (isContentWord(pos.getCoarseValue())){
-				numberOfContentWords++;
-				contentWordTypes.add(pos.getCoveredText().toLowerCase());
+			if (pos.getCoarseValue().startsWith("N")){
+				numberOfNouns++;
 			}
 			if (pos.getCoarseValue().equals("VERB")){
-				verbTypes.add(pos.getCoveredText().toLowerCase());
 				numberOfVerbs++;
 			}
 		}
 
-		double lv = (1.0*contentWordTypes.size())/numberOfContentWords;
-		double vv = (1.0*verbTypes.size())/numberOfVerbs;
+		
+		double nr = (1.0*numberOfNouns)/numberOfTokens;
+		double vr = (1.0*numberOfVerbs)/numberOfTokens;
 
 		Set<Feature> features = new HashSet<Feature>();
-		features.add(new Feature(FN_LexicalVariation, lv, FeatureType.NUMERIC));
-		features.add(new Feature(FN_VerbVariation, vv, FeatureType.NUMERIC));
+		features.add(new Feature(FN_NounRatio, nr, FeatureType.NUMERIC));
+		features.add(new Feature(FN_VerbRatio, vr, FeatureType.NUMERIC));
 
 		return features;
 	}
 
-	// TODO: Are those all content words? What about adverbs?
-	private boolean isContentWord(String coarseValue) {
-		if (coarseValue.equals("ADJ") || coarseValue.equals("VERB") || coarseValue.startsWith("N")){
-			return true;
-		} else {
-			return false;
-		}
-	}
 }
 

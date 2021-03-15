@@ -20,7 +20,7 @@ import de.unidue.ltl.escrito.features.length.NrOfTokens;
 
 import org.junit.Assert;
 
-public class LexicalVariationTest extends EssayGradingTestBase
+public class POSTokenRatioTest extends EssayGradingTestBase
 {
 	@Test
 	public void lexicalVariationFeatureExtractorTest() 
@@ -31,13 +31,13 @@ public class LexicalVariationTest extends EssayGradingTestBase
 
 		JCas jcas = engine.newJCas();
 		jcas.setDocumentLanguage("de");
-		jcas.setDocumentText("Das ist ein Test und das ist ein Beispiel.");
+		jcas.setDocumentText("Das ist ein Test und das ein schönes Beispiel.");
 		engine.process(jcas);
 
 		TextClassificationTarget target = new TextClassificationTarget(jcas, 0,
 				jcas.getDocumentText().length());
 
-		LexicalVariation extractor = new LexicalVariation();
+		POSTokenRatio extractor = new POSTokenRatio();
 		List<Feature> features = new ArrayList<Feature>(extractor.extract(jcas, target));
 
 		
@@ -47,11 +47,11 @@ public class LexicalVariationTest extends EssayGradingTestBase
 		//Test: feature values
 		for(Feature f : features) {
 			System.out.println(f.toString());
-			if(f.getName().equals(LexicalVariation.FN_LexicalVariation)) {
-				assertFeature(LexicalVariation.FN_LexicalVariation, 0.75, f);
+			if(f.getName().equals(POSTokenRatio.FN_NounRatio)) {
+				assertFeature(POSTokenRatio.FN_NounRatio, 0.2, f);
 			}
-			if (f.getName().equals(LexicalVariation.FN_VerbVariation)) {
-				assertFeature(LexicalVariation.FN_VerbVariation, 0.5, f);
+			if (f.getName().equals(POSTokenRatio.FN_VerbRatio)) {
+				assertFeature(POSTokenRatio.FN_VerbRatio, 0.1, f);
 			}
 		}
 	}
