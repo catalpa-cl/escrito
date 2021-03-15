@@ -39,7 +39,7 @@ public class POSTokenRatioTest extends EssayGradingTestBase
 
 		POSTokenRatio extractor = new POSTokenRatio();
 		List<Feature> features = new ArrayList<Feature>(extractor.extract(jcas, target));
-
+		
 		
 		//Test: returns 2 features
 		Assert.assertEquals(2, features.size());
