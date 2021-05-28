@@ -23,7 +23,7 @@ import org.junit.Assert;
 public class LexicalDensityTest extends EssayGradingTestBase
 {
     @Test
-    public void lexicalDensityFeatureExtractorTest() 
+    public void lexicalDensityFeatureExtractorTest_de() 
         throws Exception
     {
     	AnalysisEngine engine = getPreprocessingEngine("de",ParserType.noParser);
@@ -45,8 +45,34 @@ public class LexicalDensityTest extends EssayGradingTestBase
         Iterator<Feature> iter = features.iterator();
         Feature f = iter.next();
         System.out.println(f.toString());
-        assertFeature(LexicalDensityFeatureExtractor.FN_LD, 5., f);
+        assertFeature(LexicalDensityFeatureExtractor.FN_LD, 0.4, f);
     }
 
+    @Test
+    public void lexicalDensityFeatureExtractorTest_en() 
+        throws Exception
+    {
+    	AnalysisEngine engine = getPreprocessingEngine("en",ParserType.noParser);
+
+
+        JCas jcas = engine.newJCas();
+        jcas.setDocumentLanguage("en");
+        jcas.setDocumentText("This is a test.");
+        engine.process(jcas);
+
+        TextClassificationTarget target = new TextClassificationTarget(jcas, 0,
+                jcas.getDocumentText().length());
+
+        LexicalDensityFeatureExtractor extractor = new LexicalDensityFeatureExtractor();
+        List<Feature> features = new ArrayList<Feature>(extractor.extract(jcas, target));
+
+        Assert.assertEquals(1, features.size());
+
+        Iterator<Feature> iter = features.iterator();
+        Feature f = iter.next();
+        System.out.println(f.toString());
+        assertFeature(LexicalDensityFeatureExtractor.FN_LD, 0.4, f);
+    }
+    
     
 }

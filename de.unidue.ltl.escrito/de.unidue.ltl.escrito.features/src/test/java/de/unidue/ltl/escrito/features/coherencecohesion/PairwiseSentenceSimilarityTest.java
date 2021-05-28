@@ -12,20 +12,19 @@ import org.apache.uima.jcas.JCas;
 import org.dkpro.tc.api.features.Feature;
 import org.dkpro.tc.api.type.TextClassificationTarget;
 import org.junit.Test;
+
+import de.tudarmstadt.ukp.dkpro.core.matetools.MateLemmatizer;
 import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpPosTagger;
 import de.tudarmstadt.ukp.dkpro.core.tokit.BreakIteratorSegmenter;
+import de.unidue.ltl.escrito.features.core.EssayGradingTestBase;
+import de.unidue.ltl.escrito.features.core.EssayGradingTestBase.ParserType;
 
-public class PairwiseSentenceSimilarityTest {
-	@Test @Ignore
-    public void pairwiseSentenceSimilarityFeatureExtractorTest()
+public class PairwiseSentenceSimilarityTest extends EssayGradingTestBase{
+	@Test 
+    public void pairwiseSentenceSimilarityFeatureExtractorTest() 
         throws Exception
     {
-		AnalysisEngineDescription description= createEngineDescription(
-				createEngineDescription(BreakIteratorSegmenter.class),
-				createEngineDescription(OpenNlpPosTagger.class)//,
-			//	createEngineDescription(MateLemmatizer.class)
-				);
-        AnalysisEngine engine=createEngine(description);
+        AnalysisEngine engine=getPreprocessingEngine("de", ParserType.noParser);
         		
         JCas jcas = engine.newJCas();
         jcas.setDocumentLanguage("de");
@@ -62,21 +61,14 @@ public class PairwiseSentenceSimilarityTest {
         assertFeatures("GreedyStringTilingSampleNr_2", 0.17462156493029532, features, 0.0001);
         assertFeatures("GreedyStringTilingSampleNr_3", 0.1823855755894591, features, 0.0001);
         assertFeatures(PairwiseSentenceSimilarity.PAIRWISE_SENTENCE_SIMILARITY_NOUNS, 0.38625596248686234, features, 0.0001);
-        assertFeatures(PairwiseSentenceSimilarity.PAIRWISE_SENTENCE_SIMILARITY_GREEDY_TILE,  0.23868365846026235, features, 0.0001);
-//        assertFeature(PairwiseSentenceSimilarityDFE.PAIRWISE_SENTENCE_SIMILARITY_NOUNS, 1.0, iter.next());
-//        assertFeature(PairwiseSentenceSimilarityDFE.PAIRWISE_SENTENCE_SIMILARITY_GREEDY_TILE,  0.48484848484848486, iter.next());
-   
+        assertFeatures(PairwiseSentenceSimilarity.PAIRWISE_SENTENCE_SIMILARITY_GREEDY_TILE,  0.23868365846026235, features, 0.0001);  
     }
 	
-	@Test @Ignore
+	@Test 
     public void pairwiseSentenceSimilarityFeatureExtractorTest_en()
         throws Exception
     {
-		AnalysisEngineDescription description= createEngineDescription(createEngineDescription(BreakIteratorSegmenter.class), 
-				createEngineDescription(OpenNlpPosTagger.class)//,
-			//	createEngineDescription(MateLemmatizer.class)
-				);
-        AnalysisEngine engine=createEngine(description);
+        AnalysisEngine engine=getPreprocessingEngine("en", ParserType.noParser);
         		
         JCas jcas = engine.newJCas();
         jcas.setDocumentLanguage("en");
