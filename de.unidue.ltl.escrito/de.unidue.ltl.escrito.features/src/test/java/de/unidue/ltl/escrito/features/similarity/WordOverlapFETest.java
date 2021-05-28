@@ -35,7 +35,7 @@ public class WordOverlapFETest extends EssayGradingTestBase {
 		Set<Feature> features = extractor.extract(jcas1,jcas2);
 		Assert.assertEquals(2, features.size());
 		assertFeatures("TokenOverlapTargetAnswer",1.0, features,0.0001);
-		assertFeatures("TokenOverlapReferenceAnswer",1.0,features,0.0001);		
+		assertFeatures("TokenOverlapLearnerAnswer",1.0,features,0.0001);		
 	}
 	
 	
