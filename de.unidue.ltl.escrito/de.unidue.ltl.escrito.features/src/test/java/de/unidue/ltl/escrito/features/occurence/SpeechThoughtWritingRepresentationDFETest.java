@@ -17,7 +17,7 @@ import de.unidue.ltl.escrito.features.core.EssayGradingTestBase;
 import de.unidue.ltl.escrito.features.occurence.SpeechThoughtWritingRepresentation;
 
 public class SpeechThoughtWritingRepresentationDFETest extends EssayGradingTestBase{
-	@Test @Ignore
+	@Test 
 	public void speechThoughtWritingRepresentationTest_DE() throws Exception {
 		AnalysisEngine engine = getPreprocessingEngine("de",ParserType.noParser);
 
@@ -48,7 +48,7 @@ public class SpeechThoughtWritingRepresentationDFETest extends EssayGradingTestB
 	}
 	
 	
-	@Test @Ignore
+	@Test 
 	public void speechThoughtWritingRepresentationDFETest_EN() throws Exception {
 		AnalysisEngine engine = getPreprocessingEngine("en",ParserType.noParser);
 

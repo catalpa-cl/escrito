@@ -19,11 +19,11 @@ public class NumberOfSubordinateClausesTest
 	extends EssayGradingTestBase
 {
 	
-	@Test @Ignore
+	@Test 
     public void subOrdinateClauseFeatureExtractorTest_de()
         throws Exception
     {
-		AnalysisEngine engine = getPreprocessingEngine("de",ParserType.noParser);
+		AnalysisEngine engine = getPreprocessingEngine("de",ParserType.constituentParser);
         		
         JCas jcas = engine.newJCas();
         jcas.setDocumentLanguage("de");
@@ -48,11 +48,11 @@ public class NumberOfSubordinateClausesTest
 	
 	
 	
-	@Test @Ignore
+	@Test 
     public void subOrdinateClauseFeatureExtractorTest()
         throws Exception
     {
-		AnalysisEngine engine = getPreprocessingEngine("en",ParserType.noParser);
+		AnalysisEngine engine = getPreprocessingEngine("en",ParserType.constituentParser);
         		
         JCas jcas = engine.newJCas();
         jcas.setDocumentLanguage("en");
