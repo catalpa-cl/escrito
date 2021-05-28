@@ -33,7 +33,7 @@ implements PairFeatureExtractor, MetaDependent{
 
 
 	public static final String FEAT_OVERLAP_TA = "TokenOverlapTargetAnswer";
-	public static final String FEAT_OVERLAP_LA = "TokenOverlapReferenceAnswer";
+	public static final String FEAT_OVERLAP_LA = "TokenOverlapLearnerAnswer";
 
 	public static final String PARAM_SOURCE_LOCATION = ComponentParameters.PARAM_SOURCE_LOCATION;
 	@ConfigurationParameter(name = PARAM_SOURCE_LOCATION, mandatory = false)
