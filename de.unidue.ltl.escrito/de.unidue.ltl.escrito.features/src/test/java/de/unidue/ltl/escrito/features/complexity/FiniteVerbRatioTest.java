@@ -15,7 +15,7 @@ import de.unidue.ltl.escrito.features.core.EssayGradingTestBase;
 
 public class FiniteVerbRatioTest extends EssayGradingTestBase {
 	@Test
-	public void finiteVerbRatioExtractorTest() throws Exception {
+	public void finiteVerbRatioExtractorTest_de() throws Exception {
 		AnalysisEngine engine = getPreprocessingEngine("de",ParserType.noParser);
 
 		JCas jcas = engine.newJCas();
@@ -26,6 +26,34 @@ public class FiniteVerbRatioTest extends EssayGradingTestBase {
 		FiniteVerbRatio extractor = FeatureUtil.createResource(
 				FiniteVerbRatio.class,
 				FiniteVerbRatio.PARAM_TAGSET,"stts",
+				FiniteVerbRatio.PARAM_UNIQUE_EXTRACTOR_NAME,"FiniteVerbRatio"
+		);
+		
+		Set<Feature> features = extractor.extract(jcas, TextClassificationTarget.get(jcas));
+		
+		//Test: Number of features
+		Assert.assertEquals(1, features.size());
+		
+		//Test feature value
+		Iterator<Feature> iter = features.iterator();
+        Feature f = iter.next();
+        System.out.println(f.toString());
+        assertFeature(FiniteVerbRatio.FN_FiniteVerbRatio, 0.5, f);
+	}
+	
+	
+	@Test
+	public void finiteVerbRatioExtractorTest_en() throws Exception {
+		AnalysisEngine engine = getPreprocessingEngine("en",ParserType.noParser);
+
+		JCas jcas = engine.newJCas();
+		jcas.setDocumentLanguage("en");
+		jcas.setDocumentText("I want to test an example.");
+		engine.process(jcas);
+		
+		FiniteVerbRatio extractor = FeatureUtil.createResource(
+				FiniteVerbRatio.class,
+				FiniteVerbRatio.PARAM_TAGSET,"ptb",
 				FiniteVerbRatio.PARAM_UNIQUE_EXTRACTOR_NAME,"FiniteVerbRatio"
 		);
 		

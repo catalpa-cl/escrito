@@ -31,7 +31,8 @@ implements FeatureExtractor
 {
 	public static final String FN_NounRatio = "NounRatio";
 	public static final String FN_VerbRatio = "VerbRatio";
-
+	public static final String FN_AdjectivRatio = "AdjectivRatio";
+	
 
 	@Override
 	public Set<Feature> extract(JCas jcas, TextClassificationTarget aTarget)
@@ -43,25 +44,31 @@ implements FeatureExtractor
 		//Nouns, Verbs
 		int numberOfNouns = 0;
 		int numberOfVerbs = 0;
-
+		int numberOfAdjectives = 0;
+		
 		for (POS pos : JCasUtil.select(jcas, POS.class)) {
-					
+			System.out.println(pos.getCoarseValue());
 			if (pos.getCoarseValue().startsWith("N")){
 				numberOfNouns++;
 			}
 			if (pos.getCoarseValue().equals("VERB")){
 				numberOfVerbs++;
 			}
+			if (pos.getCoarseValue().equals("VERB")){
+				numberOfAdjectives++;
+			}
 		}
 
 		
 		double nr = (1.0*numberOfNouns)/numberOfTokens;
 		double vr = (1.0*numberOfVerbs)/numberOfTokens;
+		double ar = (1.0*numberOfAdjectives)/numberOfTokens;
 
+		
 		Set<Feature> features = new HashSet<Feature>();
 		features.add(new Feature(FN_NounRatio, nr, FeatureType.NUMERIC));
 		features.add(new Feature(FN_VerbRatio, vr, FeatureType.NUMERIC));
-
+		features.add(new Feature(FN_AdjectivRatio, ar, FeatureType.NUMERIC));
 		return features;
 	}
 

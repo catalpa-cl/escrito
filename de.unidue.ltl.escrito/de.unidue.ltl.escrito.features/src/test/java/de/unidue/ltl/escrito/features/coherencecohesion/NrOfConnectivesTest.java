@@ -20,7 +20,7 @@ import de.unidue.ltl.escrito.features.core.EssayGradingTestBase;
 public class NrOfConnectivesTest 
 	extends EssayGradingTestBase
 {
-	@Test @Ignore
+	@Test 
 	public void nrOfConnectivesFeatureExtractorTest_de() throws Exception {
 		AnalysisEngine engine = getPreprocessingEngine("de",ParserType.noParser);
 
@@ -48,7 +48,7 @@ public class NrOfConnectivesTest
 	}
 	
 	
-	@Test @Ignore
+	@Test 
 	public void nrOfConnectivesFeatureExtractorTest_en() throws Exception {
 		AnalysisEngine engine = getPreprocessingEngine("en",ParserType.noParser);
 
