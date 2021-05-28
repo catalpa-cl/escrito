@@ -15,7 +15,7 @@ import de.unidue.ltl.escrito.features.fachsprache.SubstantivierungExtractor;
 
 
 public class SubstantivierungExtractorTest extends EssayGradingTestBase {
-	@Test @Ignore
+	@Test 
 	public void SubstantivierungFeatureExtractorTest() throws Exception {
 		AnalysisEngine engine = getPreprocessingEngine("de",ParserType.noParser);
 
@@ -35,6 +35,6 @@ public class SubstantivierungExtractorTest extends EssayGradingTestBase {
 		
 		Assert.assertEquals(12, features.size());
 
-		assertFeatures("frequencyOfAllSuffixes",0.21428571, features,0.0001);
+		assertFeatures("frequencyOfAllSuffixes",0.2286, features,0.0001);
 	}
 }

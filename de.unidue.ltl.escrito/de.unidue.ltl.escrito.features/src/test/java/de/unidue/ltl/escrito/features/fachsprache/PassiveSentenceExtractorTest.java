@@ -17,7 +17,7 @@ import de.unidue.ltl.escrito.features.fachsprache.PassiveSentenceExtractor;
 
 public class PassiveSentenceExtractorTest extends EssayGradingTestBase {
 	
-	@Test @Ignore
+	@Test 
 	public void PassiveFeatureExtractorTest() throws Exception {
 		AnalysisEngine engine = getPreprocessingEngine("de",ParserType.noParser);
 
@@ -51,7 +51,7 @@ public class PassiveSentenceExtractorTest extends EssayGradingTestBase {
 		assertFeatures("FrequencyOfPassiveSentences",0.8461538461538461,features,0.0001);//11/13
 	}
 	
-	@Test @Ignore
+	@Test 
 	public void PassiveFeatureInEssayTest() throws Exception {
 		AnalysisEngine engine = getPreprocessingEngine("de",ParserType.noParser);
 

@@ -24,7 +24,7 @@ public class PrepositionalPhraseExtractorTest extends EssayGradingTestBase {
 		
 		PrepositionalPhraseExtractor extractor = FeatureUtil.createResource(
 				PrepositionalPhraseExtractor.class,
-				PrepositionalPhraseExtractor.PARAM_UNIQUE_EXTRACTOR_NAME,"PassiveSentenceExtractor"
+				PrepositionalPhraseExtractor.PARAM_UNIQUE_EXTRACTOR_NAME,"dummy"
 		);
 		
 		Set<Feature> features = extractor.extract(jcas, TextClassificationTarget.get(jcas));
