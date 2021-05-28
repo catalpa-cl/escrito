@@ -37,8 +37,8 @@ public class SyntaxTreeDepthTest
 
         Assert.assertEquals(2, features.size());
 
-        assertFeatures(SyntaxTreeDepth.AVG_SYNTAX_TREE_DEPTH, 4.0, features, 0.0001);
-        assertFeatures(SyntaxTreeDepth.TOTAL_SYNTAX_TREE_DEPTH, 8.0, features, 0.0001);
+        assertFeatures(SyntaxTreeDepth.AVG_SYNTAX_TREE_DEPTH, 3.5, features, 0.0001);
+        assertFeatures(SyntaxTreeDepth.TOTAL_SYNTAX_TREE_DEPTH, 7.0, features, 0.0001);
     }
 
 	

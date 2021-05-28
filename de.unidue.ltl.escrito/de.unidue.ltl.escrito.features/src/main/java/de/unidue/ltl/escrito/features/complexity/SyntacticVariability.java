@@ -55,6 +55,10 @@ public class SyntacticVariability
         	fdPhraseLevel.inc(getStringRepresentation(trees.get(i),Level.phrase));
         	fdPosLevel.inc(getStringRepresentation(trees.get(i),Level.pos));
         	fdSentenceLevel.inc(getStringRepresentation(trees.get(i),Level.sentence));
+//        	System.out.println(getStringRepresentation(trees.get(i),Level.pos));
+//        	System.out.println(getStringRepresentation(trees.get(i),Level.phrase));
+//        	System.out.println(getStringRepresentation(trees.get(i),Level.sentence));
+    		
         	
         	//compare pairwise
         	if (i < trees.size() - 1) {
@@ -106,6 +110,7 @@ public class SyntacticVariability
  * @return
  */
 	private String getStringRepresentation(PennTree tree, Level level) {
+	//	System.out.println(tree);
 		List<String> representation=new ArrayList<String>();
 		if(level.equals(Level.pos)){
 			for (Token t : JCasUtil.selectCovered(
@@ -113,7 +118,7 @@ public class SyntacticVariability
 	    		representation.add(t.getPos().getPosValue());
 	    	}
 		}
-		else if(level.equals(Level.pos)){
+		else if(level.equals(Level.phrase)){
 	    	for (Constituent c : JCasUtil.selectCovered(
 					Constituent.class, tree)){
 	    		representation.add(c.getConstituentType());

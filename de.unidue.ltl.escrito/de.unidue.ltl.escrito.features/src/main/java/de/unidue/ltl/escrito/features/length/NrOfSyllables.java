@@ -23,8 +23,8 @@ import com.googlecode.jweb1t.JWeb1TSearcher;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.readability.measure.WordSyllableCounter;
 
-@TypeCapability(inputs = { "de.tudarmstadt.ukp.dkpro.core.api.segmentation.token", 
-"de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS" })
+//@TypeCapability(inputs = { "de.tudarmstadt.ukp.dkpro.core.api.segmentation.token", 
+//"de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS" })
 public class NrOfSyllables 
 extends FeatureExtractorResource_ImplBase
 implements FeatureExtractor{
@@ -38,9 +38,6 @@ implements FeatureExtractor{
 
 
 	WordSyllableCounter wsc;
-	int numSyllables = 0;
-	int numSimpleWords = 0;
-	int numComplexWords = 0;
 
 	@Override
 	public boolean initialize(ResourceSpecifier aSpecifier,
@@ -57,6 +54,9 @@ implements FeatureExtractor{
 	public Set<Feature> extract(JCas aJCas, TextClassificationTarget aTarget) throws TextClassificationException {
 		Set<Feature> features = new HashSet<Feature>();
 		int numWords = 0;
+		int numSyllables = 0;
+		int numSimpleWords = 0;
+		int numComplexWords = 0;
 		for (Token token : JCasUtil.select(aJCas, Token.class)) {
 			if (!(isPunctuation(token))){
 				numWords++;

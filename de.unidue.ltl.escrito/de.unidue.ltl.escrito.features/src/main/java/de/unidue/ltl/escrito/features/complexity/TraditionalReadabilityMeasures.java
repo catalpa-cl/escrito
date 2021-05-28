@@ -38,27 +38,27 @@ public class TraditionalReadabilityMeasures
     protected boolean kincaid;
 
     public static final String PARAM_ADD_ARI = "ari";
-    @ConfigurationParameter(name = PARAM_ADD_ARI, mandatory = false)
+    @ConfigurationParameter(name = PARAM_ADD_ARI, mandatory = false, defaultValue = "true")
     protected boolean ari;
 
     public static final String PARAM_ADD_COLEMANLIAU = "coleman_liau";
-    @ConfigurationParameter(name = PARAM_ADD_ARI, mandatory = true, defaultValue = "true")
+    @ConfigurationParameter(name = PARAM_ADD_ARI, mandatory = false, defaultValue = "true")
     protected boolean colemanLiau;
 
     public static final String PARAM_ADD_FLESH = "flesch";
-    @ConfigurationParameter(name = PARAM_ADD_FLESH, mandatory = false)
+    @ConfigurationParameter(name = PARAM_ADD_FLESH, mandatory = false, defaultValue = "true")
     protected boolean flesh;
 
     public static final String PARAM_ADD_FOG = "fog";
-    @ConfigurationParameter(name = PARAM_ADD_FOG, mandatory = false)
+    @ConfigurationParameter(name = PARAM_ADD_FOG, mandatory = false, defaultValue = "true")
     protected boolean fog;
 
     public static final String PARAM_ADD_LIX = "lix";
-    @ConfigurationParameter(name = PARAM_ADD_LIX, mandatory = false)
+    @ConfigurationParameter(name = PARAM_ADD_LIX, mandatory = false, defaultValue = "true")
     protected boolean lix;
 
     public static final String PARAM_ADD_SMOG = "smog";
-    @ConfigurationParameter(name = PARAM_ADD_ARI, mandatory = false)
+    @ConfigurationParameter(name = PARAM_ADD_ARI, mandatory = false, defaultValue = "true")
     protected boolean smog;
 
     @Override

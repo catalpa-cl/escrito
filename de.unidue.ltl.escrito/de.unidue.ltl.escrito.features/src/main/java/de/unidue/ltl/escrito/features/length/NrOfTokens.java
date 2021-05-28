@@ -29,12 +29,13 @@ public class NrOfTokens
      */
     public static final String FN_NR_OF_TOKENS = "NrofTokens";
 
+    
     @Override
     public Set<Feature> extract(JCas jcas, TextClassificationTarget target)
         throws TextClassificationException
     {
         Set<Feature> featList = new HashSet<Feature>();
-
+        
         double numTokens = JCasUtil.selectCovered(jcas, Token.class, target).size();
 
         featList.add(new Feature(FN_NR_OF_TOKENS, numTokens, FeatureType.NUMERIC));
