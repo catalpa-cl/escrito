@@ -98,6 +98,14 @@
 			<artifactId>de.tudarmstadt.ukp.dkpro.core.matetools-gpl
 			</artifactId>
 		</dependency>
+			<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.io.xmi-asl</artifactId>
+		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId> -->
+<!-- 			<artifactId>de.tudarmstadt.ukp.dkpro.core.languagetool-asl</artifactId> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
 			<artifactId>de.tudarmstadt.ukp.dkpro.core.stanfordnlp-model-parser-en-pcfg</artifactId>
