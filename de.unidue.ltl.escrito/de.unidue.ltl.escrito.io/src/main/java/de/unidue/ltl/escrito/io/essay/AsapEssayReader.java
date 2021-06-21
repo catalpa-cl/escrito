@@ -143,7 +143,7 @@ extends JCasResourceCollectionReader_ImplBase
 				text = text.replace("â€™", "'");
 				// TODO: There seems to be more going wrong, this is a drastic fix for now
 				//	text = text.replace("[^a-zA-Z0-9Ã¤Ã¼Ã¶ÃŸÃ„ÃœÃ–\\(\\)-_ ,.;:\\.\\?]", "");
-				text = text.replaceAll("[^a-zA-Z0-9 ]", "");
+				//text = text.replaceAll("[^a-zA-Z0-9 ]", "");
 				//	System.out.println(text);
 				AsapItem newItem = new AsapItem(essayId, essaySetId, score, text);
 				if (requestedQuestionId != null && requestedQuestionId != essaySetId) {
