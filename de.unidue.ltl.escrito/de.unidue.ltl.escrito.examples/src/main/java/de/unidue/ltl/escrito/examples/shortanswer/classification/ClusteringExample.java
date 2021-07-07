@@ -26,36 +26,38 @@ public class ClusteringExample extends Experiments_ImplBase implements Constants
 		//				System.getenv("DKPRO_HOME")+"/datasets/asap/originalData/test_public.txt", 
 		//				"en", 
 		//				1);
-		runPowergradingBaselineExperiment("PG_LearningCurve_Example", 
-				System.getenv("DKPRO_HOME")+"/datasets/powergrading//train_70.txt", 
+		runPowergradingBaselineExperiment("KI_CLustering_Example", 
+				"/Users/andrea/Downloads/studentAnswers_forClustering.txt",
+				//System.getenv("DKPRO_HOME")+"/datasets/powergrading//train_70.txt", 
 				System.getenv("DKPRO_HOME")+"/datasets/powergrading//test_30.txt", 
-				"en", 
-				1);
+				"de", 
+				3,
+				3);
 	}
 
 
 
 	protected static void runAsapBaselineExperiment(String experimentName, String trainData, String testData,
-			String languageCode, Integer... questionIds) throws Exception {
+			String languageCode, int numClusters, Integer... questionIds) throws Exception {
 		for (int id : questionIds) {
 			CollectionReaderDescription readerTrain = CollectionReaderFactory.createReaderDescription(Asap2Reader.class,
 					Asap2Reader.PARAM_INPUT_FILE, trainData,
 					Asap2Reader.PARAM_PROMPT_IDS, id);
 
-			runClusteringExperiment(experimentName + "_" + id + "", readerTrain, languageCode);
+			runClusteringExperiment(experimentName + "_" + id + "", readerTrain, numClusters, languageCode);
 		}
 	}
 
 
 	protected static void runPowergradingBaselineExperiment(String experimentName, String trainData, String testData,
-			String languageCode, Integer... questionIds) throws Exception {
+			String languageCode, int numClusters, Integer... questionIds) throws Exception {
 		for (int id : questionIds) {
 			System.out.println("Prompt: "+id);
 			CollectionReaderDescription readerTrain = CollectionReaderFactory.createReaderDescription(PowerGradingReader.class,
 					PowerGradingReader.PARAM_INPUT_FILE, trainData,
 					PowerGradingReader.PARAM_PROMPT_IDS, id);
 
-			runClusteringExperiment(experimentName + "_" + id + "", readerTrain, languageCode);
+			runClusteringExperiment(experimentName + "_" + id + "_"+numClusters+"clusters", readerTrain, numClusters, languageCode);
 		}
 	}
 
@@ -64,6 +66,7 @@ public class ClusteringExample extends Experiments_ImplBase implements Constants
 	@SuppressWarnings("unchecked")
 	private static void runClusteringExperiment(String experimentName, 
 			CollectionReaderDescription readerTrain, 
+			int numClusters,
 			String languageCode)
 					throws Exception
 	{     
@@ -79,8 +82,8 @@ public class ClusteringExample extends Experiments_ImplBase implements Constants
 		
 		ParameterSpace pSpace = new ParameterSpace(
 				Dimension.createBundle("readers", dimReaders),
-				Dimension.create("dimension_number_of_clusters_min", 10),
-				Dimension.create("dimension_number_of_clusters_max", 10),
+				Dimension.create("dimension_number_of_clusters_min", numClusters),
+				Dimension.create("dimension_number_of_clusters_max", numClusters),
 				dimClusteringArgs,
 				learningDims,
 				Dimension.create(DIM_FEATURE_MODE, FM_UNIT),
