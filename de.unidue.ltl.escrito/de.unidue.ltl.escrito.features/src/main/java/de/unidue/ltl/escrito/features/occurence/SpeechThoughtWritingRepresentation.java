@@ -50,8 +50,8 @@ public class SpeechThoughtWritingRepresentation
     @ConfigurationParameter(name = PARAM_REPORTING_VERBS_FILE_PATH, mandatory = true)
     private String reportingVerbsFilePath;
     
-	public static final String LANGUAGE = "language";
-	@ConfigurationParameter(name = LANGUAGE, mandatory = true)
+	public static final String PARAM_LANGUAGE = "language";
+	@ConfigurationParameter(name = PARAM_LANGUAGE, mandatory = true)
 	private String language;
 
 	private List<String> reportingVerbs;
@@ -65,6 +65,7 @@ public class SpeechThoughtWritingRepresentation
 		reportingVerbs = getReportingVerbs(reportingVerbsFilePath);
 		return true;
 	}
+	
 	private List<String> getReportingVerbs(String reportingVerbsFilePath) {
 		List<String> list = new ArrayList<String>();
 		Scanner s;

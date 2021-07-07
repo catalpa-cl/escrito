@@ -30,10 +30,10 @@ public class CharNGramsNormalizedFeatureExtractor extends CharacterNGram {
             	int n = topNgram.length();
             	int numberOfNgramsInEssay = jcas.getDocumentText().length()-n+1;	
        //     	System.out.println("Char: \t"+topNgram+"\t"+numberOfOccurences+"\t"+numberOfNgramsInEssay+"\t"+1.0*numberOfOccurences/numberOfNgramsInEssay);
-                features.add(new Feature(getFeaturePrefix() + "_" + topNgram, 1.0*numberOfOccurences/numberOfNgramsInEssay, FeatureType.NUMERIC));
+                features.add(new Feature(getFeaturePrefix() + "_normalized_" + topNgram, 1.0*numberOfOccurences/numberOfNgramsInEssay, FeatureType.NUMERIC));
             }
             else {
-                features.add(new Feature(getFeaturePrefix() + "_" + topNgram, 0, FeatureType.NUMERIC));
+                features.add(new Feature(getFeaturePrefix() + "_normalized_" + topNgram, 0, FeatureType.NUMERIC));
             }
         }
         return features;

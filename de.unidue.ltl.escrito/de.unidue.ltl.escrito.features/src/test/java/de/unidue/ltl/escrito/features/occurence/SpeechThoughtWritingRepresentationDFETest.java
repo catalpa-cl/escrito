@@ -31,7 +31,7 @@ public class SpeechThoughtWritingRepresentationDFETest extends EssayGradingTestB
 
 		SpeechThoughtWritingRepresentation extractor = FeatureUtil.createResource(
 				SpeechThoughtWritingRepresentation.class,
-				SpeechThoughtWritingRepresentation.LANGUAGE,"de",
+				SpeechThoughtWritingRepresentation.PARAM_LANGUAGE,"de",
 				SpeechThoughtWritingRepresentation.PARAM_REPORTING_VERBS_FILE_PATH,"src/main/resources/lists/de/reporting_verbs_krestel_de.txt",
 				SpeechThoughtWritingRepresentation.PARAM_UNIQUE_EXTRACTOR_NAME, "SpeechThoughtWritingRepresentationDFE"
         );
@@ -62,7 +62,7 @@ public class SpeechThoughtWritingRepresentationDFETest extends EssayGradingTestB
 
 		SpeechThoughtWritingRepresentation extractor = FeatureUtil.createResource(
 				SpeechThoughtWritingRepresentation.class,
-				SpeechThoughtWritingRepresentation.LANGUAGE,"en",
+				SpeechThoughtWritingRepresentation.PARAM_LANGUAGE,"en",
 				SpeechThoughtWritingRepresentation.PARAM_REPORTING_VERBS_FILE_PATH,"src/main/resources/lists/en/reporting_verbs_krestel_en.txt",
 				SpeechThoughtWritingRepresentation.PARAM_UNIQUE_EXTRACTOR_NAME, "SpeechThoughtWritingRepresentationDFE"
         );
