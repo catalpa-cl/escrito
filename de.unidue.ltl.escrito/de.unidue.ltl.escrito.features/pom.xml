@@ -32,10 +32,10 @@
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
 			<artifactId>de.tudarmstadt.ukp.dkpro.core.matetools-gpl</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
-			<artifactId>de.tudarmstadt.ukp.dkpro.core.languagetool-asl</artifactId>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId> -->
+<!-- 			<artifactId>de.tudarmstadt.ukp.dkpro.core.languagetool-asl</artifactId> -->
+<!-- 		</dependency> -->
 <!-- 		<dependency> -->
 <!-- 			<groupId>edu.stanford.nlp</groupId> -->
 <!-- 			<artifactId>stanford-corenlp</artifactId> -->
