@@ -1,7 +1,6 @@
 package de.unidue.ltl.escrito.io.shortanswer;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -48,6 +47,7 @@ public class MohlerMihalceaPreprocessor {
 				}		
 				line = br.readLine();
 			}
+			br.close();
 			assignmentId++;
 		}
 		

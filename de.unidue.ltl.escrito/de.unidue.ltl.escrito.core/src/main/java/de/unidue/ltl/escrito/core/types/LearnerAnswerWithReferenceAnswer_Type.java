@@ -13,7 +13,7 @@ import org.apache.uima.cas.impl.FeatureImpl;
 import org.apache.uima.cas.Feature;
 
 /** 
- * Updated by JCasGen Thu Feb 02 15:50:24 CET 2017
+ * Updated by JCasGen Mon Jan 27 15:16:25 CET 2020
  * @generated */
 public class LearnerAnswerWithReferenceAnswer_Type extends LearnerAnswer_Type {
   /** @generated */
@@ -22,7 +22,7 @@ public class LearnerAnswerWithReferenceAnswer_Type extends LearnerAnswer_Type {
   /** @generated 
      @modifiable */
   @SuppressWarnings ("hiding")
-  public final static boolean featOkTst = JCasRegistry.getFeatOkTst("org.autograder.type.LearnerAnswerWithReferenceAnswer");
+  public final static boolean featOkTst = JCasRegistry.getFeatOkTst("de.unidue.ltl.escrito.core.types.LearnerAnswerWithReferenceAnswer");
  
   /** @generated */
   final Feature casFeat_referenceAnswers;
@@ -34,7 +34,7 @@ public class LearnerAnswerWithReferenceAnswer_Type extends LearnerAnswer_Type {
    */ 
   public int getReferenceAnswers(int addr) {
         if (featOkTst && casFeat_referenceAnswers == null)
-      jcas.throwFeatMissing("referenceAnswers", "org.autograder.type.LearnerAnswerWithReferenceAnswer");
+      jcas.throwFeatMissing("referenceAnswers", "de.unidue.ltl.escrito.core.types.LearnerAnswerWithReferenceAnswer");
     return ll_cas.ll_getRefValue(addr, casFeatCode_referenceAnswers);
   }
   /** @generated
@@ -43,7 +43,7 @@ public class LearnerAnswerWithReferenceAnswer_Type extends LearnerAnswer_Type {
    */    
   public void setReferenceAnswers(int addr, int v) {
         if (featOkTst && casFeat_referenceAnswers == null)
-      jcas.throwFeatMissing("referenceAnswers", "org.autograder.type.LearnerAnswerWithReferenceAnswer");
+      jcas.throwFeatMissing("referenceAnswers", "de.unidue.ltl.escrito.core.types.LearnerAnswerWithReferenceAnswer");
     ll_cas.ll_setRefValue(addr, casFeatCode_referenceAnswers, v);}
     
    /** @generated
@@ -53,7 +53,7 @@ public class LearnerAnswerWithReferenceAnswer_Type extends LearnerAnswer_Type {
    */
   public String getReferenceAnswers(int addr, int i) {
         if (featOkTst && casFeat_referenceAnswers == null)
-      jcas.throwFeatMissing("referenceAnswers", "org.autograder.type.LearnerAnswerWithReferenceAnswer");
+      jcas.throwFeatMissing("referenceAnswers", "de.unidue.ltl.escrito.core.types.LearnerAnswerWithReferenceAnswer");
     if (lowLevelTypeChecks)
       return ll_cas.ll_getStringArrayValue(ll_cas.ll_getRefValue(addr, casFeatCode_referenceAnswers), i, true);
     jcas.checkArrayBounds(ll_cas.ll_getRefValue(addr, casFeatCode_referenceAnswers), i);
@@ -67,7 +67,7 @@ public class LearnerAnswerWithReferenceAnswer_Type extends LearnerAnswer_Type {
    */ 
   public void setReferenceAnswers(int addr, int i, String v) {
         if (featOkTst && casFeat_referenceAnswers == null)
-      jcas.throwFeatMissing("referenceAnswers", "org.autograder.type.LearnerAnswerWithReferenceAnswer");
+      jcas.throwFeatMissing("referenceAnswers", "de.unidue.ltl.escrito.core.types.LearnerAnswerWithReferenceAnswer");
     if (lowLevelTypeChecks)
       ll_cas.ll_setStringArrayValue(ll_cas.ll_getRefValue(addr, casFeatCode_referenceAnswers), i, v, true);
     jcas.checkArrayBounds(ll_cas.ll_getRefValue(addr, casFeatCode_referenceAnswers), i);
@@ -85,7 +85,7 @@ public class LearnerAnswerWithReferenceAnswer_Type extends LearnerAnswer_Type {
    */ 
   public int getReferenceAnswerIds(int addr) {
         if (featOkTst && casFeat_referenceAnswerIds == null)
-      jcas.throwFeatMissing("referenceAnswerIds", "org.autograder.type.LearnerAnswerWithReferenceAnswer");
+      jcas.throwFeatMissing("referenceAnswerIds", "de.unidue.ltl.escrito.core.types.LearnerAnswerWithReferenceAnswer");
     return ll_cas.ll_getRefValue(addr, casFeatCode_referenceAnswerIds);
   }
   /** @generated
@@ -94,7 +94,7 @@ public class LearnerAnswerWithReferenceAnswer_Type extends LearnerAnswer_Type {
    */    
   public void setReferenceAnswerIds(int addr, int v) {
         if (featOkTst && casFeat_referenceAnswerIds == null)
-      jcas.throwFeatMissing("referenceAnswerIds", "org.autograder.type.LearnerAnswerWithReferenceAnswer");
+      jcas.throwFeatMissing("referenceAnswerIds", "de.unidue.ltl.escrito.core.types.LearnerAnswerWithReferenceAnswer");
     ll_cas.ll_setRefValue(addr, casFeatCode_referenceAnswerIds, v);}
     
    /** @generated
@@ -104,7 +104,7 @@ public class LearnerAnswerWithReferenceAnswer_Type extends LearnerAnswer_Type {
    */
   public String getReferenceAnswerIds(int addr, int i) {
         if (featOkTst && casFeat_referenceAnswerIds == null)
-      jcas.throwFeatMissing("referenceAnswerIds", "org.autograder.type.LearnerAnswerWithReferenceAnswer");
+      jcas.throwFeatMissing("referenceAnswerIds", "de.unidue.ltl.escrito.core.types.LearnerAnswerWithReferenceAnswer");
     if (lowLevelTypeChecks)
       return ll_cas.ll_getStringArrayValue(ll_cas.ll_getRefValue(addr, casFeatCode_referenceAnswerIds), i, true);
     jcas.checkArrayBounds(ll_cas.ll_getRefValue(addr, casFeatCode_referenceAnswerIds), i);
@@ -118,7 +118,7 @@ public class LearnerAnswerWithReferenceAnswer_Type extends LearnerAnswer_Type {
    */ 
   public void setReferenceAnswerIds(int addr, int i, String v) {
         if (featOkTst && casFeat_referenceAnswerIds == null)
-      jcas.throwFeatMissing("referenceAnswerIds", "org.autograder.type.LearnerAnswerWithReferenceAnswer");
+      jcas.throwFeatMissing("referenceAnswerIds", "de.unidue.ltl.escrito.core.types.LearnerAnswerWithReferenceAnswer");
     if (lowLevelTypeChecks)
       ll_cas.ll_setStringArrayValue(ll_cas.ll_getRefValue(addr, casFeatCode_referenceAnswerIds), i, v, true);
     jcas.checkArrayBounds(ll_cas.ll_getRefValue(addr, casFeatCode_referenceAnswerIds), i);

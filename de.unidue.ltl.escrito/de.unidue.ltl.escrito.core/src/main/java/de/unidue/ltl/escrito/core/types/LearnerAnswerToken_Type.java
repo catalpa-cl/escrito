@@ -13,7 +13,7 @@ import org.apache.uima.jcas.tcas.Annotation_Type;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token_Type;
 
 /** 
- * Updated by JCasGen Thu Feb 02 15:50:24 CET 2017
+ * Updated by JCasGen Mon Jan 27 15:16:25 CET 2020
  * @generated */
 public class LearnerAnswerToken_Type extends Annotation_Type {
   /** @generated */
@@ -22,7 +22,7 @@ public class LearnerAnswerToken_Type extends Annotation_Type {
   /** @generated 
      @modifiable */
   @SuppressWarnings ("hiding")
-  public final static boolean featOkTst = JCasRegistry.getFeatOkTst("org.autograder.type.LearnerAnswerToken");
+  public final static boolean featOkTst = JCasRegistry.getFeatOkTst("de.unidue.ltl.escrito.core.types.LearnerAnswerToken");
  
   /** @generated */
   final Feature casFeat_isQuestionMaterial;
@@ -34,7 +34,7 @@ public class LearnerAnswerToken_Type extends Annotation_Type {
    */ 
   public boolean getIsQuestionMaterial(int addr) {
         if (featOkTst && casFeat_isQuestionMaterial == null)
-      jcas.throwFeatMissing("isQuestionMaterial", "org.autograder.type.LearnerAnswerToken");
+      jcas.throwFeatMissing("isQuestionMaterial", "de.unidue.ltl.escrito.core.types.LearnerAnswerToken");
     return ll_cas.ll_getBooleanValue(addr, casFeatCode_isQuestionMaterial);
   }
   /** @generated
@@ -43,7 +43,7 @@ public class LearnerAnswerToken_Type extends Annotation_Type {
    */    
   public void setIsQuestionMaterial(int addr, boolean v) {
         if (featOkTst && casFeat_isQuestionMaterial == null)
-      jcas.throwFeatMissing("isQuestionMaterial", "org.autograder.type.LearnerAnswerToken");
+      jcas.throwFeatMissing("isQuestionMaterial", "de.unidue.ltl.escrito.core.types.LearnerAnswerToken");
     ll_cas.ll_setBooleanValue(addr, casFeatCode_isQuestionMaterial, v);}
     
   
@@ -58,7 +58,7 @@ public class LearnerAnswerToken_Type extends Annotation_Type {
    */ 
   public int getToken(int addr) {
         if (featOkTst && casFeat_token == null)
-      jcas.throwFeatMissing("token", "org.autograder.type.LearnerAnswerToken");
+      jcas.throwFeatMissing("token", "de.unidue.ltl.escrito.core.types.LearnerAnswerToken");
     return ll_cas.ll_getRefValue(addr, casFeatCode_token);
   }
   /** @generated
@@ -67,7 +67,7 @@ public class LearnerAnswerToken_Type extends Annotation_Type {
    */    
   public void setToken(int addr, int v) {
         if (featOkTst && casFeat_token == null)
-      jcas.throwFeatMissing("token", "org.autograder.type.LearnerAnswerToken");
+      jcas.throwFeatMissing("token", "de.unidue.ltl.escrito.core.types.LearnerAnswerToken");
     ll_cas.ll_setRefValue(addr, casFeatCode_token, v);}
     
   
@@ -82,7 +82,7 @@ public class LearnerAnswerToken_Type extends Annotation_Type {
    */ 
   public boolean getIsStopWord(int addr) {
         if (featOkTst && casFeat_isStopWord == null)
-      jcas.throwFeatMissing("isStopWord", "org.autograder.type.LearnerAnswerToken");
+      jcas.throwFeatMissing("isStopWord", "de.unidue.ltl.escrito.core.types.LearnerAnswerToken");
     return ll_cas.ll_getBooleanValue(addr, casFeatCode_isStopWord);
   }
   /** @generated
@@ -91,7 +91,7 @@ public class LearnerAnswerToken_Type extends Annotation_Type {
    */    
   public void setIsStopWord(int addr, boolean v) {
         if (featOkTst && casFeat_isStopWord == null)
-      jcas.throwFeatMissing("isStopWord", "org.autograder.type.LearnerAnswerToken");
+      jcas.throwFeatMissing("isStopWord", "de.unidue.ltl.escrito.core.types.LearnerAnswerToken");
     ll_cas.ll_setBooleanValue(addr, casFeatCode_isStopWord, v);}
     
   
@@ -106,7 +106,7 @@ public class LearnerAnswerToken_Type extends Annotation_Type {
    */ 
   public boolean getIsPunctuation(int addr) {
         if (featOkTst && casFeat_isPunctuation == null)
-      jcas.throwFeatMissing("isPunctuation", "org.autograder.type.LearnerAnswerToken");
+      jcas.throwFeatMissing("isPunctuation", "de.unidue.ltl.escrito.core.types.LearnerAnswerToken");
     return ll_cas.ll_getBooleanValue(addr, casFeatCode_isPunctuation);
   }
   /** @generated
@@ -115,7 +115,7 @@ public class LearnerAnswerToken_Type extends Annotation_Type {
    */    
   public void setIsPunctuation(int addr, boolean v) {
         if (featOkTst && casFeat_isPunctuation == null)
-      jcas.throwFeatMissing("isPunctuation", "org.autograder.type.LearnerAnswerToken");
+      jcas.throwFeatMissing("isPunctuation", "de.unidue.ltl.escrito.core.types.LearnerAnswerToken");
     ll_cas.ll_setBooleanValue(addr, casFeatCode_isPunctuation, v);}
     
   

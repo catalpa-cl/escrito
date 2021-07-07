@@ -27,6 +27,7 @@ import de.unidue.ltl.evaluation.measures.categorial.Precision;
 import de.unidue.ltl.evaluation.measures.categorial.Recall;
 import de.unidue.ltl.evaluation.measures.correlation.PearsonCorrelation;
 import de.unidue.ltl.evaluation.measures.correlation.SpearmanCorrelation;
+import de.unidue.ltl.evaluation.visualization.ConfusionMatrix;
 
 public class CvEvaluationReport extends BatchReportBase
 implements Constants{
@@ -131,6 +132,9 @@ implements Constants{
 				results.put(SPEARMAN, spearman.getResult());
 			}
 
+			ConfusionMatrix cf = new ConfusionMatrix(evaluationString);
+			System.out.println(cf.toText());
+			
 			for (String s : results.keySet()) {
 				System.out.printf(s+": %.2f"+System.getProperty("line.separator"), results.get(s));
 				props.setProperty(s, results.get(s).toString());

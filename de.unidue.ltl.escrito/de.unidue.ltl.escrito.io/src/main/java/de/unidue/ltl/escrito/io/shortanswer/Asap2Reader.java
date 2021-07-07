@@ -151,7 +151,7 @@ public class Asap2Reader extends JCasCollectionReader_ImplBase {
 				//		System.out.println("Added item: "+newItem.toString());
 			}
 			// compute IAA
-			QuadraticallyWeightedKappa qwk = new QuadraticallyWeightedKappa(evalData);
+			QuadraticallyWeightedKappa<Integer> qwk = new QuadraticallyWeightedKappa<Integer>(evalData);
 			System.out.println("QWK: "+qwk.getResult());
 			currentIndex = 0;
 		}

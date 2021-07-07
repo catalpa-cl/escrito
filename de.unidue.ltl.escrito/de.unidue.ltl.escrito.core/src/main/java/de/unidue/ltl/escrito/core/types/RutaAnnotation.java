@@ -11,7 +11,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Thu May 02 10:37:39 CEST 2019
+ * Updated by JCasGen Mon Jan 27 15:16:25 CET 2020
  * XML source: /Users/andrea/git/escrito/de.unidue.ltl.escrito/de.unidue.ltl.escrito.core/src/main/resources/desc/type/Escrito.xml
  * @generated */
 public class RutaAnnotation extends Annotation {

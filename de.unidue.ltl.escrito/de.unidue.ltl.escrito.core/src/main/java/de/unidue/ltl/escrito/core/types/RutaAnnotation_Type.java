@@ -11,7 +11,7 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Thu May 02 10:37:39 CEST 2019
+ * Updated by JCasGen Mon Jan 27 15:16:25 CET 2020
  * @generated */
 public class RutaAnnotation_Type extends Annotation_Type {
   /** @generated */

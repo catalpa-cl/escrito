@@ -25,7 +25,6 @@ import org.dkpro.tc.api.type.TextClassificationTarget;
 import de.tudarmstadt.ukp.dkpro.core.api.metadata.type.DocumentMetaData;
 import de.tudarmstadt.ukp.dkpro.core.api.resources.ResourceUtils;
 import de.unidue.ltl.escrito.core.types.LearnerAnswer;
-import de.unidue.ltl.escrito.io.util.Utils;
 
 public class PowerGradingReader
 extends JCasCollectionReader_ImplBase

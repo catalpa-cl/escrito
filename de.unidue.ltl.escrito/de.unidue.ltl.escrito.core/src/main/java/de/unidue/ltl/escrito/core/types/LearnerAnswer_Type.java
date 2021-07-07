@@ -14,7 +14,7 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Thu Feb 02 15:50:24 CET 2017
+ * Updated by JCasGen Mon Jan 27 15:16:25 CET 2020
  * @generated */
 public class LearnerAnswer_Type extends Annotation_Type {
   /** @generated */
@@ -23,7 +23,7 @@ public class LearnerAnswer_Type extends Annotation_Type {
   /** @generated 
      @modifiable */
   @SuppressWarnings ("hiding")
-  public final static boolean featOkTst = JCasRegistry.getFeatOkTst("org.autograder.type.LearnerAnswer");
+  public final static boolean featOkTst = JCasRegistry.getFeatOkTst("de.unidue.ltl.escrito.core.types.LearnerAnswer");
  
   /** @generated */
   final Feature casFeat_promptId;
@@ -35,7 +35,7 @@ public class LearnerAnswer_Type extends Annotation_Type {
    */ 
   public String getPromptId(int addr) {
         if (featOkTst && casFeat_promptId == null)
-      jcas.throwFeatMissing("promptId", "org.autograder.type.LearnerAnswer");
+      jcas.throwFeatMissing("promptId", "de.unidue.ltl.escrito.core.types.LearnerAnswer");
     return ll_cas.ll_getStringValue(addr, casFeatCode_promptId);
   }
   /** @generated
@@ -44,7 +44,7 @@ public class LearnerAnswer_Type extends Annotation_Type {
    */    
   public void setPromptId(int addr, String v) {
         if (featOkTst && casFeat_promptId == null)
-      jcas.throwFeatMissing("promptId", "org.autograder.type.LearnerAnswer");
+      jcas.throwFeatMissing("promptId", "de.unidue.ltl.escrito.core.types.LearnerAnswer");
     ll_cas.ll_setStringValue(addr, casFeatCode_promptId, v);}
     
   

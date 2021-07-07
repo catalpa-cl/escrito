@@ -1,8 +1,5 @@
 package de.unidue.ltl.escrito.io.generic;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class GenericDatasetItem {
 
 	private String grade;

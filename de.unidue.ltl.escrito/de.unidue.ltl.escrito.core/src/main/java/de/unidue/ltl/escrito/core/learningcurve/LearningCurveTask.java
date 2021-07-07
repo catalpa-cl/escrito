@@ -104,7 +104,7 @@ implements Constants
 		System.out.println("Execute LearningCurveTask");
 		for (Integer numberInstances : NUMBER_OF_TRAINING_INSTANCES) {
 			for (int iteration=0; iteration<ITERATIONS; iteration++) {
-				//System.out.println(numberInstances+"\t"+iteration);
+				System.out.println(numberInstances+"\t"+iteration);
 				File arffFileTrain = Utils.getFile(aContext, TEST_TASK_INPUT_KEY_TRAINING_DATA,
 						FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
 				File arffFileTest = Utils.getFile(aContext, TEST_TASK_INPUT_KEY_TEST_DATA,
@@ -157,15 +157,18 @@ implements Constants
 				// train the classifier on the train set split - not necessary in multilabel setup, but
 				// in single label setup
 				
-				Classifier cl = trainer.train(trainData, model, Utils.getParameters(classificationArguments));
+			//	Classifier cl = trainer.train(trainData, model, Utils.getParameters(classificationArguments));
+			// Wir chreiben das Model nicht jedes Mal!
+				Classifier cl = trainWithoutSerialization(trainData, model, Utils.getParameters(classificationArguments));
 
+				
 				//cl.buildClassifier(trainData);
 
+				
 				weka.core.SerializationHelper.write(evalOutput.getAbsolutePath(),
 						Utils.getEvaluationSinglelabel(cl, trainData, testData));
 				testData = Utils.getPredictionInstancesSingleLabel(testData, cl);
 				testData = _eka.addInstanceId(testData, copyTestData, multiLabel);
-
 				BufferedWriter bw = new BufferedWriter(new FileWriter(trainItemIds));
 				for (Instance inst : copyTrainData){
 					//				bw.write(inst.stringValue(0)+"\n");
@@ -194,6 +197,18 @@ implements Constants
 			bw.write(inst.value(0)+"\n");
 		}
 		bw.close();
+	}
+
+
+	private Classifier trainWithoutSerialization(Instances data, File model, List<String> parameters) throws Exception {
+		  String algoName = parameters.get(0);
+	        List<String> algoParameters = parameters.subList(1, parameters.size());
+
+	        // build classifier
+	        Classifier cl = AbstractClassifier.forName(algoName, algoParameters.toArray(new String[0]));
+	        cl.buildClassifier(data);
+
+	        return cl;
 	}
 
 	

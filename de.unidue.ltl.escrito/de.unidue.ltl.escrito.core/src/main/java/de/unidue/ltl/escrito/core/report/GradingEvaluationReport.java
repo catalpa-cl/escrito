@@ -29,6 +29,7 @@ import de.unidue.ltl.evaluation.measures.categorial.Precision;
 import de.unidue.ltl.evaluation.measures.categorial.Recall;
 import de.unidue.ltl.evaluation.measures.correlation.PearsonCorrelation;
 import de.unidue.ltl.evaluation.measures.correlation.SpearmanCorrelation;
+import de.unidue.ltl.evaluation.visualization.ConfusionMatrix;
 
 public class GradingEvaluationReport extends TcAbstractReport {
 
@@ -70,9 +71,9 @@ public class GradingEvaluationReport extends TcAbstractReport {
 
 			if (TcTaskTypeUtil.isFeatureExtractionTestTask(storageService, id)) {
 				String path = storageService.locateKey(id, "output/documentMetaData.txt").getAbsolutePath();
-				//	System.out.println(path);
+			//	System.out.println(path);
 				instanceId2TextMap = Utils.getInstanceId2TextMap(path);
-				System.out.println("Read map with "+instanceId2TextMap.size()+" entries");
+			//	System.out.println("Read map with "+instanceId2TextMap.size()+" entries");
 			}
 			//	System.out.println(id);
 			if (!TcTaskTypeUtil.isFacadeTask(storageService, id)) {
@@ -161,6 +162,9 @@ public class GradingEvaluationReport extends TcAbstractReport {
 			//				System.out.println(s + ": " + results.get(s));
 			props.setProperty(s, results.get(s).toString());
 		}
+		
+		ConfusionMatrix cf = new ConfusionMatrix(evaluationString);
+		System.out.println(cf.toText());
 
 		File itemsFile = new File(evaluationFile.getParentFile(), LABELED_ITEMS_FILENAME);
 		ReportUtils.writeLabeledOutput(instanceId2TextMap, evaluationString, itemsFile, confScoreMap);
