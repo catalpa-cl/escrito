@@ -1,0 +1,7 @@
+id	score	answer
+1	0	This is a sentence.
+2	1	This is a slightly longer sentence.
+3	2	Hans loves Mary in Berlin.
+4	1	This is a sentence containing a slightly more complex syntactic structure including a subordinate sentence just because we didn't have that in the others.
+
+	
