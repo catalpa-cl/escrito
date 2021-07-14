@@ -117,8 +117,35 @@ public abstract class Experiments_ImplBase
 		}
 		return null;
 	}
+	
+	public static AnalysisEngineDescription getPreprocessingSimple(String languageCode) throws ResourceInitializationException {
+		if (languageCode.equals("en")){
+			return createEngineDescription(
+					createEngineDescription(
+							ClearNlpSegmenter.class
+							)
+					);
+		} else if (languageCode.equals("de")){
+			return createEngineDescription(
+					createEngineDescription(
+							OpenNlpSegmenter.class
+							)
+					);
+		} else {
+			System.err.println("Unknown language code "+languageCode+". We currently support: en, de");
+			System.exit(-1);
+		}
+		return null;
+	}
 
-
+	public static AnalysisEngineDescription getEmptyPreprocessing() throws ResourceInitializationException {
+		
+			return createEngineDescription(
+					createEngineDescription(
+							NoOpAnnotator.class
+							)
+					);
+	}
 
 
 	// ######### EXPERIMENTAL SETUPS ##########

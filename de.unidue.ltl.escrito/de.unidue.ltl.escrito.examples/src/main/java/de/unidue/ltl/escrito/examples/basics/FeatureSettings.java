@@ -66,6 +66,29 @@ implements Constants
 				);
 		return dimFeatureSets;
 	}
+	
+	public static Dimension<TcFeatureSet> getFeatureSetsDimBaselineFast()
+	{
+		Dimension<TcFeatureSet> dimFeatureSets = Dimension.create(
+				DIM_FEATURE_SET,
+				new TcFeatureSet(
+						//			TcFeatureFactory.create(NrOfTokens.class),
+						TcFeatureFactory.create(
+								WordNGram.class,
+								WordNGram.PARAM_NGRAM_MIN_N, 1,
+								WordNGram.PARAM_NGRAM_MAX_N, 3,
+								WordNGram.PARAM_NGRAM_USE_TOP_K, 100
+								),
+						TcFeatureFactory.create(
+								CharacterNGram.class,
+								CharacterNGram.PARAM_NGRAM_MIN_N, 2,
+								CharacterNGram.PARAM_NGRAM_MAX_N, 5,
+								CharacterNGram.PARAM_NGRAM_USE_TOP_K, 100
+								)
+						)
+				);
+		return dimFeatureSets;
+	}
 
 
 	public static Dimension<TcFeatureSet> getFeatureSetNGrams()
