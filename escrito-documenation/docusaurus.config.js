@@ -6,7 +6,7 @@ module.exports = {
   title: 'ESCRITO Documentation',
   tagline: 'How to use the Educational SCoRIng TOolkit',
   url: 'https://ltl-ude.github.io',
-  baseUrl: '/',
+  baseUrl: '/Escrito-documentation/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
