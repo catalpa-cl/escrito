@@ -112,7 +112,7 @@ implements Constants
 	/*
 	 * Standard Baseline feature set for prompt-specific scoring 
 	 */
-	public static Dimension<TcFeatureSet> getFeatureSetsSimilarity(String corpusName)
+	public static Dimension<TcFeatureSet> getFeatureSetsSimilarity_en(String corpusName)
 	{
 		Dimension<TcFeatureSet> dimFeatureSets = Dimension.create(
 				DIM_FEATURE_SET,
@@ -147,6 +147,33 @@ implements Constants
 	}
 
 
+	public static Dimension<TcFeatureSet> getFeatureSetsSimilarity_de(String corpusName)
+	{
+		Dimension<TcFeatureSet> dimFeatureSets = Dimension.create(
+				DIM_FEATURE_SET,
+				new TcFeatureSet(
+						TcFeatureFactory.create(
+								PairwiseFeatureWrapper.class,
+								PairwiseFeatureWrapper.PARAM_PAIRWISE_FEATURE_EXTRACTOR, WordOverlapFeatureExtractor.class.getName(),
+								PairwiseFeatureWrapper.PARAM_TARGET_ANSWER_PREFIX, "TA",
+								PairwiseFeatureWrapper.PARAM_AGGREGATION_METHOD, PairwiseFeatureWrapper.AggregationMethod.MAXIMUM,
+								PairwiseFeatureWrapper.PARAM_ADDITIONAL_TEXTS_LOCATION, System.getenv("DKPRO_HOME")+"/processedData/"+corpusName
+								),
+						TcFeatureFactory.create(
+								de.unidue.ltl.escrito.features.similarity.PairwiseFeatureWrapper.class,
+								PairwiseFeatureWrapper.PARAM_PAIRWISE_FEATURE_EXTRACTOR, StringSimilarityFeatureExtractor.class.getName(),
+								StringSimilarityFeatureExtractor.PARAM_STRING_TILING_MIN, "2",
+								StringSimilarityFeatureExtractor.PARAM_STRING_TILING_MAX, "5",
+								PairwiseFeatureWrapper.PARAM_TARGET_ANSWER_PREFIX, "TA",
+								PairwiseFeatureWrapper.PARAM_AGGREGATION_METHOD, PairwiseFeatureWrapper.AggregationMethod.MAXIMUM,
+								PairwiseFeatureWrapper.PARAM_ADDITIONAL_TEXTS_LOCATION, System.getenv("DKPRO_HOME")+"/processedData/"+corpusName
+								)
+						)
+				);
+		return dimFeatureSets;
+	}
+	
+	
 	/*
 	 * Standard Baseline feature set for prompt-specific scoring 
 	 */

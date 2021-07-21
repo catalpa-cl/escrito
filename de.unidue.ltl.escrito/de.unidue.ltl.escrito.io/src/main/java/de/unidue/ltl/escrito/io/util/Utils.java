@@ -124,6 +124,7 @@ public class Utils {
 				AnalysisEngine writerEngine = AnalysisEngineFactory.createEngine(
 						BinaryCasWriter.class,
 						BinaryCasWriter.PARAM_OVERWRITE, true,
+						BinaryCasWriter.PARAM_FORMAT, "6+",
 						BinaryCasWriter.PARAM_TARGET_LOCATION, filePath
 						);
 				writerEngine.process(jcas);

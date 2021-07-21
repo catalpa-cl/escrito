@@ -194,6 +194,9 @@ public class GenericDatasetReader  extends JCasCollectionReader_ImplBase{
 			throw new ResourceInitializationException(e);
 		}
 		currentIndex = 0;
+		if (!targetAnswers.isEmpty()){
+			Utils.preprocessConnectedTexts(targetAnswers, corpusName, targetAnswerPrefix, language);
+		}
 		//System.out.println("read "+items.size()+" items.");
 	}
 
