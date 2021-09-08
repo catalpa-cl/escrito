@@ -54,7 +54,7 @@ implements FeatureExtractor
 			if (pos.getCoarseValue().equals("VERB")){
 				numberOfVerbs++;
 			}
-			if (pos.getCoarseValue().equals("VERB")){
+			if (pos.getCoarseValue().equals("ADJ")){
 				numberOfAdjectives++;
 			}
 		}
