@@ -99,21 +99,22 @@ implements Constants
 	{
 		boolean multiLabel = false;
 		Map<String, String> instanceId2TextMap = Utils.getInstanceId2TextMapTrain(aContext);
+		File arffFileTrain = Utils.getFile(aContext, TEST_TASK_INPUT_KEY_TRAINING_DATA,
+				FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
+		File arffFileTest = Utils.getFile(aContext, TEST_TASK_INPUT_KEY_TEST_DATA,
+				FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
 
+		Instances trainData_fix = _eka.getInstances(arffFileTrain, multiLabel);
+		Instances testData_fix = _eka.getInstances(arffFileTest, multiLabel);
 
-		System.out.println("Execute LearningCurveTask");
+		System.out.println("Execute LearningCurveTask ...");
 		for (Integer numberInstances : NUMBER_OF_TRAINING_INSTANCES) {
 			for (int iteration=0; iteration<ITERATIONS; iteration++) {
 				System.out.println(numberInstances+"\t"+iteration);
-				File arffFileTrain = Utils.getFile(aContext, TEST_TASK_INPUT_KEY_TRAINING_DATA,
-						FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
-				File arffFileTest = Utils.getFile(aContext, TEST_TASK_INPUT_KEY_TEST_DATA,
-						FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
-
-				Instances trainData = _eka.getInstances(arffFileTrain, multiLabel);
-				Instances testData = _eka.getInstances(arffFileTest, multiLabel);
-
-
+				
+				Instances trainData = new Instances(trainData_fix);
+				Instances testData = new Instances(testData_fix);
+				
 				if (numberInstances > trainData.size()) {
 					System.out.println("Not enough training data!");
 					continue;
@@ -185,9 +186,9 @@ implements Constants
 				//                        .getAbsolutePath() + "/" + PREDICTIONS_FILENAME + "_" + trainPercent, testData); 
 			} 	
 		}
-		File arffFileTest = Utils.getFile(aContext, TEST_TASK_INPUT_KEY_TEST_DATA,
+		File arffFileTest2 = Utils.getFile(aContext, TEST_TASK_INPUT_KEY_TEST_DATA,
 				FILENAME_DATA_IN_CLASSIFIER_FORMAT, AccessMode.READONLY);
-		Instances testData = _eka.getInstances(arffFileTest, multiLabel);
+		Instances testData = _eka.getInstances(arffFileTest2, multiLabel);
 		File testItemIds = new File(aContext.getStorageLocation("",
 				AccessMode.READWRITE)
 				.getPath()
