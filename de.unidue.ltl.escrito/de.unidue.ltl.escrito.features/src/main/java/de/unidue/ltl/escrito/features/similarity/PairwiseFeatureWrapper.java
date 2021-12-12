@@ -31,8 +31,8 @@ import de.unidue.ltl.escrito.core.types.LearnerAnswerWithReferenceAnswer;
 
 
 public class PairwiseFeatureWrapper 
-	extends FeatureExtractorResource_ImplBase
-	implements FeatureExtractor, MetaDependent
+extends FeatureExtractorResource_ImplBase
+implements FeatureExtractor, MetaDependent
 {
 
 
@@ -52,6 +52,9 @@ public class PairwiseFeatureWrapper
 	@ConfigurationParameter(name = PARAM_TARGET_ANSWER_PREFIX, mandatory = true)
 	protected String targetAnswerPrefix;
 
+	public static final String PARAM_PROMPTNAME = "promptName";
+	@ConfigurationParameter(name = PARAM_PROMPTNAME, mandatory = true)
+	protected String promptName;
 
 	public static final String PARAM_PAIRWISE_FEATURE_EXTRACTOR = "embeddedPairwiseFeatureExtractor";
 	@ConfigurationParameter(name = PARAM_PAIRWISE_FEATURE_EXTRACTOR, mandatory = true)
@@ -62,6 +65,10 @@ public class PairwiseFeatureWrapper
 	public static final String PARAM_AGGREGATION_METHOD = "aggregationMethod";
 	@ConfigurationParameter(name = PARAM_AGGREGATION_METHOD, mandatory = true, defaultValue = ConfigurationParameter.NO_DEFAULT_VALUE)
 	protected AggregationMethod aggregationMethod;
+	
+	public static final String PARAM_NUMBER_TARGETANSWERS = "numberOfTargetAnswers";
+	@ConfigurationParameter(name = PARAM_NUMBER_TARGETANSWERS, mandatory = false, defaultValue = "1")
+	protected int numberOfTargetAnswers;
 
 	public enum AggregationMethod {
 		MAXIMUM, MINIMUM, AVERAGE, INDIVIDUAL_FEATURES,   
@@ -100,17 +107,35 @@ public class PairwiseFeatureWrapper
 		Set<Feature> featuresForOneReferenceAnswer = null;
 		Set<Feature> featureForOnereferenceAnswerBest = null;
 		Set<Feature> featureForAllReferenceAnswers = new HashSet<Feature>();
+//		System.out.println(promptName);
+//		System.out.println(aggregationMethod);
+//		System.out.println(numberOfTargetAnswers);
+		
 		if (!(JCasUtil.exists(view, LearnerAnswerWithReferenceAnswer.class))){
-			return PFE.extract(view, view);
+			if(this.aggregationMethod.equals(AggregationMethod.INDIVIDUAL_FEATURES)) {
+				Set<Feature> features = PFE.extract(view, view);
+				Set<Feature> all = new HashSet<Feature>();
+				for (Feature f : features) {
+					for (int i = 1; i<=numberOfTargetAnswers; i++) {
+						all.add(new Feature(f.getName()+"_"+promptName+"_"+i, f.getValue(),f.getType()));
+					}
+				}
+//				System.out.println(all.size());
+				return all;
+			} else {
+				return PFE.extract(view, view);
+			}
 		}
+		
 		LearnerAnswerWithReferenceAnswer learnerAnswer = JCasUtil.selectSingle(view, LearnerAnswerWithReferenceAnswer.class);
 		JCas comparisonView = null;
 		Map<String, List<Feature>> allValuesPerFeature = new HashMap<String, List<Feature>>();
-		
-		// System.out.println("Found "+learnerAnswer.getReferenceAnswerIds().size()+" reference answers");
+
+		System.out.println("Found "+learnerAnswer.getReferenceAnswerIds().size()+" reference answers");
+		System.out.println("Aggregation Method: "+this.aggregationMethod);
 		for (int index = 0; index < learnerAnswer.getReferenceAnswerIds().size(); index++){
 			String refAnsId = learnerAnswer.getReferenceAnswerIds(index);
-		//	System.out.println("Reference answer ID: "+refAnsId);
+			System.out.println("Reference answer ID: "+refAnsId);
 			if (comparisonViewCache.containsKey(refAnsId)){
 				comparisonView = comparisonViewCache.get(refAnsId); 
 			} else {
@@ -121,12 +146,13 @@ public class PairwiseFeatureWrapper
 				}
 				comparisonViewCache.put(refAnsId, comparisonView);
 			}
-//			System.out.println("COMPARING "+view.getDocumentText()+" WITH "+comparisonView.getDocumentText());
+			System.out.println("COMPARING "+view.getDocumentText()+" WITH "+comparisonView.getDocumentText());
 			featuresForOneReferenceAnswer = PFE.extract(view, comparisonView);
+//			System.out.println("featuresFound: "+featuresForOneReferenceAnswer.size());
 			for (Iterator<Feature> iter1 = featuresForOneReferenceAnswer.iterator(); iter1.hasNext();){
 				Feature feature = iter1.next();
 				String featureName = feature.getName();
-				//	// System.out.println("featureName = "+featureName);
+//				System.out.println("featureName = "+featureName);
 				if (this.aggregationMethod.equals(AggregationMethod.MAXIMUM)){
 					if(featureForOnereferenceAnswerBest!=null)
 						for (Iterator<Feature> iter2 = featureForOnereferenceAnswerBest.iterator(); iter2.hasNext();){
@@ -134,19 +160,19 @@ public class PairwiseFeatureWrapper
 							if(prevFeature.getName().equals(featureName)){
 								if (feature.getValue() instanceof Integer){
 									int maxVal = (int)feature.getValue() > (int)prevFeature.getValue() ? (int)feature.getValue() : (int)prevFeature.getValue();
-									// System.out.println(featureName+": val = "+feature.getValue());
-									// System.out.println(featureName+": maxVal (int) = "+maxVal);
+//									System.out.println(featureName+": val = "+feature.getValue());
+//									System.out.println(featureName+": maxVal (int) = "+maxVal);
 									feature.setValue(maxVal);
 								} else
 									if(feature.getValue() instanceof Double){
 										double maxVal = (double)feature.getValue() > (double)prevFeature.getValue() ? (double)feature.getValue() : (double)prevFeature.getValue();
-										// System.out.println(featureName+": val = "+feature.getValue());
-										// System.out.println(featureName+": maxVal (double) = "+maxVal);
+//										System.out.println(featureName+": val = "+feature.getValue());
+//										System.out.println(featureName+": maxVal (double) = "+maxVal);
 										feature.setValue(maxVal);
 									}
 							}
 						} else {
-							// System.out.println(featureName+": val = "+feature.getValue());
+							System.out.println(featureName+": val = "+feature.getValue());
 						}
 				} else if (this.aggregationMethod.equals(AggregationMethod.MINIMUM)) {
 					if(featureForOnereferenceAnswerBest!=null)
@@ -176,8 +202,7 @@ public class PairwiseFeatureWrapper
 					allValuesPerFeature.get(featureName).add(feature);
 				} else if (this.aggregationMethod.equals(AggregationMethod.INDIVIDUAL_FEATURES)) {
 					// make sure that all feature names are unique
-					feature.setName(feature.getName()+"_"+refAnsId);
-					featureForAllReferenceAnswers.add(feature);
+					featureForAllReferenceAnswers.add(new Feature(feature.getName()+"_"+refAnsId, feature.getValue(), feature.getType()));
 				} else {
 					System.err.println("Unknown aggregtion method "+this.aggregationMethod);
 					System.exit(-1);
@@ -185,9 +210,16 @@ public class PairwiseFeatureWrapper
 			}
 			featureForOnereferenceAnswerBest = featuresForOneReferenceAnswer;
 		}
-		//	System.out.println("============================");
+		
+		if (true) {
+			featureForAllReferenceAnswers.add(new Feature("dummy", 1.0, FeatureType.NUMERIC));
+			return(featureForAllReferenceAnswers);
+		}
+		
+		System.out.println("============================");
 		if (this.aggregationMethod.equals(AggregationMethod.INDIVIDUAL_FEATURES)){
-			// System.out.println(featureForAllReferenceAnswers);
+//			System.out.println("all features: "+featureForAllReferenceAnswers);
+//			System.out.println("all features: "+featureForAllReferenceAnswers.size());
 			return featureForAllReferenceAnswers;
 		} else if (this.aggregationMethod.equals(AggregationMethod.AVERAGE)){
 			Set<Feature> averagedFeatures = new HashSet<Feature>();
@@ -195,7 +227,7 @@ public class PairwiseFeatureWrapper
 				double average = getAverage(allValuesPerFeature.get(featureName));
 				averagedFeatures.add(new Feature(featureName, average, FeatureType.NUMERIC));
 				// System.out.println(allValuesPerFeature.get(featureName));
-				}
+			}
 			// System.out.println(averagedFeatures);
 			return averagedFeatures;
 		} else {
@@ -223,7 +255,7 @@ public class PairwiseFeatureWrapper
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 			throw new ResourceInitializationException(e);
 		}
-		
+
 		if( pfe instanceof MetaDependent){
 			return ((MetaDependent) pfe).getMetaCollectorClasses(parameterSettings);
 		} else {
